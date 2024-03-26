@@ -48,10 +48,10 @@ export function App() {
                   Lembrar usuário
                 </span>
               </div>
-              <footer className="flex flex-col gap-8">
+              <footer className="flex flex-col gap-8 pt-10">
                 <button
                   type="submit"
-                  className='fixed left-1/2 top-3/4 -translate-x-1/2 -translate-y-1/2 font-bold border border-pec rounded-md box-border h-10 w-32 bg-pec text-cinza'
+                  className='fixed left-1/2 -translate-x-1/2 -translate-y-1/2 font-bold border border-pec rounded-md box-border h-10 w-32 bg-pec text-cinza'
                 >
                   Entrar
                 </button>
