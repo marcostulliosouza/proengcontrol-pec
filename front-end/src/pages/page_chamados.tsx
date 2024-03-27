@@ -2,8 +2,41 @@ import { Link } from 'react-router-dom';
 import { Background } from '../components/background';
 import { Sidebar } from '../components/sidebar';
 import { BarraPesquisa } from '../components/barra_pesquisa';
+import { useEffect, useState } from 'react';
 
 export function Chamados() {
+    const [dados, setDados] = useState([]);
+
+    
+    useEffect(() => {
+        const intervalId = setInterval(fetchData, 3000); // Busca os dados a cada 1 minuto
+        return () => clearInterval(intervalId); // Limpa o temporizador quando o componente é desmontado
+    }, []);
+
+    // useEffect(function () {
+    //     const socket = io('http://127.0.0.1:5000'); // Conectar ao servidor de WebSocket do backend
+
+
+    //     // Manipular eventos de atualização de dados
+    //     socket.on('dadosAtualizados', () => {
+    //         fetchData(); // Buscar dados quando os dados forem atualizados no backend
+    //     });
+    //     return () => socket.disconnect(); // Desconectar quando o componente for desmontado
+    // }, []);
+
+    const fetchData = async () => {
+        try {
+            const response = await fetch('http://127.0.0.1:5000/api/dadoschamados');
+            if (response.ok) {
+                const data = await response.json();
+                setDados(data);
+            } else {
+                console.error('Erro ao buscar dados: ', response.statusText);
+            }
+        } catch (error) {
+            console.error("Erro fetching dados: ", error)
+        }
+    };
     return (
         <div>
             <header>
@@ -34,19 +67,21 @@ export function Chamados() {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr className='bg-white'>
-                                <td className='border border-slate-600'>Jiga</td>
-                                <td className='border border-slate-600'>Aberto</td>
-                                <td className='border border-slate-600'>20:00</td>
-                                <td className='border border-slate-600'>10:00</td>
-                                <td className='border border-slate-600'>Problema na jiga</td>
-                                <td className='border border-slate-600'>PÓS-COMPOSIÇÃO-011</td>
-                                <td className='border border-slate-600'>007</td>
-                                <td className='border border-slate-600'>001</td>
-                                <td className='border border-slate-600'>Samuel</td>
-                                <td className='border border-slate-600'>Alguma coisa deu errado</td>
-                                <td className='border border-slate-600'>Fulaninho</td>
-                            </tr>
+                            {dados.map(chamado =>(
+                                <tr className='bg-white' key={chamado.cha_id}>
+                                    <td className='border border-slate-600'>{chamado.cha_tipo}</td>
+                                    <td className='border border-slate-600'>{chamado.cha_status}</td>
+                                    <td className='border border-slate-600'>{chamado.cha_data_hora_abertura}</td>
+                                    <td className='border border-slate-600'>{chamado.cha_data_hora_atendimento}</td>
+                                    <td className='border border-slate-600'>{chamado.cha_tipo}</td>
+                                    <td className='border border-slate-600'>{chamado.cha_DT}</td>
+                                    <td className='border border-slate-600'>{chamado.cha_produto}</td>
+                                    <td className='border border-slate-600'>{chamado.cha_cliente}</td>
+                                    <td className='border border-slate-600'>{chamado.cha_acao}</td>
+                                    <td className='border border-slate-600'>{chamado.cha_descricao}</td>
+                                    <td className='border border-slate-600'>{chamado.cha_operador}</td>
+                                </tr>
+                            ))} 
                         </tbody>
                     </table>
                 </div>
