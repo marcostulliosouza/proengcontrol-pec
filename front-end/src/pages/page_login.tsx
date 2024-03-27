@@ -1,8 +1,6 @@
 import logo from '../assets/icon_pec.svg'
 import user from '../assets/user.png'
 import key from '../assets/key.png'
-import { FormEvent } from 'react';
-import { useState } from 'react';
 
 export function Login() {
     const [username, setUsername] = useState('');
@@ -50,7 +48,7 @@ export function Login() {
                 className="flex flex-col items-center gap-4 font-normal"
               >
                 <div className="flex items-center gap-2">
-                  <img className='w-5 pr-1 opacity-50' src={user} alt="user" />
+                  <AiOutlineUser className='w-5 pr-1 opacity-50' />
                   <input className='bg-cinza indent-1'
                     type="text"
                     placeholder='Login'
@@ -59,7 +57,7 @@ export function Login() {
                   />
                 </div>
                 <div className="flex items-center gap-2">
-                  <img className='w-5 pr-1 opacity-50' src={key} alt="key" />
+                  <GoKey  className='w-5 pr-1 opacity-50' />
                   <input className='bg-cinza indent-1'
                     type="password"
                     placeholder='Senha'

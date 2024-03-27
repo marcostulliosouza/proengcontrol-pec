@@ -8,6 +8,7 @@ export default {
     extend: {
       colors: {
         'pec': '#020c3e',
+        'table_header': '#c5d1f5',
         'cinza': {
           light: '#f1f1f1',
           DEFAULT: '#e3e3e3',
