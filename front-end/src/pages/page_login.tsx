@@ -1,6 +1,9 @@
 import logo from '../assets/icon_pec.svg'
-import user from '../assets/user.png'
-import key from '../assets/key.png'
+import { AiOutlineUser } from "react-icons/ai";
+import { GoKey } from "react-icons/go";
+
+import { useState } from 'react';
+import { FormEvent } from 'react';
 
 export function Login() {
     const [username, setUsername] = useState('');
