@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom';
 
 import logo from '../assets/icon_pec.svg'
-import user from '../assets/user.png'
-import key from '../assets/key.png'
+import { AiOutlineUser } from "react-icons/ai";
+import { GoKey } from "react-icons/go";
 
 export function Login() {
 
@@ -26,14 +26,14 @@ export function Login() {
                 className="flex flex-col items-center gap-4 font-normal"
               >
                 <div className="flex items-center gap-2">
-                  <img className='w-5 pr-1 opacity-50' src={user} alt="user" />
+                  <AiOutlineUser className='w-5 pr-1 opacity-50' />
                   <input className='bg-cinza indent-1'
                     type="text"
                     placeholder='Login'
                   />
                 </div>
                 <div className="flex items-center gap-2">
-                  <img className='w-5 pr-1 opacity-50' src={key} alt="key" />
+                  <GoKey  className='w-5 pr-1 opacity-50' />
                   <input className='bg-cinza indent-1'
                     type="text"
                     placeholder='Senha'
