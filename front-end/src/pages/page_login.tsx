@@ -1,13 +1,37 @@
-import { Link } from 'react-router-dom';
-
 import logo from '../assets/icon_pec.svg'
 import user from '../assets/user.png'
 import key from '../assets/key.png'
+import { FormEvent } from 'react';
+import { useState } from 'react';
 
 export function Login() {
-
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    
+    const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      try{
+        const response = await fetch('http://127.0.0.1:5000/autentication', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ username, password }),
+        });
+        const data = await response.json();
+        console.log(data);
+        if (response.ok) {
+          // history.push('/chamados'); // Redirecionando para /pages/page_chamados
+        } 
+        else {
+          window.alert('Desculpe, parece que você digitou o login ou a senha incorretos. \nPor favor, verifique e tente novamente.');
+        }
+      } 
+      catch(error){
+        console.error('Erro ao fazer login:', error);
+      }
+    };
     return (
-  
       <div className='grid grid-cols-2 h-screen bg-pec'>
         <div className='bg-cinza max-w-[50vh] w-full h-[70vh] fixed overflow-hidden left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-md'>
           <div>
@@ -22,7 +46,7 @@ export function Login() {
                   <p className='text-cinza-medium_dark'>Bem-Vindo!</p>
                 </div>
               </header>
-              <form
+              <form onSubmit={handleLogin}
                 className="flex flex-col items-center gap-4 font-normal"
               >
                 <div className="flex items-center gap-2">
@@ -30,13 +54,17 @@ export function Login() {
                   <input className='bg-cinza indent-1'
                     type="text"
                     placeholder='Login'
+                    value={username} 
+                    onChange={(e) => setUsername(e.target.value)}
                   />
                 </div>
                 <div className="flex items-center gap-2">
                   <img className='w-5 pr-1 opacity-50' src={key} alt="key" />
                   <input className='bg-cinza indent-1'
-                    type="text"
+                    type="password"
                     placeholder='Senha'
+                    value={password} 
+                    onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
                 <div className='flex items-center gap-2 font-normal -translate-x-1/4'>
@@ -51,14 +79,14 @@ export function Login() {
                   </span>
                 </div>
                 <footer className="flex flex-col gap-8 pt-10">
-                  <Link to="/chamados">
+                  {/* <Link to="/chamados"> */}
                     <button
                       type="submit"
                       className='fixed left-1/2 -translate-x-1/2 -translate-y-1/2 font-bold border border-pec rounded-md box-border h-10 w-32 bg-pec text-cinza'
                     >
                       Entrar
                     </button>
-                  </Link>
+                  {/* </Link> */}
                 </footer>
               </form>
             </main>
