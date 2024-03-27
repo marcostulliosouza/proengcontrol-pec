@@ -17,8 +17,7 @@ def login():
     data = request.json
     username = data['username']
     password = data['password']
-    print("Recebido username:", username)
-    print("Recebido password:", password)
+
     cursor = mydb.cursor()
     cursor.execute("SELECT * FROM colaboradores WHERE col_login=%s AND col_senha=MD5(%s)", (username, password))
     user = cursor.fetchone()
