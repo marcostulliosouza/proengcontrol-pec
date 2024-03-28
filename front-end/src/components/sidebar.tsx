@@ -2,7 +2,7 @@ import logo from "../assets/icon_pec_cinza.svg"
 
 export const Sidebar = (props) => {
     return (
-        <div className="bg-pec w-2/12 h-[100vh] absolute inset-y-0 left-0 py-10">
+        <div className="bg-pec absolute inset-y-0 left-0 w-[200px]">
             <header className="flex flex-col items-center text-cinza font-semibold">
                 <div className="flex items-center gap-2">
                   <img src={logo} alt="PEC" />

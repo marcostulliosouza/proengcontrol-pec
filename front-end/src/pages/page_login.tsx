@@ -36,26 +36,23 @@ export function Login() {
       }
     };
     return (
-      <div className='grid grid-cols-2 h-screen bg-pec'>
-        <div className='bg-cinza max-w-[50vh] w-full h-[70vh] fixed overflow-hidden left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-md'>
-          <div>
+      <div className='lg:grid grid-cols-2 h-screen bg-pec'>
+        <div className='bg-cinza max-w-[325px] w-full h-[475px] fixed overflow-hidden left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg'>          <div>
             <main className="flex flex-col mt-20 gap-10">
               <header className="flex flex-col items-center text-pec font-semibold">
-                <div className="flex items-center gap-2">
-                  <img src={logo} alt="PEC" />
+                <div className="flex items-center gap-1">
+                  <img src={logo} alt="PEC" className='w-10 h-10' />
                   <h1 className='text-xl'>PEC</h1>
                 </div>
-                <div className="flex flex-col items-center gap-2">
+                <div className="flex flex-col items-center gap-6">
                   <p className='text-sm'>ProEngControl</p>
-                  <p className='text-cinza-medium_dark'>Bem-Vindo!</p>
+                  <p className='text-cinza-medium_dark text-xl font-extralight'>Bem-Vindo!</p>
                 </div>
               </header>
-              <form onSubmit={handleLogin}
-                className="flex flex-col items-center gap-4 font-normal"
-              >
+              <form onSubmit={handleLogin} className="flex flex-col items-center gap-4 font-normal">
                 <div className="flex items-center gap-2">
-                  <AiOutlineUser className='w-5 pr-1 opacity-50' />
-                  <input className='bg-cinza indent-1 outline-none'
+                  <AiOutlineUser className='w-4 h-4 pr- opacity-30' />
+                  <input className='bg-cinza indent-1 outline-none focus:bg-gray-300'
                     type="text"
                     placeholder='Login'
                     value={username} 
@@ -63,8 +60,8 @@ export function Login() {
                   />
                 </div>
                 <div className="flex items-center gap-2">
-                  <GoKey  className='w-5 pr-1 opacity-50' />
-                  <input className='bg-cinza indent-1 outline-none'
+                  <GoKey  className='w-4 h-4 pr- opacity-30' />
+                  <input className='bg-cinza indent-1 outline-none focus:bg-gray-300'
                     type="password"
                     placeholder='Senha'
                     value={password} 
@@ -75,7 +72,7 @@ export function Login() {
                   <button
                     id='rememberUser'
                     type='button'
-                    className='box-border h-5 w-5 bg-cinza-extra_dark rounded-md focus:bg-pec'
+                    className='box-border h-5 w-5 bg-cinza-extra_dark rounded-sm focus:bg-pec'
                   >
                   </button>
                   <span className='text-pec'>
