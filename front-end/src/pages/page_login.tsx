@@ -37,7 +37,7 @@ export function Login() {
     };
     return (
       <div className='lg:grid grid-cols-2 h-screen bg-pec'>
-        <div className='bg-cinza max-w-[325px] w-full h-[475px] fixed overflow-hidden left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg'>
+        <div className='bg-cinza-200 max-w-[325px] w-full h-[475px] fixed overflow-hidden left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg'>
             <main className="flex flex-col mt-20 gap-10">
               <header className="flex flex-col items-center text-pec font-semibold">
                 <div className="flex items-center gap-1">
@@ -52,7 +52,7 @@ export function Login() {
               <form onSubmit={handleLogin} className="flex flex-col items-center gap-4 font-normal">
                 <div className="flex items-center gap-2">
                   <AiOutlineUser className='h-4 opacity-30' />
-                  <input className='bg-cinza indent-1 outline-none focus:bg-gray-300'
+                  <input className='bg-cinza-300 indent-1 outline-none rounded'
                     type="text"
                     placeholder='Login'
                     value={username} 
@@ -61,7 +61,7 @@ export function Login() {
                 </div>
                 <div className="flex items-center gap-2">
                   <GoKey  className='h-3.5 opacity-30' />
-                  <input className='bg-cinza indent-1 outline-none focus:bg-gray-300'
+                  <input className='bg-cinza-300 indent-1 outline-none rounded'
                     type="password"
                     placeholder='Senha'
                     value={password} 
@@ -72,7 +72,7 @@ export function Login() {
                   <button
                     id='rememberUser'
                     type='button'
-                    className='box-border h-5 w-5 bg-cinza-extra_dark rounded-sm focus:bg-pec'
+                    className='box-border h-5 w-5 bg-cinza-400 rounded-sm focus:bg-pec'
                   >
                   </button>
                   <span className='text-pec'>
@@ -83,7 +83,7 @@ export function Login() {
                   {/* <Link to="/chamados"> */}
                     <button
                       type="submit"
-                      className='fixed left-1/2 -translate-x-1/2 -translate-y-1/2 font-bold border border-pec rounded-md box-border h-10 w-32 bg-pec text-cinza'
+                      className='fixed left-1/2 -translate-x-1/2 -translate-y-1/2 font-bold rounded-md box-border h-10 w-32 bg-pec text-cinza-200'
                     >
                       Entrar
                     </button>

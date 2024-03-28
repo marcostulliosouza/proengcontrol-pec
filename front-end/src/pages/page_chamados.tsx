@@ -46,7 +46,7 @@ export function Chamados() {
                 <Sidebar />
                 <main className='absolute inset-y-0 right-0 w-10/12 grid gap-y-5 p-10'>
                     <BarraPesquisa />
-                    <div className='w-9/12 text-cinza-medium_dark'>
+                    <div className='w-9/12 text-cinza-500'>
                         <p className='text-sm'>Dashboard Chamados</p>
                         <p className='text-base'>Olá, @usuário</p>
                     </div>
