@@ -1,14 +1,17 @@
 import logo from '../assets/icon_pec.svg'
 import { AiOutlineUser } from "react-icons/ai";
 import { GoKey } from "react-icons/go";
+import{ useNavigate } from 'react-router-dom'
 
 import { useState } from 'react';
 import { FormEvent } from 'react';
 
+
 export function Login() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    
+    const navigate = useNavigate();
+
     const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       try{
@@ -22,7 +25,7 @@ export function Login() {
         const data = await response.json();
         console.log(data);
         if (response.ok) {
-          // history.push('/chamados'); // Redirecionando para /pages/page_chamados
+          navigate('/chamados');
         } 
         else {
           window.alert('Desculpe, parece que você digitou o login ou a senha incorretos. \nPor favor, verifique e tente novamente.');
