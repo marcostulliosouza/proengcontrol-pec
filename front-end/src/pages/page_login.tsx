@@ -37,7 +37,7 @@ export function Login() {
     };
     return (
       <div className='lg:grid grid-cols-2 h-screen bg-pec'>
-        <div className='bg-cinza max-w-[325px] w-full h-[475px] fixed overflow-hidden left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg'>          <div>
+        <div className='bg-cinza max-w-[325px] w-full h-[475px] fixed overflow-hidden left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg'>
             <main className="flex flex-col mt-20 gap-10">
               <header className="flex flex-col items-center text-pec font-semibold">
                 <div className="flex items-center gap-1">
@@ -51,7 +51,7 @@ export function Login() {
               </header>
               <form onSubmit={handleLogin} className="flex flex-col items-center gap-4 font-normal">
                 <div className="flex items-center gap-2">
-                  <AiOutlineUser className='w-4 h-4 pr- opacity-30' />
+                  <AiOutlineUser className='h-4 opacity-30' />
                   <input className='bg-cinza indent-1 outline-none focus:bg-gray-300'
                     type="text"
                     placeholder='Login'
@@ -60,7 +60,7 @@ export function Login() {
                   />
                 </div>
                 <div className="flex items-center gap-2">
-                  <GoKey  className='w-4 h-4 pr- opacity-30' />
+                  <GoKey  className='h-3.5 opacity-30' />
                   <input className='bg-cinza indent-1 outline-none focus:bg-gray-300'
                     type="password"
                     placeholder='Senha'
@@ -93,6 +93,5 @@ export function Login() {
             </main>
           </div>
         </div>
-      </div>
     )
   }
