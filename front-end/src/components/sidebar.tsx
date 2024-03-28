@@ -1,6 +1,6 @@
 import logo from "../assets/icon_pec_cinza.svg"
 
-export function Sidebar() {
+export const Sidebar = (props) => {
     return (
         <div className="bg-pec w-2/12 h-[100vh] absolute inset-y-0 left-0 py-10">
             <header className="flex flex-col items-center text-cinza font-semibold">
@@ -17,6 +17,7 @@ export function Sidebar() {
                     </p>
                 </footer>
               </main>
+              {props.children}
         </div>
     )
 }

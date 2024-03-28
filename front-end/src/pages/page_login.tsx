@@ -52,7 +52,7 @@ export function Login() {
               >
                 <div className="flex items-center gap-2">
                   <AiOutlineUser className='w-5 pr-1 opacity-50' />
-                  <input className='bg-cinza indent-1'
+                  <input className='bg-cinza indent-1 outline-none'
                     type="text"
                     placeholder='Login'
                     value={username} 
@@ -61,7 +61,7 @@ export function Login() {
                 </div>
                 <div className="flex items-center gap-2">
                   <GoKey  className='w-5 pr-1 opacity-50' />
-                  <input className='bg-cinza indent-1'
+                  <input className='bg-cinza indent-1 outline-none'
                     type="password"
                     placeholder='Senha'
                     value={password} 
