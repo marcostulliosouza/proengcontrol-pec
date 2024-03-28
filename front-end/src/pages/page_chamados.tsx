@@ -4,6 +4,7 @@ import { Sidebar } from '../components/sidebar';
 import { BarraPesquisa } from '../components/barra_pesquisa';
 import { useEffect, useState } from 'react';
 import { MainView } from '../components/main_view';
+import Table from "../components/table";
 
 export function Chamados() {
     const [dados, setDados] = useState([]);
@@ -52,6 +53,9 @@ export function Chamados() {
                 <BarraPesquisa>
                 </BarraPesquisa>
                 <MainView>
+                    <div>
+
+                    </div>
                     <div className='grid justify-items-center p-5'>
                         <table className="table-fixed table-xs w-11/12 md:w-full border-collapse text-xs">
                             <thead>
