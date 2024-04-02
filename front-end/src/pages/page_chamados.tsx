@@ -1,44 +1,10 @@
 import React from "react";
 import { Link } from 'react-router-dom';
-import { Background } from '../components/background';
 import { Sidebar } from '../components/sidebar';
 import { BarraPesquisa } from '../components/barra_pesquisa';
 import { useEffect, useState } from 'react';
-import { MainView } from '../components/main_view';
-import { Table } from "../components/table";
+import { CollapsibleTable } from "../components/collapsible_table"
 
-// Tabela
-const getData = () => {
-    const data = [
-        {
-            tipo: "teste",
-            status: "teste",
-            duracao_total: "teste",
-            tempo_atendimento: "teste",
-            tipo_chamado: "teste",
-            local: "teste",
-            produto: "teste",
-            cliente: "teste",
-            responsavel: "teste",
-            desricao: "teste",
-            operador: "teste",
-        },
-        {
-            tipo: "teste2",
-            status: "teste2",
-            duracao_total: "teste2",
-            tempo_atendimento: "teste2",
-            tipo_chamado: "teste2",
-            local: "teste2",
-            produto: "teste2",
-            cliente: "teste2",
-            responsavel: "teste2",
-            desricao: "teste2 kdok saokdó akspodj aisdoaksdoj aspi jaosk doajsd poaksp dlkasópdkoásk dpasldpá oskdoá p[dla sp´ kdó ask",
-            operador: "teste2",
-        },
-    ];
-    return [...data, ...data, ...data, ...data, ...data, ...data]
-}
 
 export function Chamados() {
     const [dados, setDados] = useState([]);
@@ -73,72 +39,21 @@ export function Chamados() {
         }
     };
 
-    // Tabela
-    const columns = React.useMemo(() => [
-        {
-            Header: "Tipo",
-            accessor: "tipo",
-        },
-        {
-            Header: "Status",
-            accessor: "status",
-        },
-        {
-            Header: "Duração Total",
-            accessor: "duracao_total",
-        },
-        {
-            Header: "Tempo de Atendimento",
-            accessor: "tempo_atendimento",
-        },
-        {
-            Header: "Tipo de Chamado",
-            accessor: "tipo_chamado",
-        },
-        {
-            Header: "Local",
-            accessor: "local",
-        },
-        {
-            Header: "Produto",
-            accessor: "produto",
-        },
-        {
-            Header: "Cliente",
-            accessor: "cliente",
-        },
-        {
-            Header: "Responsável",
-            accessor: "responsavel",
-        },
-        {
-            Header: "Descrição do chamado",
-            accessor: "desricao",
-        },
-        {
-            Header: "Operador",
-            accessor: "operador",
-        },
-    ],
-        []
-    );
-
-    const data = React.useMemo(() => getData(), []);
-
     return (
-        <div>
-            <Background />
+        <div className="bg-cinza-200 w-full h-full">
             <body>
-                <Sidebar />
+                <div className="bg-pec fixed inset-y-0 left-0 w-[200px]">
+                    <Sidebar />
+                </div>
                 <main className='absolute inset-y-0 right-0 w-10/12 grid gap-y-5 p-10'>
                     <BarraPesquisa />
                     <div className='w-9/12 text-cinza-500'>
                         <p className='text-sm'>Dashboard Chamados</p>
                         <p className='text-base'>Olá, @usuário</p>
                     </div>
-                    <MainView>
-                        <div className="p-5 text-sm flex justify-center max-h-full">
-                            <Table columns={columns} data={data} />
+                    <div>
+                        <div className="py-5">
+                            <CollapsibleTable />
                         </div>
                         {/* <div className='grid justify-items-center p-5'>
                             <table className="table-fixed table-xs w-11/12 md:w-full border-collapse text-xs">
@@ -176,7 +91,7 @@ export function Chamados() {
                                 </tbody>
                             </table>
                         </div> */}
-                    </MainView>
+                    </div>
                 </main>
             </body>
 
