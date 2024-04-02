@@ -39,7 +39,7 @@ export function Table({ columns, data }) {
         
 
     return (
-        <div className="">
+        <div>
             <table {...getTableProps()} className="text-left text-xs shadow">
                 {/* Cabeçalho da tabela */}
                 <thead className="bg-cinza-300">
@@ -56,7 +56,7 @@ export function Table({ columns, data }) {
                     ))}
                 </thead>
                 {/* Corpo da tabela */}
-                <tbody {...getTableBodyProps()} className="bg-white divide-y divide-gray-200">
+                <tbody {...getTableBodyProps()} className="bg-white">
                     {page.map((row, i) => {
                         prepareRow(row);
                         return (
@@ -81,16 +81,16 @@ export function Table({ columns, data }) {
                 <div className="flex">
                     <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
                         <MdOutlineKeyboardDoubleArrowLeft className="h-6 w-6 border border-cinza-400 bg-white rounded-l" />
-                    </button>{' '}
+                    </button>
                     <button onClick={() => previousPage()} disabled={!canPreviousPage}>
                         <MdOutlineKeyboardArrowLeft className="h-6 w-6 border border-cinza-400 bg-white" />
-                    </button>{' '}
+                    </button>
                     <button onClick={() => nextPage()} disabled={!canNextPage}>
                         <MdOutlineKeyboardArrowRight className="h-6 w-6 border border-cinza-400 bg-white" />
-                    </button>{' '}
+                    </button>
                     <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
                         <MdOutlineKeyboardDoubleArrowRight className="h-6 w-6 border border-cinza-400 bg-white rounded-r" />
-                    </button>{' '}
+                    </button>
                 </div>
             </div>
         </div>

@@ -137,7 +137,7 @@ export function Chamados() {
                         <p className='text-base'>Olá, @usuário</p>
                     </div>
                     <MainView>
-                        <div className="p-5 text-sm flex justify-center">
+                        <div className="p-5 text-sm flex justify-center max-h-full">
                             <Table columns={columns} data={data} />
                         </div>
                         {/* <div className='grid justify-items-center p-5'>
