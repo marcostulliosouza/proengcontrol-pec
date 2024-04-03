@@ -9,7 +9,9 @@ export const BarraPesquisa = (props) => {
                 type="text"
                 placeholder='Pesquisar'
             />
-            <BiSolidUserCircle className="text-2xl text-pec"/>
+            <button>
+                <BiSolidUserCircle className="text-2xl text-pec"/>
+            </button>
             {props.children}
         </div>
     )
