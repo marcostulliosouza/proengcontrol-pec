@@ -45,18 +45,17 @@ export function Chamados() {
     return (
         <div>
             <body>
-                <div className="bg-cinza-200 fixed inset-y-0 w-screen"/>
+                <div className="bg-cinza-200 fixed inset-y-0 w-screen" />
                 <div className="bg-pec fixed inset-y-0 left-0 w-[200px]">
                     <Sidebar />
                 </div>
                 <main className='absolute inset-y-0 right-0 w-10/12 grid content-start gap-y-5 p-10'>
                     <BarraPesquisa />
-                    <HelloUser user={"usuário"}/>
-                    <div>
-                        <div className="py-5">
-                            <CollapsibleTable />
-                        </div>
-                        {/* <div className='grid justify-items-center p-5'>
+                    <HelloUser user={"usuário"} />
+                    <div className="py-5">
+                        <CollapsibleTable />
+                    </div>
+                    {/* <div className='grid justify-items-center p-5'>
                             <table className="table-fixed table-xs w-11/12 md:w-full border-collapse text-xs">
                                 <thead>
                                     <tr className='bg-table_header'>
@@ -92,7 +91,6 @@ export function Chamados() {
                                 </tbody>
                             </table>
                         </div> */}
-                    </div>
                 </main>
             </body>
 
