@@ -2,6 +2,7 @@ import logo from '../assets/icon_pec.svg'
 import { AiOutlineUser } from "react-icons/ai";
 import { GoKey } from "react-icons/go";
 import{ useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 
 import { useState } from 'react';
 import { FormEvent } from 'react';
@@ -80,7 +81,7 @@ export function Login() {
                   </span>
                 </div>
                 <footer className="flex flex-col gap-8 pt-10">
-                  {/* <Link to="/chamados"> */}
+                  {/* <Link to="/menu"> */}
                     <button
                       type="submit"
                       className='fixed left-1/2 -translate-x-1/2 -translate-y-1/2 font-bold rounded-md box-border h-10 w-32 bg-pec text-cinza-200'

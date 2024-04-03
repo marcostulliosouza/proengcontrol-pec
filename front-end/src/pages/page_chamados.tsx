@@ -40,12 +40,13 @@ export function Chamados() {
     };
 
     return (
-        <div className="bg-cinza-200 w-full h-full">
+        <div>
             <body>
+                <div className="bg-cinza-200 fixed inset-y-0 w-screen"/>
                 <div className="bg-pec fixed inset-y-0 left-0 w-[200px]">
                     <Sidebar />
                 </div>
-                <main className='absolute inset-y-0 right-0 w-10/12 grid gap-y-5 p-10'>
+                <main className='absolute inset-y-0 right-0 w-10/12 grid content-start gap-y-5 p-10'>
                     <BarraPesquisa />
                     <div className='w-9/12 text-cinza-500'>
                         <p className='text-sm'>Dashboard Chamados</p>
