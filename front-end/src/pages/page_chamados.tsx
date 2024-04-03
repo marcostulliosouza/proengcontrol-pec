@@ -1,7 +1,10 @@
-import React from "react";
-import { Link } from 'react-router-dom';
+// Componentes
 import { Sidebar } from '../components/sidebar';
 import { BarraPesquisa } from '../components/barra_pesquisa';
+import { HelloUser } from '../components/hello_user';
+
+import React from "react";
+import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { CollapsibleTable } from "../components/collapsible_table"
 
@@ -48,10 +51,7 @@ export function Chamados() {
                 </div>
                 <main className='absolute inset-y-0 right-0 w-10/12 grid content-start gap-y-5 p-10'>
                     <BarraPesquisa />
-                    <div className='w-9/12 text-cinza-500'>
-                        <p className='text-sm'>Dashboard Chamados</p>
-                        <p className='text-base'>Olá, @usuário</p>
-                    </div>
+                    <HelloUser user={"usuário"}/>
                     <div>
                         <div className="py-5">
                             <CollapsibleTable />
