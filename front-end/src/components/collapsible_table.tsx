@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
@@ -14,40 +15,40 @@ import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
-function createData(
-  tipo: string,
-  status: string,
-  duracao_total: string,
-  tempo_atendimento: string,
-  tipo_chamado: string,
-  local: string,
-  produto: string,
-  cliente: string,
-  responsavel: string,
-  descricao: string,
-  operador: string,
-) {
-  return {
-    tipo,
-    status,
-    duracao_total,
-    tempo_atendimento,
-    tipo_chamado,
-    local,
+// function createData(
+//   tipo: string,
+//   status: string,
+//   duracao_total: string,
+//   tempo_atendimento: string,
+//   tipo_chamado: string,
+//   local: string,
+//   produto: string,
+//   cliente: string,
+//   responsavel: string,
+//   descricao: string,
+//   operador: string,
+// ) {
+//   return {
+//     tipo,
+//     status,
+//     duracao_total,
+//     tempo_atendimento,
+//     tipo_chamado,
+//     local,
 
-    detalhes: [
-      {
-        produto: '007',
-        cliente: 'Hi-Mix',
-        responsavel: 'Fulano',
-        descricao: 'Deu problema aoskd oaksdo kaoskdoask odkasd asijdisa daiosj diasj diajsi djaso ijd',
-        operador: 'Ciclano',
-      },
-    ],
-  };
-}
+//     detalhes: [
+//       {
+//         produto: '007',
+//         cliente: 'Hi-Mix',
+//         responsavel: 'Fulano',
+//         descricao: 'Deu problema aoskd oaksdo kaoskdoask odkasd asijdisa daiosj diasj diajsi djaso ijd',
+//         operador: 'Ciclano',
+//       },
+//     ],
+//   };
+// }
 
-function Row(props: { row: ReturnType<typeof createData> }) {
+function Row(props = { row: ReturnType<typeof Chamados> }) {
   const { row } = props;
   const [open, setOpen] = React.useState(false);
 
@@ -64,13 +65,13 @@ function Row(props: { row: ReturnType<typeof createData> }) {
           </IconButton>
         </TableCell>
         <TableCell align="left" component="th" scope="row">
-          {row.tipo}
+          {row.cha_tipo}
         </TableCell>
-        <TableCell align="left">{row.status}</TableCell>
-        <TableCell align="left">{row.duracao_total}</TableCell>
-        <TableCell align="left">{row.tempo_atendimento}</TableCell>
-        <TableCell align="left">{row.tipo_chamado}</TableCell>
-        <TableCell align="left">{row.local}</TableCell>
+        <TableCell align="left">{row.cha_status}</TableCell>
+        <TableCell align="left">{row.cha_data_hora_abertura}</TableCell>
+        <TableCell align="left">{row.cha_data_hora_atendimento}</TableCell>
+        <TableCell align="left">{row.cha_tipo}</TableCell>
+        <TableCell align="left">{row.cha_status}</TableCell>  {/*aqui será o local */}
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -106,10 +107,10 @@ function Row(props: { row: ReturnType<typeof createData> }) {
                       <TableCell align="left" component="th" scope="row">
                         {detalhesRow.produto}
                       </TableCell>
-                      <TableCell align="left">{detalhesRow.cliente}</TableCell>
-                      <TableCell align="left">{detalhesRow.responsavel}</TableCell>
-                      <TableCell align="left">{detalhesRow.descricao}</TableCell>
-                      <TableCell align="left">{detalhesRow.operador}</TableCell>
+                      <TableCell align="left">{detalhesRow.cha_cliente}</TableCell>
+                      <TableCell align="left">{detalhesRow.cha_operador}</TableCell> {/*aqui será o responsavel*/}
+                      <TableCell align="left">{detalhesRow.cha_descricao}</TableCell>
+                      <TableCell align="left">{detalhesRow.cha_operador}</TableCell>
                       <TableCell align='left'>
                         <button
                           className='rounded shadow text-white font-semibold bg-red-700 hover:bg-red-800'
@@ -129,24 +130,30 @@ function Row(props: { row: ReturnType<typeof createData> }) {
   );
 }
 
-const rows = [
-  createData('teste', 'teste', 'teste', 'teste', 'teste', 'teste'),
-  createData('teste', 'teste', 'teste', 'teste', 'teste', 'teste'),
-  createData('teste', 'teste', 'teste', 'teste', 'teste', 'teste'),
-  createData('teste', 'teste', 'teste', 'teste', 'teste', 'teste'),
-  createData('teste', 'teste', 'teste', 'teste', 'teste', 'teste'),
-  createData('teste', 'teste', 'teste', 'teste', 'teste', 'teste'),
-  createData('teste', 'teste', 'teste', 'teste', 'teste', 'teste'),
-  createData('teste', 'teste', 'teste', 'teste', 'teste', 'teste'),
-  createData('teste', 'teste', 'teste', 'teste', 'teste', 'teste'),
-  createData('teste', 'teste', 'teste', 'teste', 'teste', 'teste'),
-  createData('teste', 'teste', 'teste', 'teste', 'teste', 'teste'),
-  createData('teste', 'teste', 'teste', 'teste', 'teste', 'teste'),
-  createData('teste', 'teste', 'teste', 'teste', 'teste', 'teste'),
-  createData('teste', 'teste', 'teste', 'teste', 'teste', 'teste'),
-  createData('teste', 'teste', 'teste', 'teste', 'teste', 'teste'),
+function Chamados() {
+  const [dados, setDados] = useState([]);
 
-];
+  useEffect(() => {
+      const intervalId = setInterval(fetchData, 3000); // Busca os dados a cada 1 minuto
+      return () => clearInterval(intervalId); // Limpa o temporizador quando o componente é desmontado
+  }, []);
+
+  const fetchData = async () => {
+      try {
+          const response = await fetch('http://127.0.0.1:5000/api/dadoschamados');
+          if (response.ok) {
+              const data = await response.json();
+              setDados(data);
+          } else {
+              console.error('Erro ao buscar dados: ', response.statusText);
+          }
+      } catch (error) {
+          console.error("Erro fetching dados: ", error)
+      }
+  };
+
+  return null;
+}
 
 export function CollapsibleTable() {
 
@@ -190,10 +197,10 @@ export function CollapsibleTable() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows
+            {dados
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row) => (
-                <Row key={row.tipo} row={row} />
+                <Row key={row.cha_id} row={row} />
               ))}
           </TableBody>
         </Table>
@@ -201,7 +208,7 @@ export function CollapsibleTable() {
       <TablePagination
         rowsPerPageOptions={[5, 10, 20]}
         component="div"
-        count={rows.length}
+        count={dados.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}

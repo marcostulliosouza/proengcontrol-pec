@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Login } from './pages/page_login';
-import { Menu } from './pages/page_menu'
+import { Menu } from './pages/page_menu';
 import { Chamados } from './pages/page_chamados';
 import { ChamadoEng } from './pages/page_chamado_eng';
 import { RelatorioChamados } from './pages/page_relatorio_chamadas';

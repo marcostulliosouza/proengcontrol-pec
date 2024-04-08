@@ -26,7 +26,7 @@ export function Login() {
         const data = await response.json();
         console.log(data);
         if (response.ok) {
-          navigate('/chamados');
+          navigate('/menu');
         } 
         else {
           window.alert('Desculpe, parece que você digitou o login ou a senha incorretos. \nPor favor, verifique e tente novamente.');
