@@ -18,7 +18,6 @@ import { AdicionarNota } from './pages/page_adicionar_nota';
 export function App() {
 
   return (
-
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login/>} />
