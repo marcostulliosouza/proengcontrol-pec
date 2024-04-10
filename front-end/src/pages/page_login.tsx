@@ -9,19 +9,19 @@ import { FormEvent } from 'react';
 
 
 export function Login() {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
+    const [col_login, setUsername] = useState('');
+    const [col_senha, setPassword] = useState('');
     const navigate = useNavigate();
 
     const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       try{
-        const response = await fetch('http://127.0.0.1:5000/autentication', {
+        const response = await fetch('http://127.0.0.1:5000/login', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({ username, password }),
+          body: JSON.stringify({ col_login, col_senha }),
         });
         const data = await response.json();
         console.log(data);
@@ -56,7 +56,7 @@ export function Login() {
                   <input className='bg-cinza-300 indent-1 outline-none rounded'
                     type="text"
                     placeholder='Login'
-                    value={username} 
+                    value={col_login} 
                     onChange={(e) => setUsername(e.target.value)}
                   />
                 </div>
@@ -65,7 +65,7 @@ export function Login() {
                   <input className='bg-cinza-300 indent-1 outline-none rounded'
                     type="password"
                     placeholder='Senha'
-                    value={password} 
+                    value={col_senha} 
                     onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
