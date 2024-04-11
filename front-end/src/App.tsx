@@ -1,3 +1,4 @@
+import React from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { Login } from './pages/page_login';
 import { Menu } from './pages/page_menu';
@@ -14,8 +15,9 @@ import { ManutencaoPreventiva } from './pages/page_manutencao_preventiva';
 import { FormulariosManutencao } from './pages/page_formularios_matuncao';
 import { ListarNotasFiscais } from './pages/page_listar_notas_fiscais';
 import { AdicionarNota } from './pages/page_adicionar_nota';
+import { NotFound } from './pages/page_notfound';
 
-const PrivateRoute = ({ children, redirectTo }) => {
+const PrivateRoute = ({ children, redirectTo }: { children: React.ReactNode, redirectTo: string }) => {
   const isAuthenticated = localStorage.getItem("token") !== null;
   console.log("isAuth: ", isAuthenticated);
   return isAuthenticated ? children : <Navigate to={redirectTo} />
@@ -69,7 +71,7 @@ export function App() {
         <Route path="/adicionar_nota" element={<PrivateRoute redirectTo="/">
           <AdicionarNota />
         </PrivateRoute>} />
-        <Route path='*' element="Page Not Found" />
+        <Route path='*' element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   )
