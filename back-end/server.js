@@ -5,8 +5,19 @@ const jwt = require('jsonwebtoken');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const mysql = require('mysql');
+const http = require('http');
+const socketIo = require('socket.io');
+const { Server } = require('socket.io');
 
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"]
+  }
+});
+
 const PORT = process.env.PORT || 5000;
 
 app.use(cors());
@@ -46,4 +57,26 @@ app.post('/login', (req, res) => {
     });
 });
 
-app.listen(PORT, () => console.log('Servidor rodando na porta ', PORT));
+// Rota para buscar chamados
+app.get('/api/chamados', (req, res) => {
+    const query = 'SELECT * FROM chamados';
+    pool.query(query, (err, result) => {
+        if (err) {
+            console.error('Erro:', err);
+            return res.status(500).json({ message: 'Erro interno do servidor' });
+        }
+        return res.status(200).json(result);
+    });
+});
+
+// // WebSocket para notificar alteração no banco
+// io.on('connection', socket => {
+//     console.log('Nova alteração no banco');
+//     // Exemplo de envio de mensagem para o cliente quando os chamados forem atualizados
+//     socket.on('chamadosUpdated', () => {
+//         console.log('Chamados atualizados. Notificando cliente...');
+//         socket.emit('chamadosAtualizados');
+//     });
+// });
+
+server.listen(PORT, () => console.log('Servidor rodando na porta ', PORT));
