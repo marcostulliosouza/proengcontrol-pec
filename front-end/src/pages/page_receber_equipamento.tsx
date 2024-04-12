@@ -13,7 +13,7 @@ export function ReceberEquipamento() {
                 </div>
                 <main className='absolute inset-y-0 right-0 w-10/12 grid content-start gap-y-5 p-10'>
                     <BarraPesquisa />
-                    <HelloUser user={"usuário"}/>
+                    <HelloUser user={localStorage.getItem("user")}/>
                     <div>
                         ReceberEquipamento
                     </div>

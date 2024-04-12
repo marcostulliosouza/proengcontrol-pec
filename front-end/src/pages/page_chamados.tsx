@@ -51,7 +51,7 @@ export function Chamados() {
                 </div>
                 <main className='absolute inset-y-0 right-0 w-10/12 grid content-start gap-y-5 p-10'>
                     <BarraPesquisa />
-                    <HelloUser user={"usuário"} />
+                    <HelloUser user={localStorage.getItem("user")} />
                     <div className="py-5">
                         <CollapsibleTable />
                     </div>

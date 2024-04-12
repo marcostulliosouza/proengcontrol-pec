@@ -27,7 +27,7 @@ export function Menu() {
                 </div>
                 <main className='absolute inset-y-0 right-0 w-10/12 grid content-start gap-y-5 p-10'>
                     <BarraPesquisa />
-                    <HelloUser user={"usuário"} />
+                    <HelloUser user={localStorage.getItem("user")} />
                     <div className="bg-cinza-100 rounded-md drop-shadow grid grid-cols-6 justify-items-center items-start p-10 gap-10">
                         <MenuButton name={"Listar chamados"} link={"/chamados"} icon={BsListColumnsReverse} />
                         <MenuButton name={"Chamado de Engenharia"} link={"/chamados_engenharia"} icon={PiCircuitry} />

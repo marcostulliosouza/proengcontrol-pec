@@ -34,6 +34,7 @@ export function Login() {
       console.log(data);
       if (response.ok) {
         localStorage.setItem("token", data.token);
+        localStorage.setItem("user", col_login);
         navigate('/menu');
       }
       else {
@@ -55,7 +56,7 @@ export function Login() {
             </div>
             <div className="flex flex-col items-center gap-6">
               <p className='text-sm'>ProEngControl</p>
-              <p className='text-cinza-medium_dark text-xl font-extralight'>Bem-Vindo!</p>
+              <p className='text-pec text-xl font-extralight'>Bem-Vindo!</p>
             </div>
           </header>
           <form onSubmit={handleLogin} className="flex flex-col items-center gap-4 font-normal">
