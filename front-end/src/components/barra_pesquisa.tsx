@@ -9,16 +9,16 @@ import {
     MenuList,
     MenuItem,
     IconButton,
-    Avatar,
     Typography,
 } from "@material-tailwind/react";
 
 // Função para limpar o localStorage, isso garante que o navegador não armazene o token de autenticação quando o usuário da logout
 const handleLogout = () => {
     localStorage.clear();
+    sessionStorage.clear();
 };
 
-export const BarraPesquisa = (props) => {
+export const BarraPesquisa = (props: any) => {
     return (
         <div className="flex items-center h-10 rounded-md bg-cinza-300 drop-shadow">
             <BsSearch className="mx-4 opacity-70" />

@@ -18,7 +18,7 @@ import { AdicionarNota } from './pages/page_adicionar_nota';
 import { NotFound } from './pages/page_notfound';
 
 const PrivateRoute = ({ children, redirectTo }: { children: React.ReactNode, redirectTo: string }) => {
-  const isAuthenticated = localStorage.getItem("token") !== null;
+  const isAuthenticated = sessionStorage.getItem("token") !== null;
   console.log("isAuth: ", isAuthenticated);
   return isAuthenticated ? children : <Navigate to={redirectTo} />
 }
