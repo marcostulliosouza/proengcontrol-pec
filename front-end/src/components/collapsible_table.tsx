@@ -15,40 +15,7 @@ import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
-// function createData(
-//   tipo: string,
-//   status: string,
-//   duracao_total: string,
-//   tempo_atendimento: string,
-//   tipo_chamado: string,
-//   local: string,
-//   produto: string,
-//   cliente: string,
-//   responsavel: string,
-//   descricao: string,
-//   operador: string,
-// ) {
-//   return {
-//     tipo,
-//     status,
-//     duracao_total,
-//     tempo_atendimento,
-//     tipo_chamado,
-//     local,
-
-//     detalhes: [
-//       {
-//         produto: '007',
-//         cliente: 'Hi-Mix',
-//         responsavel: 'Fulano',
-//         descricao: 'Deu problema aoskd oaksdo kaoskdoask odkasd asijdisa daiosj diasj diajsi djaso ijd',
-//         operador: 'Ciclano',
-//       },
-//     ],
-//   };
-// }
-
-function Row(props = { row: ReturnType<typeof Chamados> }) {
+function Row(props: any) {
   const { row } = props;
   const [open, setOpen] = React.useState(false);
 
@@ -102,24 +69,20 @@ function Row(props = { row: ReturnType<typeof Chamados> }) {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {row.detalhes.map((detalhesRow) => (
-                    <TableRow key={detalhesRow.produto}>
-                      <TableCell align="left" component="th" scope="row">
-                        {detalhesRow.produto}
-                      </TableCell>
-                      <TableCell align="left">{detalhesRow.cha_cliente}</TableCell>
-                      <TableCell align="left">{detalhesRow.cha_operador}</TableCell> {/*aqui será o responsavel*/}
-                      <TableCell align="left">{detalhesRow.cha_descricao}</TableCell>
-                      <TableCell align="left">{detalhesRow.cha_operador}</TableCell>
-                      <TableCell align='left'>
-                        <button
-                          className='rounded shadow text-white font-semibold bg-red-700 hover:bg-red-800'
-                          onClick={() => console.log('Botão clicado')}>
-                          Atender chamado
-                        </button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                  <TableRow key={row.cha_produto}>
+                    <TableCell align="left">{row.cha_produto}</TableCell>
+                    <TableCell align="left">{row.cha_cliente}</TableCell>
+                    <TableCell align="left">{row.cha_operador}</TableCell> {/*aqui será o responsavel*/}
+                    <TableCell align="left">{row.cha_descricao}</TableCell>
+                    <TableCell align="left">{row.cha_operador}</TableCell>
+                    <TableCell align='left'>
+                      <button
+                        className='rounded shadow text-white font-semibold bg-red-700 hover:bg-red-800'
+                        onClick={() => console.log('Botão clicado')}>
+                        Atender chamado
+                      </button>
+                    </TableCell>
+                  </TableRow>
                 </TableBody>
               </Table>
             </Box>
@@ -130,41 +93,39 @@ function Row(props = { row: ReturnType<typeof Chamados> }) {
   );
 }
 
-function Chamados() {
-  const [dados, setDados] = useState([]);
-
-  useEffect(() => {
-      const intervalId = setInterval(fetchData, 3000); // Busca os dados a cada 1 minuto
-      return () => clearInterval(intervalId); // Limpa o temporizador quando o componente é desmontado
-  }, []);
-
-  const fetchData = async () => {
-      try {
-          const response = await fetch('http://127.0.0.1:5000/api/dadoschamados');
-          if (response.ok) {
-              const data = await response.json();
-              setDados(data);
-          } else {
-              console.error('Erro ao buscar dados: ', response.statusText);
-          }
-      } catch (error) {
-          console.error("Erro fetching dados: ", error)
-      }
-  };
-
-  return null;
-}
-
 export function CollapsibleTable() {
 
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5); // Número de linhas por página
+  const [rowsPerPage, setRowsPerPage] = React.useState(10); // Número de linhas por página
+  const [dados, setDados] = useState([]);
+  ''
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://127.0.0.1:5000/api/chamados');
+        console.log('resposta', response);
+        if (response.ok) {
+          const data = await response.json();
+          console.log(data)
+          setDados(data);
+        } else {
+          console.error('Erro ao buscar dados: ', response.statusText);
+        }
+      } catch (error) {
+        console.error("Erro fetching dados: ", error)
+      }
+    };
+    fetchData();
 
-  const handleChangePage = (event, newPage) => {
+    const intervalId = setInterval(fetchData, 3000);
+    return () => clearInterval(intervalId);
+  }, []);
+
+  const handleChangePage = (event: any, newPage: any) => {
     setPage(newPage);
   };
 
-  const handleChangeRowsPerPage = (event) => {
+  const handleChangeRowsPerPage = (event: any) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
@@ -199,7 +160,7 @@ export function CollapsibleTable() {
           <TableBody>
             {dados
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row) => (
+              .map((row: any) => (
                 <Row key={row.cha_id} row={row} />
               ))}
           </TableBody>

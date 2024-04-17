@@ -59,13 +59,13 @@ app.post('/login', (req, res) => {
 
 // Rota para buscar chamados
 app.get('/api/chamados', (req, res) => {
-    const query = 'SELECT * FROM chamados';
+    const query = 'SELECT * FROM chamados WHERE cha_status < 3 ORDER BY cha_id DESC';
     pool.query(query, (err, result) => {
         if (err) {
             console.error('Erro:', err);
             return res.status(500).json({ message: 'Erro interno do servidor' });
         }
-        return res.status(200).json(result);
+        return res.status(200), res.json(result);
     });
 });
 
