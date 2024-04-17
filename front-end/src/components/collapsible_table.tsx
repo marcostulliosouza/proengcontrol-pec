@@ -15,9 +15,22 @@ import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
+
 function Row(props: any) {
   const { row } = props;
   const [open, setOpen] = React.useState(false);
+
+  const calculateDuration = (start: string) => {
+    const startDate = new Date(start);
+    const currentDate = new Date();
+    const duration = currentDate.getTime() - startDate.getTime();
+
+    const hours = Math.floor(duration / (1000 * 60 * 60));
+    const minutes = Math.floor((duration % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((duration % (1000 * 60)) / 1000);
+
+    return `${hours}h ${minutes}m ${seconds}s`;
+  };
 
   return (
     <React.Fragment>
@@ -31,13 +44,28 @@ function Row(props: any) {
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        <TableCell align="left" component="th" scope="row">
-          {row.cha_tipo}
+        <TableCell align="left" sx={{ display: 'flex', alignItems: 'center', borderBottom: 'unset', margin: '8px' }}>
+          <span
+            style={{
+              width: '20px',
+              height: '20px',
+              borderRadius: '50%',
+              backgroundColor:
+                row.cha_plano === 1
+                  ? '#DB2E2A'
+                  : row.cha_plano === 0
+                    ? '#FFCC6D'
+                    : '#3366FF',
+              border: '1px solid black',
+            }}
+          ></span>
         </TableCell>
-        <TableCell align="left">{row.cha_status}</TableCell>
-        <TableCell align="left">{row.cha_data_hora_abertura}</TableCell>
+        <TableCell align="left">{row.cha_status === 1 ? 'ABERTO' : row.cha_status === 2 ? 'EM ATENDIMENTO' : ''}</TableCell>
+        <TableCell align="left">{calculateDuration(row.cha_data_hora_abertura)}</TableCell>
         <TableCell align="left">{row.cha_data_hora_atendimento}</TableCell>
         <TableCell align="left">{row.cha_tipo}</TableCell>
+        <TableCell align="left">{row.cha_produto}</TableCell>
+        <TableCell align="left">{row.cha_cliente}</TableCell>
         <TableCell align="left">{row.cha_status}</TableCell>  {/*aqui será o local */}
       </TableRow>
       <TableRow>
@@ -50,12 +78,6 @@ function Row(props: any) {
               <Table size="small" aria-label="purchases">
                 <TableHead>
                   <TableRow>
-                    <TableCell align="left">
-                      <Typography variant="subtitle2" sx={{ fontWeight: 'bold' }}>Produto</Typography>
-                    </TableCell>
-                    <TableCell align="left">
-                      <Typography variant="subtitle2" sx={{ fontWeight: 'bold' }}>Cliente</Typography>
-                    </TableCell>
                     <TableCell align="left">
                       <Typography variant="subtitle2" sx={{ fontWeight: 'bold' }}>Responsável</Typography>
                     </TableCell>
@@ -70,14 +92,12 @@ function Row(props: any) {
                 </TableHead>
                 <TableBody>
                   <TableRow key={row.cha_produto}>
-                    <TableCell align="left">{row.cha_produto}</TableCell>
-                    <TableCell align="left">{row.cha_cliente}</TableCell>
                     <TableCell align="left">{row.cha_operador}</TableCell> {/*aqui será o responsavel*/}
                     <TableCell align="left">{row.cha_descricao}</TableCell>
                     <TableCell align="left">{row.cha_operador}</TableCell>
                     <TableCell align='left'>
                       <button
-                        className='rounded shadow text-white font-semibold bg-red-700 hover:bg-red-800'
+                        className='rounded shadow text-white font-semibold bg-red-700 hover:bg-red-800 p-2'
                         onClick={() => console.log('Botão clicado')}>
                         Atender chamado
                       </button>
@@ -117,7 +137,7 @@ export function CollapsibleTable() {
     };
     fetchData();
 
-    const intervalId = setInterval(fetchData, 3000);
+    const intervalId = setInterval(fetchData, 1000);
     return () => clearInterval(intervalId);
   }, []);
 
@@ -151,6 +171,12 @@ export function CollapsibleTable() {
               </TableCell>
               <TableCell align="left">
                 <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>Tipo de Chamado</Typography>
+              </TableCell>
+              <TableCell align="left">
+                <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>Produto</Typography>
+              </TableCell>
+              <TableCell align="left">
+                <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>Cliente</Typography>
               </TableCell>
               <TableCell align="left">
                 <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>Local</Typography>
