@@ -2,7 +2,7 @@
 import { Sidebar } from '../components/sidebar';
 import { BarraPesquisa } from '../components/barra_pesquisa';
 import { HelloUser } from '../components/hello_user';
-import { MenuButton } from '../components/menu_button';
+import { MenuButton } from '../components/button_menu';
 
 // Icones
 import { BsListColumnsReverse } from "react-icons/bs";
@@ -19,7 +19,7 @@ import { CgNotes } from "react-icons/cg";
 
 export function Menu() {
     return (
-        <div>
+        <>
             <body>
                 <div className="bg-cinza-200 fixed inset-y-0 w-screen" />
                 <div className="bg-pec fixed inset-y-0 left-0 w-[200px]">
@@ -45,6 +45,6 @@ export function Menu() {
                     </div>
                 </main>
             </body>
-        </div>
+        </>
     )
 }

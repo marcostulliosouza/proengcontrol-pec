@@ -15,6 +15,9 @@ import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
+// Componentes
+import { AtenderChamado } from './buttom_atender_chamado';
+
 
 function Row(props: any) {
   const { row } = props;
@@ -96,11 +99,7 @@ function Row(props: any) {
                     <TableCell align="left">{row.cha_descricao}</TableCell>
                     <TableCell align="left">{row.cha_operador}</TableCell>
                     <TableCell align='left'>
-                      <button
-                        className='rounded shadow text-white font-semibold bg-red-700 hover:bg-red-800 p-2'
-                        onClick={() => console.log('Botão clicado')}>
-                        Atender chamado
-                      </button>
+                      <AtenderChamado produto={row.cha_produto} cliente={row.cha_cliente} problema={row.cha_descricao}/>
                     </TableCell>
                   </TableRow>
                 </TableBody>
