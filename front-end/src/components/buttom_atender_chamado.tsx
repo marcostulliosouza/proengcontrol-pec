@@ -14,7 +14,7 @@ export function AtenderChamado({ produto, cliente, problema }) {
             </button>
             {showModal ? (
                 <>
-                    <div className="flex justify-center items-center overflow-x-hidden overflow-y-auto fixed inset-0 z-50">
+                    <div className="flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50">
                         <div className="relative w-auto my-6 mx-auto max-w-3xl">
                             <div className="rounded-lg shadow-lg fixed left-1/2 top-72 -translate-x-1/2 -translate-y-1/2 flex flex-col w-6/12 bg-cinza-300">
                                 <head className="flex items-start flex-col p-5 text-base font-semibold gap-2">
@@ -36,12 +36,12 @@ export function AtenderChamado({ produto, cliente, problema }) {
                                     <p className="font-normal">{problema}</p>
                                     <p>Tempo de atendimento: </p>
                                 </head>
-                                <main className="relative p-6 flex-auto">
+                                <main className="p-6">
                                     <form className="bg-cinza-200 shadow-md rounded px-8 pt-6 pb-8 w-full">
                                         <label className="block text-black text-sm font-bold mb-1">
                                             Descrição da solução
                                         </label>
-                                        <input className="bg-cinza-100 shadow appearance-none border rounded w-full h-60 py-2 px-1 text-black" />
+                                        <input type='text' className="bg-cinza-100 shadow appearance-none border rounded w-full h-60 py-2 px-1 text-black" />
                                     </form>
                                 </main>
                                 <footer className="flex items-center justify-between p-6 rounded">
@@ -53,7 +53,7 @@ export function AtenderChamado({ produto, cliente, problema }) {
                                         Tranferir chamado
                                     </button>
                                     <button
-                                        className="text-cinza-100 bg-pec active:bg-yellow-700 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1"
+                                        className="text-cinza-100 bg-pec font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1"
                                         type="button"
                                         onClick={() => setShowModal(false)}
                                     >
