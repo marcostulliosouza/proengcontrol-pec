@@ -122,7 +122,7 @@ function Row(props: any) {
                     <TableCell align="left">{row.cha_descricao}</TableCell>
                     <TableCell align="left">{row.cha_operador}</TableCell>
                     <TableCell align='left'>
-                      <AtenderChamado produto={row.cha_produto} cliente={row.cha_cliente} problema={row.cha_descricao} tempoDeAtendimento={calculateDurationAtendimento(row.cha_data_hora_atendimento)} />
+                      <AtenderChamado produto={row.cha_produto} cliente={row.cha_cliente} problema={row.cha_descricao} tempoDeAtendimento={calculateDurationAtendimento(row.cha_data_hora_atendimento)} tipo={row.cha_plano}/>
                     </TableCell>
                   </TableRow>
                 </TableBody>

@@ -2,7 +2,7 @@ import React from "react";
 import { useState } from "react";
 import Draggable from 'react-draggable';
 
-export function AtenderChamado({ produto, cliente, problema, tempoDeAtendimento }) {
+export function AtenderChamado({ produto, cliente, problema, tempoDeAtendimento, tipo }) {
     const [showModal, setShowModal] = useState(false);
 
     return (
@@ -32,7 +32,8 @@ export function AtenderChamado({ produto, cliente, problema, tempoDeAtendimento 
                                 </div>
                                 <p>Problema:</p>
                                 <p className="font-normal">{problema}</p>
-                                <p className="flex justify-center items-center bg-pec rounded p-2 text-gray-100 text-9xl font-jersey">{tempoDeAtendimento}</p>
+                                <p className={`flex justify-center items-center rounded p-2 text-gray-100 text-9xl ${tipo === 1 ? 'bg-no_plano' : tipo === 0 ? 'bg-fora_plano' : 'bg-engenharia'
+                                    }`} style={{ textShadow: '2px 2px 2px black' }}>{tempoDeAtendimento}</p>
                             </header>
                             <body>
                                 <main>
