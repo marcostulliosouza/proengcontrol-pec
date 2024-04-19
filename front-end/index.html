@@ -1,17 +1,21 @@
 <!doctype html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
-    <title>ProEngControl</title>
-    <link rel="icon" type="image/png" href="./src/assets/icon_pec.svg">
-    <script>
-      window.token='{{ flask_token }}';
-    </script>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Jersey+10&display=swap" rel="stylesheet">
+
+  <title>ProEngControl</title>
+  <link rel="icon" type="image/png" href="./src/assets/icon_pec.svg">
+  <script>
+    window.token = '{{ flask_token }}';
+  </script>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+
 </html>

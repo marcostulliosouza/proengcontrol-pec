@@ -2,7 +2,7 @@ import React from "react";
 import { useState } from "react";
 import Draggable from 'react-draggable';
 
-export function AtenderChamado({ produto, cliente, problema }) {
+export function AtenderChamado({ produto, cliente, problema, tempoDeAtendimento }) {
     const [showModal, setShowModal] = useState(false);
 
     return (
@@ -16,7 +16,7 @@ export function AtenderChamado({ produto, cliente, problema }) {
             {showModal ? (
                 <>
                     <Draggable>
-                        <div className="w-[800px] rounded-lg shadow bg-cinza-300 border border-black absolute top-[50%] left-[50%] transform translate[-50%,-50%] z-50">
+                        <div className="w-[80vw] max-w-[800px] rounded-lg shadow bg-cinza-300 border border-black absolute top-[50%] left-[50%] transform translate[-50%,-50%] z-50">
                             <header className="rounded-lg shadow-lg cursor-move p-5 bg-cinza-300 text-base font-semibold flex flex-col gap-2">
                                 <span className="">Atendendo chamado</span>
                                 <button
@@ -32,7 +32,7 @@ export function AtenderChamado({ produto, cliente, problema }) {
                                 </div>
                                 <p>Problema:</p>
                                 <p className="font-normal">{problema}</p>
-                                <p className="flex justify-center items-center bg-pec rounded p-5 text-gray-100">Tempo de atendimento: </p>
+                                <p className="flex justify-center items-center bg-pec rounded p-2 text-gray-100 text-9xl font-jersey">{tempoDeAtendimento}</p>
                             </header>
                             <body>
                                 <main>

@@ -6,19 +6,19 @@ export default {
   ],
   theme: {
     screens: {
-      'sm': {'min': '640px', 'max': '767px'},
+      'sm': { 'min': '640px', 'max': '767px' },
       // Tablet
 
-      'md': {'min': '768px', 'max': '1023px'},
+      'md': { 'min': '768px', 'max': '1023px' },
       // Laptop
 
-      'lg': {'min': '1024px', 'max': '1279px'},
+      'lg': { 'min': '1024px', 'max': '1279px' },
       // Desktop
 
-      'xl': {'min': '1280px', 'max': '1535px'},
+      'xl': { 'min': '1280px', 'max': '1535px' },
       // TV
 
-      '2xl': {'min': '1536px'},
+      '2xl': { 'min': '1536px' },
     },
     extend: {
       colors: {
@@ -32,6 +32,9 @@ export default {
           500: '#444444',
         }
       },
+      fontFamily: {
+        'jersey': ['Jersey 10', 'sans-serif'],
+      },
       keyframes: {
         wiggle: {
           '0%, 100%': { transform: 'rotate(-3deg)' },
@@ -43,5 +46,5 @@ export default {
       }
     }
   },
-  plugins: [],
+  plugins: ['@tailwindcss/typography'],
 }

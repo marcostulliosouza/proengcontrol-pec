@@ -22,18 +22,41 @@ import { AtenderChamado } from './buttom_atender_chamado';
 function Row(props: any) {
   const { row } = props;
   const [open, setOpen] = React.useState(false);
+  const [tempoInicioAtendimento, setTempoInicioAtendimento] = React.useState<Date | null>(null);
 
   const calculateDuration = (start: string) => {
     const startDate = new Date(start);
     const currentDate = new Date();
     const duration = currentDate.getTime() - startDate.getTime();
-
-    const hours = Math.floor(duration / (1000 * 60 * 60));
-    const minutes = Math.floor((duration % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((duration % (1000 * 60)) / 1000);
-
-    return `${hours}h ${minutes}m ${seconds}s`;
+  
+    const hours = Math.floor(duration / (1000 * 60 * 60)).toString().padStart(2, '0');
+    const minutes = Math.floor((duration % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
+    const seconds = Math.floor((duration % (1000 * 60)) / 1000).toString().padStart(2, '0');
+  
+    return `${hours}:${minutes}:${seconds}`;
   };
+
+  const calculateDurationAtendimento = (start: string) => {
+    if(!start) {
+      return '00:00:00'
+    }
+
+    const startDate = new Date(start);
+    const currentDate = new Date();
+    const duration = currentDate.getTime() - startDate.getTime();
+  
+    const hours = Math.floor(duration / (1000 * 60 * 60)).toString().padStart(2, '0');
+    const minutes = Math.floor((duration % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
+    const seconds = Math.floor((duration % (1000 * 60)) / 1000).toString().padStart(2, '0');
+  
+    return `${hours}:${minutes}:${seconds}`;
+  };
+
+  useEffect(() => {
+    if (row.cha_status === 2 && !tempoInicioAtendimento) {
+      setTempoInicioAtendimento(new Date());
+    }
+  }, [row.cha_status]);
 
   return (
     <React.Fragment>
@@ -65,7 +88,7 @@ function Row(props: any) {
         </TableCell>
         <TableCell align="left">{row.cha_status === 1 ? 'ABERTO' : row.cha_status === 2 ? 'EM ATENDIMENTO' : ''}</TableCell>
         <TableCell align="left">{calculateDuration(row.cha_data_hora_abertura)}</TableCell>
-        <TableCell align="left">{row.cha_data_hora_atendimento}</TableCell>
+        <TableCell align="left">{calculateDurationAtendimento(row.cha_data_hora_atendimento)}</TableCell>
         <TableCell align="left">{row.cha_tipo}</TableCell>
         <TableCell align="left">{row.cha_produto}</TableCell>
         <TableCell align="left">{row.cha_cliente}</TableCell>
@@ -99,7 +122,7 @@ function Row(props: any) {
                     <TableCell align="left">{row.cha_descricao}</TableCell>
                     <TableCell align="left">{row.cha_operador}</TableCell>
                     <TableCell align='left'>
-                      <AtenderChamado produto={row.cha_produto} cliente={row.cha_cliente} problema={row.cha_descricao} />
+                      <AtenderChamado produto={row.cha_produto} cliente={row.cha_cliente} problema={row.cha_descricao} tempoDeAtendimento={calculateDurationAtendimento(row.cha_data_hora_atendimento)} />
                     </TableCell>
                   </TableRow>
                 </TableBody>
