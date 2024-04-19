@@ -99,7 +99,7 @@ function Row(props: any) {
                     <TableCell align="left">{row.cha_descricao}</TableCell>
                     <TableCell align="left">{row.cha_operador}</TableCell>
                     <TableCell align='left'>
-                      <AtenderChamado produto={row.cha_produto} cliente={row.cha_cliente} problema={row.cha_descricao}/>
+                      <AtenderChamado produto={row.cha_produto} cliente={row.cha_cliente} problema={row.cha_descricao} />
                     </TableCell>
                   </TableRow>
                 </TableBody>
@@ -115,9 +115,9 @@ function Row(props: any) {
 export function CollapsibleTable() {
 
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10); // Número de linhas por página
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [dados, setDados] = useState([]);
-  ''
+
   useEffect(() => {
     const fetchData = async () => {
       try {

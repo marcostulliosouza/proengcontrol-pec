@@ -1,5 +1,6 @@
 import React from "react";
 import { useState } from "react";
+import Draggable from 'react-draggable';
 
 export function AtenderChamado({ produto, cliente, problema }) {
     const [showModal, setShowModal] = useState(false);
@@ -14,39 +15,37 @@ export function AtenderChamado({ produto, cliente, problema }) {
             </button>
             {showModal ? (
                 <>
-                    <div className="flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50">
-                        <div className="relative w-auto my-6 mx-auto max-w-3xl">
-                            <div className="rounded-lg shadow-lg fixed left-1/2 top-72 -translate-x-1/2 -translate-y-1/2 flex flex-col w-6/12 bg-cinza-300">
-                                <head className="flex items-start flex-col p-5 text-base font-semibold gap-2">
-                                    <div>
-                                        <p className="text-2xl">Atendendo chamado</p>
-                                        <button
-                                            className="text-cinza-100 bg-red-700 rounded font-bold uppercase px-6 py-2 text-sm mr-1 mb-1 absolute top-5 right-5"
-                                            type="button"
-                                            onClick={() => setShowModal(false)}
-                                        >
-                                            Cancelar chamado
-                                        </button>
-                                    </div>
-                                    <div className="flex items-start justify-start gap-10">
-                                        <p>Produto: {produto}</p>
-                                        <p>Cliente: {cliente}</p>
-                                    </div>
-                                    <p>Problema:</p>
-                                    <p className="font-normal">{problema}</p>
-                                    <p>Tempo de atendimento: </p>
-                                </head>
-                                <main className="p-6">
-                                    <form className="bg-cinza-200 shadow-md rounded px-8 pt-6 pb-8 w-full">
+                    <Draggable>
+                        <div className="w-[800px] rounded-lg shadow bg-cinza-300 border border-black absolute top-[50%] left-[50%] transform translate[-50%,-50%] z-50">
+                            <header className="rounded-lg shadow-lg cursor-move p-5 bg-cinza-300 text-base font-semibold flex flex-col gap-2">
+                                <span className="">Atendendo chamado</span>
+                                <button
+                                    className="absolute top-5 right-5 text-cinza-100 bg-red-700 rounded font-bold uppercase px-6 py-2 text-sm"
+                                    type="button"
+                                    onClick={() => setShowModal(false)}
+                                >
+                                    Cancelar chamado
+                                </button>
+                                <div className="flex items-start justify-start gap-10">
+                                    <p>Produto: {produto}</p>
+                                    <p>Cliente: {cliente}</p>
+                                </div>
+                                <p>Problema:</p>
+                                <p className="font-normal">{problema}</p>
+                                <p className="flex justify-center items-center bg-pec rounded p-5 text-gray-100">Tempo de atendimento: </p>
+                            </header>
+                            <body>
+                                <main>
+                                    <form className="p-5 w-full">
                                         <label className="block text-black text-sm font-bold mb-1">
-                                            Descrição da solução
+                                            Descrição da solução:
                                         </label>
-                                        <input type='text' className="bg-cinza-100 shadow appearance-none border rounded w-full h-60 py-2 px-1 text-black" />
+                                        <textarea className="bg-gray-100 shadow appearance-none border rounded w-full h-60 py-2 px-1 text-black resize-none"></textarea>
                                     </form>
                                 </main>
-                                <footer className="flex items-center justify-between p-6 rounded">
+                                <footer className="flex items-center justify-between p-6">
                                     <button
-                                        className="text-cinza-500 bg-cinza-400 rounded font-bold uppercase px-6 py-3 text-sm outline-none focus:outline-none mr-1 mb-1"
+                                        className="text-pec bg-cinza-400 rounded font-bold uppercase px-6 py-3 text-sm outline-none focus:outline-none mr-1 mb-1"
                                         type="button"
                                         onClick={() => setShowModal(false)}
                                     >
@@ -60,9 +59,9 @@ export function AtenderChamado({ produto, cliente, problema }) {
                                         Encerrar chamado
                                     </button>
                                 </footer>
-                            </div>
+                            </body>
                         </div>
-                    </div>
+                    </Draggable>
                 </>
             ) : null}
         </>
