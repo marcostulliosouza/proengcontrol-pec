@@ -59,7 +59,7 @@ app.post('/login', (req, res) => {
 
 // Rota para buscar chamados
 app.get('/api/chamados', (req, res) => {
-    const query = 'SELECT * FROM chamados WHERE cha_status < 3 ORDER BY cha_id DESC';
+    const query = 'SELECT chamados.*, produtos.pro_nome AS produto_nome FROM chamados JOIN produtos ON chamados.pro_id = produtos.id WHERE chamados.cha_status < 3 ORDER BY chamados.cha_id DESC;';
     pool.query(query, (err, result) => {
         if (err) {
             console.error('Erro:', err);

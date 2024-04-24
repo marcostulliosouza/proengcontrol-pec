@@ -14,41 +14,42 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import Draggable from 'react-draggable';
 
 // Componentes
-import { AtenderChamado } from './buttom_atender_chamado';
 
 
 function Row(props: any) {
   const { row } = props;
   const [open, setOpen] = React.useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [tempoInicioAtendimento, setTempoInicioAtendimento] = React.useState<Date | null>(null);
 
   const calculateDuration = (start: string) => {
     const startDate = new Date(start);
     const currentDate = new Date();
     const duration = currentDate.getTime() - startDate.getTime();
-  
+
     const hours = Math.floor(duration / (1000 * 60 * 60)).toString().padStart(2, '0');
     const minutes = Math.floor((duration % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
     const seconds = Math.floor((duration % (1000 * 60)) / 1000).toString().padStart(2, '0');
-  
+
     return `${hours}:${minutes}:${seconds}`;
   };
 
   const calculateDurationAtendimento = (start: string) => {
-    if(!start) {
+    if (!start) {
       return '00:00:00'
     }
 
     const startDate = new Date(start);
     const currentDate = new Date();
     const duration = currentDate.getTime() - startDate.getTime();
-  
+
     const hours = Math.floor(duration / (1000 * 60 * 60)).toString().padStart(2, '0');
     const minutes = Math.floor((duration % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
     const seconds = Math.floor((duration % (1000 * 60)) / 1000).toString().padStart(2, '0');
-  
+
     return `${hours}:${minutes}:${seconds}`;
   };
 
@@ -66,6 +67,7 @@ function Row(props: any) {
             aria-label="expand row"
             size="small"
             onClick={() => setOpen(!open)}
+            disabled={showModal}
           >
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
@@ -122,7 +124,75 @@ function Row(props: any) {
                     <TableCell align="left">{row.cha_descricao}</TableCell>
                     <TableCell align="left">{row.cha_operador}</TableCell>
                     <TableCell align='left'>
-                      <AtenderChamado produto={row.cha_produto} cliente={row.cha_cliente} problema={row.cha_descricao} tempoDeAtendimento={calculateDurationAtendimento(row.cha_data_hora_atendimento)} tipo={row.cha_plano}/>
+                      <>
+                        {row.cha_status === 1 ? (
+                          <button
+                            onClick={() => setShowModal(true)}
+                            type="button"
+                            className='rounded shadow text-white font-semibold bg-red-700 hover:bg-red-800 p-2'
+                          >
+                            Atender chamado
+                          </button>
+                        ) : (
+                          <button
+                            className='rounded shadow text-white font-semibold bg-pec p-2'
+                          >
+                            Chamado em atendimento
+                          </button>
+                        )}
+                        {showModal ? (
+                          <>
+                            <Draggable>
+                              <div className="w-[80vw] max-w-[800px] rounded-lg shadow bg-cinza-300 border border-black absolute top-[50%] left-[50%] transform translate[-50%,-50%] z-50">
+                                <header className="rounded-lg shadow-lg cursor-move p-5 bg-cinza-300 text-base font-semibold flex flex-col gap-2">
+                                  <span className="">Atendendo chamado</span>
+                                  <button
+                                    onClick={() => setShowModal(false)}
+                                    type="button"
+                                    className="absolute top-5 right-5 text-cinza-100 bg-red-700 rounded font-bold uppercase px-6 py-2 text-sm"
+                                  >
+                                    Cancelar chamado
+                                  </button>
+                                  <div className="flex items-start justify-start gap-10">
+                                    <p>Produto: {row.cha_produto}</p>
+                                    <p>Cliente: {row.cha_cliente}</p>
+                                  </div>
+                                  <p>Problema:</p>
+                                  <p className="font-normal">{row.cha_descricao}</p>
+                                  <p className={`flex justify-center items-center rounded p-2 text-gray-100 text-9xl ${row.cha_plano === 1 ? 'bg-no_plano' : row.cha_plano === 0 ? 'bg-fora_plano' : 'bg-engenharia'
+                                    }`} style={{ textShadow: '2px 2px 2px black' }}>{calculateDurationAtendimento(row.cha_data_hora_atendimento)}</p>
+                                </header>
+                                <body>
+                                  <main>
+                                    <form className="p-5 w-full">
+                                      <label className="block text-black text-sm font-bold mb-1">
+                                        Descrição da solução:
+                                      </label>
+                                      <textarea className="bg-gray-100 shadow appearance-none border rounded w-full h-60 py-2 px-1 text-black resize-none"></textarea>
+                                    </form>
+                                  </main>
+                                  <footer className="flex items-center justify-between p-6">
+                                    <button
+                                      onClick={() => setShowModal(false)}
+                                      type="button"
+                                      className="text-pec bg-cinza-400 rounded font-bold uppercase px-6 py-3 text-sm outline-none focus:outline-none mr-1 mb-1"
+                                    >
+                                      Tranferir chamado
+                                    </button>
+                                    <button
+                                      onClick={() => setShowModal(false)}
+                                      type="button"
+                                      className="text-cinza-100 bg-pec font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1"
+                                    >
+                                      Encerrar chamado
+                                    </button>
+                                  </footer>
+                                </body>
+                              </div>
+                            </Draggable>
+                          </>
+                        ) : null}
+                      </>
                     </TableCell>
                   </TableRow>
                 </TableBody>
