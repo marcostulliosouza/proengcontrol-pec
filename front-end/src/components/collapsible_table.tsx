@@ -91,10 +91,10 @@ function Row(props: any) {
         <TableCell align="left">{row.cha_status === 1 ? 'ABERTO' : row.cha_status === 2 ? 'EM ATENDIMENTO' : ''}</TableCell>
         <TableCell align="left">{calculateDuration(row.cha_data_hora_abertura)}</TableCell>
         <TableCell align="left">{calculateDurationAtendimento(row.cha_data_hora_atendimento)}</TableCell>
-        <TableCell align="left">{row.cha_tipo}</TableCell>
-        <TableCell align="left">{row.cha_produto}</TableCell>
-        <TableCell align="left">{row.cha_cliente}</TableCell>
-        <TableCell align="left">{row.cha_status}</TableCell>  {/*aqui será o local */}
+        <TableCell align="left">{row.tipo_chamado}</TableCell>
+        <TableCell align="left">{row.produto_nome}</TableCell>
+        <TableCell align="left">{row.cliente_nome}</TableCell>
+        <TableCell align="left">{row.local_nome}</TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -135,6 +135,8 @@ function Row(props: any) {
                           </button>
                         ) : (
                           <button
+                            onClick={() => setShowModal(true)}
+                            type="button"
                             className='rounded shadow text-white font-semibold bg-pec p-2'
                           >
                             Chamado em atendimento
@@ -144,8 +146,8 @@ function Row(props: any) {
                           <>
                             <Draggable>
                               <div className="w-[80vw] max-w-[800px] rounded-lg shadow bg-cinza-300 border border-black absolute top-[50%] left-[50%] transform translate[-50%,-50%] z-50">
-                                <header className="rounded-lg shadow-lg cursor-move p-5 bg-cinza-300 text-base font-semibold flex flex-col gap-2">
-                                  <span className="">Atendendo chamado</span>
+                                <header className="rounded-lg shadow-lg cursor-move p-5 bg-cinza-300 text-base flex flex-col gap-2">
+                                  <span className="text-2xl font-semibold">Atendendo chamado</span>
                                   <button
                                     onClick={() => setShowModal(false)}
                                     type="button"
@@ -154,11 +156,21 @@ function Row(props: any) {
                                     Cancelar chamado
                                   </button>
                                   <div className="flex items-start justify-start gap-10">
-                                    <p>Produto: {row.cha_produto}</p>
-                                    <p>Cliente: {row.cha_cliente}</p>
+                                    <div className='flex items-start justify-start gap-2'>
+                                      <p className="font-semibold">Produto:</p><p>{row.produto_nome}</p>
+                                    </div>
+                                    <div className='flex items-start justify-start gap-2'>
+                                      <p className="font-semibold">Cliente:</p><p>{row.cliente_nome}</p>
+                                    </div>
+                                    <div className='flex items-start justify-start gap-2'>
+                                      <p className="font-semibold">Local:</p><p>{row.local_nome}</p>
+                                    </div>
                                   </div>
-                                  <p>Problema:</p>
-                                  <p className="font-normal">{row.cha_descricao}</p>
+                                  <div className='flex items-start justify-start gap-2'>
+                                    <p className="font-semibold">Tipo de chamado:</p><p>{row.tipo_chamado}</p>
+                                  </div>
+                                  <p className="font-semibold">Problema:</p>
+                                  <p>{row.cha_descricao}</p>
                                   <p className={`flex justify-center items-center rounded p-2 text-gray-100 text-9xl ${row.cha_plano === 1 ? 'bg-no_plano' : row.cha_plano === 0 ? 'bg-fora_plano' : 'bg-engenharia'
                                     }`} style={{ textShadow: '2px 2px 2px black' }}>{calculateDurationAtendimento(row.cha_data_hora_atendimento)}</p>
                                 </header>
