@@ -59,8 +59,27 @@ app.post('/login', (req, res) => {
 
 // Rota para buscar chamados
 app.get('/api/chamados', (req, res) => {
-    const query = 'SELECT chamados.*, produtos.pro_nome AS produto_nome, clientes.cli_nome AS cliente_nome, local_chamado.loc_nome AS local_nome, tipos_chamado.tch_descricao AS tipo_chamado FROM chamados LEFT JOIN produtos ON chamados.cha_produto = produtos.pro_id LEFT JOIN clientes ON chamados.cha_cliente = clientes.cli_id LEFT JOIN local_chamado ON chamados.cha_local = local_chamado.loc_id LEFT JOIN tipos_chamado ON cha_tipo = tch_id WHERE chamados.cha_status < 3 ORDER BY chamados.cha_id DESC;';
-    //  
+    const query = `
+                SELECT 
+                    chamados.*, 
+                    produtos.pro_nome AS produto_nome, 
+                    clientes.cli_nome AS cliente_nome, 
+                    local_chamado.loc_nome AS local_nome, 
+                    tipos_chamado.tch_descricao AS tipo_chamado, 
+                    colaboradores.col_nome AS responsavel 
+                FROM 
+                    chamados 
+                    LEFT JOIN produtos ON chamados.cha_produto = produtos.pro_id 
+                    LEFT JOIN clientes ON chamados.cha_cliente = clientes.cli_id 
+                    LEFT JOIN local_chamado ON chamados.cha_local = local_chamado.loc_id 
+                    LEFT JOIN tipos_chamado ON cha_tipo = tch_id 
+                    LEFT JOIN atendimentos_chamados ON atendimentos_chamados.atc_chamado = cha_id 
+                    LEFT JOIN colaboradores ON atendimentos_chamados.atc_colaborador = colaboradores.col_id
+                WHERE 
+                    chamados.cha_status < 3 
+                ORDER BY 
+                    chamados.cha_id DESC;
+    `;
     pool.query(query, (err, result) => {
         if (err) {
             console.error('Erro:', err);

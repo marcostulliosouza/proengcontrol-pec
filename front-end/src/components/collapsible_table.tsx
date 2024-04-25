@@ -120,7 +120,7 @@ function Row(props: any) {
                 </TableHead>
                 <TableBody>
                   <TableRow key={row.cha_produto}>
-                    <TableCell align="left">{row.cha_operador}</TableCell> {/*aqui será o responsavel*/}
+                    <TableCell align="left">{row.responsavel}</TableCell> {/*aqui será o responsavel*/}
                     <TableCell align="left">{row.cha_descricao}</TableCell>
                     <TableCell align="left">{row.cha_operador}</TableCell>
                     <TableCell align='left'>
