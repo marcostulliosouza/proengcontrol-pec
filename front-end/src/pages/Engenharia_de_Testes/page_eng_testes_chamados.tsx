@@ -1,9 +1,9 @@
 // Componentes
-import { Sidebar } from '../components/sidebar';
-import { BarraPesquisa } from '../components/barra_pesquisa';
-import { HelloUser } from '../components/hello_user';
+import { Sidebar } from '../../components/sidebar';
+import { BarraPesquisa } from '../../components/barra_pesquisa';
+import { HelloUser } from '../../components/hello_user';
 
-import { CollapsibleTable } from "../components/collapsible_table"
+import { CollapsibleTable } from "../../components/collapsible_table"
 
 
 export function Chamados() {
@@ -15,7 +15,7 @@ export function Chamados() {
             </div>
             <main className='absolute inset-y-0 right-0 w-10/12 grid content-start gap-y-5 p-10'>
                 <BarraPesquisa />
-                <HelloUser user={localStorage.getItem("user")} />
+                <HelloUser pagina={"Chamados"} user={localStorage.getItem("user")} />
                 <div className="py-5">
                     <CollapsibleTable />
                 </div>

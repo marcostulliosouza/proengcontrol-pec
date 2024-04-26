@@ -1,9 +1,9 @@
 // Componentes
-import { Sidebar } from '../components/sidebar';
-import { BarraPesquisa } from '../components/barra_pesquisa';
-import { HelloUser } from '../components/hello_user';
+import { Sidebar } from '../../components/sidebar';
+import { BarraPesquisa } from '../../components/barra_pesquisa';
+import { HelloUser } from '../../components/hello_user';
 
-export function RelatorioChamados() {
+export function ListarNotasFiscais() {
     return (
         <div className="bg-cinza-200 w-screen h-screen">
             <body>
@@ -13,9 +13,9 @@ export function RelatorioChamados() {
                 </div>
                 <main className='absolute inset-y-0 right-0 w-10/12 grid content-start gap-y-5 p-10'>
                     <BarraPesquisa />
-                    <HelloUser user={localStorage.getItem("user")}/>
+                    <HelloUser pagina={'Listar Notas Fiscais'} user={localStorage.getItem("user")}/>
                     <div>
-                        RelatorioChamados
+                        ListarNotasFiscais
                     </div>
                 </main>
             </body>
