@@ -30,7 +30,7 @@ export const BarraPesquisa = (props: any) => {
                 <Menu>
                     <MenuHandler>
                         <IconButton variant="text">
-                            <BiSolidUserCircle className="text-2xl text-pec" />
+                            <BiSolidUserCircle className="text-2xl text-pec hover:scale-110 transition duration-200" />
                         </IconButton>
                     </MenuHandler> 
                     <MenuList className="bg-cinza-300 p-2">
