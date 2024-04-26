@@ -12,9 +12,9 @@ export const Sidebar = (props) => {
               </header>
               <main>
                 <footer>
-                    <p className="fixed bottom-2 left-2 text-cinza-200 font-semibold text-[10px]">
+                    {/* <p className="fixed bottom-2 left-2 text-cinza-200 font-semibold text-[10px]">
                         Desenvolvido por <br></br> Marcos Souza & Samuel Grontoski
-                    </p>
+                    </p> */}
                 </footer>
               </main>
               {props.children}
