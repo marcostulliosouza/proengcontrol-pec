@@ -5,6 +5,7 @@ import { Menu } from './pages/page_menu';
 import { NotFound } from './pages/page_notfound';
 // Rotas Engenharia de Testes
 import { MenuEngTestes } from './pages/Engenharia_de_Testes/page_eng_testes_menu';
+import { AbrirChamado } from './pages/Engenharia_de_Testes/page_eng_testes_abrir_chamado';
 import { Chamados } from './pages/Engenharia_de_Testes/page_eng_testes_chamados';
 import { ChamadoEng } from './pages/Engenharia_de_Testes/page_eng_testes_chamado_eng';
 import { RelatorioChamados } from './pages/Engenharia_de_Testes/page_eng_testes_relatorio_chamadas';
@@ -38,6 +39,9 @@ export function App() {
         </PrivateRoute>} />
         <Route path="/engenharia_testes" element={<PrivateRoute redirectTo="/">
           <MenuEngTestes />
+        </PrivateRoute>} />
+        <Route path="/engenharia_testes/abrir_chamado" element={<PrivateRoute redirectTo="/">
+          <AbrirChamado />
         </PrivateRoute>} />
         <Route path="/engenharia_testes/chamados" element={<PrivateRoute redirectTo="/">
           <Chamados />
