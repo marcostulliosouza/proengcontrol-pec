@@ -5,6 +5,7 @@ import { HelloUser } from '../../components/hello_user';
 import { MenuButton } from '../../components/button_menu';
 
 // Icones
+import { CiViewBoard } from "react-icons/ci";
 import { LuUsers2 } from "react-icons/lu";
 import { BsListColumnsReverse } from "react-icons/bs";
 import { PiCircuitry } from "react-icons/pi";
@@ -30,8 +31,9 @@ export function MenuEngTestes() {
                     <BarraPesquisa />
                     <HelloUser pagina={'Engenharia de testes'} user={localStorage.getItem("user")} />
                     <div className="bg-cinza-100 rounded-md drop-shadow grid grid-cols-6 justify-items-center items-start p-10 gap-10">
+                        <MenuButton name={"Visualizar chamados"} link={"/engenharia_testes/visualizar_chamados"} icon={CiViewBoard} />
                         <MenuButton name={"Abrir chamado"} link={"/engenharia_testes/abrir_chamado"} icon={LuUsers2} />
-                        <MenuButton name={"Listar chamados"} link={"/engenharia_testes/chamados"} icon={BsListColumnsReverse} />
+                        <MenuButton name={"Atendimento de chamado"} link={"/engenharia_testes/chamados"} icon={BsListColumnsReverse} />
                         <MenuButton name={"Chamado de Engenharia"} link={"/engenharia_testes/chamados_engenharia"} icon={PiCircuitry} />
                         <MenuButton name={"Relatório de chamados"} link={"/engenharia_testes/relatorio_chamados"} icon={BsGraphUpArrow} />
                         <MenuButton name={"Enviar Plano de Produção"} link={"/engenharia_testes/enviar_plano_de_producao"} icon={TbTableImport} />

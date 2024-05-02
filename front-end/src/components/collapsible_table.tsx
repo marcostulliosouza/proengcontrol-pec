@@ -16,9 +16,6 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import Draggable from 'react-draggable';
 
-// Componentes
-
-
 function Row(props: any) {
   const { row } = props;
   const [open, setOpen] = React.useState(false);
@@ -94,7 +91,7 @@ function Row(props: any) {
         <TableCell align="left">{row.tipo_chamado}</TableCell>
         <TableCell align="left">{row.produto_nome}</TableCell>
         <TableCell align="left">{row.cliente_nome}</TableCell>
-        <TableCell align="left">{row.local_nome}</TableCell>
+        <TableCell align="left">{row.cha_local}</TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -120,7 +117,7 @@ function Row(props: any) {
                 </TableHead>
                 <TableBody>
                   <TableRow key={row.cha_produto}>
-                    <TableCell align="left">{row.responsavel}</TableCell> {/*aqui será o responsavel*/}
+                    <TableCell align="left">{row.responsavel}</TableCell>
                     <TableCell align="left">{row.cha_descricao}</TableCell>
                     <TableCell align="left">{row.cha_operador}</TableCell>
                     <TableCell align='left'>
@@ -163,7 +160,7 @@ function Row(props: any) {
                                       <p className="font-semibold">Cliente:</p><p>{row.cliente_nome}</p>
                                     </div>
                                     <div className='flex items-start justify-start gap-2'>
-                                      <p className="font-semibold">Local:</p><p>{row.local_nome}</p>
+                                      <p className="font-semibold">Local:</p><p>{row.cha_local}</p>
                                     </div>
                                   </div>
                                   <div className='flex items-start justify-start gap-2'>
