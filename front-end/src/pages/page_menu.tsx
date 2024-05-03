@@ -21,7 +21,7 @@ export function Menu() {
                     <HelloUser pagina={'Menu'} user={localStorage.getItem("user")} />
                     <div className="bg-cinza-100 rounded-md drop-shadow grid grid-cols-6 justify-items-center items-start p-10 gap-10">
                         <MenuButton name={"Engenharia de Testes"} link={"/engenharia_testes"} icon={FaGears} />
-                        <MenuButton name={"Qualidade"} link={"/qualidade"} icon={FaRegCheckSquare} />
+                        {/* <MenuButton name={"Qualidade"} link={"/qualidade"} icon={FaRegCheckSquare} /> */}
                     </div>
                 </main>
             </body>

@@ -46,6 +46,9 @@ export default {
       },
       animation: {
         wiggle: 'wiggle 1s ease-in-out infinite',
+      },
+      backdropBlur: {
+        xs: '1px',
       }
     }
   },
