@@ -5,7 +5,7 @@ import { Menu } from './pages/page_menu';
 import { NotFound } from './pages/page_notfound';
 // Rotas Engenharia de Testes
 import { MenuEngTestes } from './pages/Engenharia_de_Testes/page_eng_testes_menu';
-import { VisualizarChamados } from './pages/Engenharia_de_Testes/page_eng_teste_visualizar_chamados';
+import { VisualizarChamados } from './pages/Engenharia_de_Testes/page_eng_testes_visualizar_chamados';
 import { AbrirChamado } from './pages/Engenharia_de_Testes/page_eng_testes_abrir_chamado';
 import { Chamados } from './pages/Engenharia_de_Testes/page_eng_testes_chamados';
 import { ChamadoEng } from './pages/Engenharia_de_Testes/page_eng_testes_chamado_eng';
