@@ -134,6 +134,16 @@ export function VisualizarChamados() {
         return `${hours}:${minutes}:${seconds}`;
     };
 
+    const [autoPlay, setAutoPlay] = useState(false);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setAutoPlay(true);
+        }, 1000);
+
+        return () => clearTimeout(timer);
+    }, []);
+
     return (
         <>
             <div className="bg-cinza-200 fixed inset-y-0 w-screen" />
@@ -168,7 +178,7 @@ export function VisualizarChamados() {
                     <div className='text-4xl py-4 text-pec font-bold p-10 mt-10'>
                         CHAMADOS EM ATENDIMENTO
                     </div>
-                    <Carousel showArrows={false} showStatus={false} infiniteLoop autoPlay autoFocus swipeable stopOnHover>
+                    <Carousel showArrows={false} showStatus={false} infiniteLoop={true} autoPlay={autoPlay} autoFocus interval={5000}>
                         {dados
                             .filter((row: any) => row.cha_status === 2)
                             .map((row: any) => (
