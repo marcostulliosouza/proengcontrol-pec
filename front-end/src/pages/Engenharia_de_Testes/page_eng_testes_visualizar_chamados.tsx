@@ -180,7 +180,14 @@ export function VisualizarChamados() {
                     <div className='text-4xl py-4 text-pec font-bold p-10 mt-10'>
                         CHAMADOS EM ATENDIMENTO
                     </div>
-                    <Carousel showArrows={false} showStatus={false} infiniteLoop={true} autoPlay={autoPlay} autoFocus interval={5000}>
+                    <Carousel 
+                        showArrows={false}
+                        showStatus={false} 
+                        infiniteLoop={true} 
+                        autoPlay={autoPlay} 
+                        autoFocus 
+                        interval={5000}
+                    >
                         {dados
                             .filter((row: any) => row.cha_status === 2)
                             .map((row: any) => (
