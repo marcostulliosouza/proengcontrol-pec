@@ -1,9 +1,6 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import Box from '@mui/material/Box';
-import Collapse from '@mui/material/Collapse';
-import IconButton from '@mui/material/IconButton';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -13,8 +10,6 @@ import TableRow from '@mui/material/TableRow';
 import TablePagination from '@mui/material/TablePagination';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import { Carousel } from 'react-responsive-carousel';
@@ -24,9 +19,11 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import logo from "../../assets/icon_pec.svg"
 import { IoMenu } from "react-icons/io5";
 import { IoIosArrowForward } from "react-icons/io";
+import { FaHome } from "react-icons/fa";
 
 // Componentes
 import { Sidebar } from '../../components/sidebar';
+import { HelloUser } from '../../components/hello_user';
 
 function Row(props: any) {
     const { row } = props;
@@ -146,30 +143,36 @@ export function VisualizarChamados() {
     return (
         <>
             <div className="bg-cinza-200 fixed inset-y-0 w-screen" />
-            <header className='absolute top-10 left-10 flex items-start gap-4 items-start'>
-                <button
-                    onClick={() => setShowSidebar(true)}
-                    className='text-pec text-4xl hover:scale-110 transition duration-200'
-                >
-                    <IoMenu />
-                </button>
-                <div className="grid justify-items-center items-center text-pec font-semibold">
-                    <div className="flex items-center gap-2">
-                        <img src={logo} alt="PEC" />
-                        <h1 className='text-xl'>PEC</h1>
+            <header className='absolute top-0 left-0 p-10 flex justify-between gap-4 items-start w-screen'>
+                <div className='inline-flex items-start gap-4'>
+                    <button
+                        onClick={() => setShowSidebar(true)}
+                        className='text-pec text-4xl hover:scale-110 transition duration-200'
+                    >
+                        <IoMenu />
+                    </button>
+                    <div className="grid justify-items-center items-center text-pec font-semibold">
+                        <div className="flex items-center gap-2">
+                            <img src={logo} alt="PEC" />
+                            <h1 className='text-xl'>PEC</h1>
+                        </div>
+                        <p className='text-sm'>ProEngControl</p>
                     </div>
-                    <p className='text-sm'>ProEngControl</p>
-                </div>
-                <div className='ml-8 mt-3 inline-flex items-center gap-2 content font-bold text-pec'>
-                    <Link to={"/menu"}>
-                        <p>Menu</p>
-                    </Link>
-                    <IoIosArrowForward />
-                    <Link to={"/engenharia_testes"}>
-                        <p>Engenharia de Testes</p>
-                    </Link>
-                    <IoIosArrowForward />
-                    <p>Visualizar Chamados</p>
+                    <div className='flex flex-col ml-8 mt-3 gap-3'>
+                        <div className='inline-flex items-center gap-2 content font-bold text-pec'>
+                            <Link to={"/menu"} className='inline-flex items-center gap-2'>
+                                <FaHome />
+                                <p>Menu</p>
+                            </Link>
+                            <IoIosArrowForward />
+                            <Link to={"/engenharia_testes"}>
+                                <p>Engenharia de Testes</p>
+                            </Link>
+                            <IoIosArrowForward />
+                            <p>Visualizar Chamados</p>
+                        </div>
+                        <HelloUser user={localStorage.getItem("user")} />
+                    </div>
                 </div>
             </header>
             <body className='grid grid-cols-2 gap-4 mt-24'>

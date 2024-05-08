@@ -4,9 +4,9 @@ import logo from "../assets/icon_pec_cinza.svg"
 import { SidebarButton } from "./button_sidebar"
 
 //Icons
-import { PiHouseLine } from "react-icons/pi";
 import { FaGears } from "react-icons/fa6";
 import { LuLogOut } from "react-icons/lu";
+import { FaHome } from "react-icons/fa";
 
 export const Sidebar = (props) => {
     const handleLogout = () => {
@@ -25,7 +25,7 @@ export const Sidebar = (props) => {
             </header>
             <main>
                 <body className="grid text-center gap-4">
-                    <SidebarButton name={"Menu Principal"} link={"/menu"} icon={PiHouseLine} />
+                    <SidebarButton name={"Menu Principal"} link={"/menu"} icon={FaHome} />
                     <SidebarButton name={"Engenharia de Testes"} link={"/engenharia_testes"} icon={FaGears} />
                 </body>
                 <footer>

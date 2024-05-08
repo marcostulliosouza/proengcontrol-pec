@@ -1,8 +1,7 @@
-export function HelloUser ({pagina, user}) {
+export function HelloUser ({user}) {
     return (
         <div className='w-9/12 text-cinza-500'>
-            <p className='text-sm'>Olá, {user}</p>
-            <p className='text-base font-bold'>{pagina}</p>
+            <p className='text-sm text-nowrap'>Olá, {user}</p>
         </div>
     )
 }
