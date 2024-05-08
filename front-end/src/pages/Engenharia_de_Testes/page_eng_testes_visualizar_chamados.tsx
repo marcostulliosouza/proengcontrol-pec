@@ -186,7 +186,7 @@ export function VisualizarChamados() {
                         infiniteLoop={true} 
                         autoPlay={autoPlay} 
                         autoFocus 
-                        interval={5000}
+                        interval={4000}
                     >
                         {dados
                             .filter((row: any) => row.cha_status === 2)
