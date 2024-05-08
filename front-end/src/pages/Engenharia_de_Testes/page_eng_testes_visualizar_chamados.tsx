@@ -30,7 +30,6 @@ import { Sidebar } from '../../components/sidebar';
 
 function Row(props: any) {
     const { row } = props;
-    const [open, setOpen] = React.useState(false);
     const [tempoInicioAtendimento, setTempoInicioAtendimento] = React.useState<Date | null>(null);
 
     const calculateDuration = (start: string) => {
