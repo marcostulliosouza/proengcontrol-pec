@@ -12,8 +12,8 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import { Carousel } from 'react-responsive-carousel';
-import "react-responsive-carousel/lib/styles/carousel.min.css";
+import 'bootstrap/dist/css/bootstrap.css';
+import Carousel from 'react-bootstrap/Carousel';
 
 // Icons
 import logo from "../../assets/icon_pec.svg"
@@ -130,16 +130,6 @@ export function VisualizarChamados() {
         return `${hours}:${minutes}:${seconds}`;
     };
 
-    const [autoPlay, setAutoPlay] = useState(false);
-
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setAutoPlay(true);
-        }, 1000);
-
-        return () => clearTimeout(timer);
-    }, []);
-
     return (
         <>
             <div className="bg-cinza-200 fixed inset-y-0 w-screen" />
@@ -180,44 +170,43 @@ export function VisualizarChamados() {
                     <div className='text-4xl py-4 text-pec font-bold p-10 mt-10'>
                         CHAMADOS EM ATENDIMENTO
                     </div>
-                    <Carousel 
-                        showArrows={false}
-                        showStatus={false} 
-                        infiniteLoop={true} 
-                        autoPlay={autoPlay} 
-                        autoFocus 
-                        interval={4000}
+                    <Carousel
+                        pauseOnHover={false}
+                        stopOnHover={false}
+                        showStatus={false}
+                        showThumbs={false}
+                        infiniteLoop={true}
+                        interval={5000}
+                        variant="dark"
                     >
                         {dados
                             .filter((row: any) => row.cha_status === 2)
                             .map((row: any) => (
-                                <div className='px-10 pb-10' key={row.cha_id}>
-                                    <Card sx={{ maxWidth: 800, height: 742 }}>
-                                        <CardContent>
-                                            <p className='font-semibold text-4xl py-10'>Responsável: {row.responsavel}</p>
-                                            <p className={`flex justify-center items-center rounded p-2 text-gray-100 text-9xl ${row.cha_plano === 1 ? 'bg-no_plano' : row.cha_plano === 0 ? 'bg-fora_plano' : 'bg-engenharia'
-                                                }`} style={{ textShadow: '2px 2px 2px black' }}>{calculateDurationAtendimento(row.cha_data_hora_atendimento)}</p>
-                                            <div className="flex items-start justify-between pt-10 pb-2 text-xl">
-                                                <div className='flex items-start justify-start gap-2'>
-                                                    <p className='font-semibold'>Produto:</p><p>{row.produto_nome}</p>
-                                                </div>
-                                                <div className='flex items-start justify-start gap-2'>
-                                                    <p className='font-semibold'>Cliente: </p><p>{row.cliente_nome}</p>
-                                                </div>
-                                                <div className='flex items-start justify-start gap-2'>
-                                                    <p className='font-semibold'>Local: </p><p>{row.cha_local}</p>
-                                                </div>
+                                <Carousel.Item>
+                                    <div className='px-10 pb-10' key={row.cha_id}>
+                                        <p className='font-semibold text-4xl py-10'>Responsável: {row.responsavel}</p>
+                                        <p className={`flex justify-center items-center rounded p-2 text-gray-100 text-9xl ${row.cha_plano === 1 ? 'bg-no_plano' : row.cha_plano === 0 ? 'bg-fora_plano' : 'bg-engenharia'
+                                            }`} style={{ textShadow: '2px 2px 2px black' }}>{calculateDurationAtendimento(row.cha_data_hora_atendimento)}</p>
+                                        <div className="flex items-start justify-between pt-10 pb-2 text-xl">
+                                            <div className='flex items-start justify-start gap-2'>
+                                                <p className='font-semibold'>Produto:</p><p>{row.produto_nome}</p>
                                             </div>
-                                            <div className='flex justify-start gap-2 text-xl'>
-                                                <p className='font-semibold'>Tipo de Chamado: </p><p>{row.tipo_chamado}</p>
+                                            <div className='flex items-start justify-start gap-2'>
+                                                <p className='font-semibold'>Cliente: </p><p>{row.cliente_nome}</p>
                                             </div>
-                                            <div className='flex flex-col items-start justify-start py-2 text-xl gap-2'>
-                                                <p className="font-semibold">Problema:</p>
-                                                <p>{row.cha_descricao}</p>
+                                            <div className='flex items-start justify-start gap-2'>
+                                                <p className='font-semibold'>Local: </p><p>{row.cha_local}</p>
                                             </div>
-                                        </CardContent>
-                                    </Card>
-                                </div>
+                                        </div>
+                                        <div className='flex justify-start gap-2 text-xl'>
+                                            <p className='font-semibold'>Tipo de Chamado: </p><p>{row.tipo_chamado}</p>
+                                        </div>
+                                        <div className='flex flex-col items-start justify-start py-2 text-xl gap-2'>
+                                            <p className="font-semibold">Problema:</p>
+                                            <p>{row.cha_descricao}</p>
+                                        </div>
+                                    </div>
+                                </Carousel.Item>
                             ))}
                     </Carousel>
                 </div>
