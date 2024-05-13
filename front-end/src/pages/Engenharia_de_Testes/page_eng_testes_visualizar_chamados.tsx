@@ -49,7 +49,7 @@ function Row(props: any) {
 
     return (
         <React.Fragment>
-            <TableRow sx={{ '& > *': { borderBottom: 'unset', fontSize: '15px' } }}>
+            <TableRow sx={{ '& > *': { borderBottom: 'unset', fontSize: '16px' } }}>
                 <TableCell align="left" sx={{ display: 'flex', alignItems: 'center', borderBottom: 'unset', margin: '8px' }}>
                     <span
                         style={{
@@ -161,12 +161,12 @@ export function VisualizarChamados() {
                             <IoIosArrowForward />
                             <p>Visualizar Chamados</p>
                         </div>
-                        <HelloUser user={localStorage.getItem("user")} />
+                        {/* <HelloUser user={localStorage.getItem("user")} /> */}
                     </div>
                 </div>
             </header>
             <body className='grid grid-cols-2 gap-4 mt-24'>
-                <div className='z-10'>
+                <div className='z-10 w-[840px]'>
                     <div className='text-4xl py-4 text-pec font-bold p-10 mt-10'>
                         CHAMADOS EM ATENDIMENTO
                     </div>
@@ -175,6 +175,7 @@ export function VisualizarChamados() {
                         stopOnHover={false}
                         showStatus={false}
                         showThumbs={false}
+                        controls={false}
                         infiniteLoop={true}
                         interval={5000}
                         variant="dark"
@@ -183,27 +184,29 @@ export function VisualizarChamados() {
                             .filter((row: any) => row.cha_status === 2)
                             .map((row: any) => (
                                 <Carousel.Item>
-                                    <div className='px-10 pb-10' key={row.cha_id}>
+                                    <div className='ml-10 px-10 pb-10 rounded bg-white shadow shadow-black border-1 border-cinza-300 h-[740px]' key={row.cha_id}>
                                         <p className='font-semibold text-4xl py-10'>Responsável: {row.responsavel}</p>
                                         <p className={`flex justify-center items-center rounded p-2 text-gray-100 text-9xl ${row.cha_plano === 1 ? 'bg-no_plano' : row.cha_plano === 0 ? 'bg-fora_plano' : 'bg-engenharia'
                                             }`} style={{ textShadow: '2px 2px 2px black' }}>{calculateDurationAtendimento(row.cha_data_hora_atendimento)}</p>
-                                        <div className="flex items-start justify-between pt-10 pb-2 text-xl">
-                                            <div className='flex items-start justify-start gap-2'>
-                                                <p className='font-semibold'>Produto:</p><p>{row.produto_nome}</p>
+                                        <div className="text-3xl pt-10">
+                                            <div className='flex justify-between'>
+                                                <div className='flex items-start justify-start gap-2 py-3'>
+                                                    <p className='font-semibold'>Produto:</p><p>{row.produto_nome}</p>
+                                                </div>
+                                                <div className='flex items-start justify-start gap-2 py-3'>
+                                                    <p className='font-semibold'>Cliente: </p><p>{row.cliente_nome}</p>
+                                                </div>
                                             </div>
-                                            <div className='flex items-start justify-start gap-2'>
-                                                <p className='font-semibold'>Cliente: </p><p>{row.cliente_nome}</p>
-                                            </div>
-                                            <div className='flex items-start justify-start gap-2'>
+                                            <div className='flex items-start justify-start gap-2 py-3'>
                                                 <p className='font-semibold'>Local: </p><p>{row.cha_local}</p>
                                             </div>
-                                        </div>
-                                        <div className='flex justify-start gap-2 text-xl'>
-                                            <p className='font-semibold'>Tipo de Chamado: </p><p>{row.tipo_chamado}</p>
-                                        </div>
-                                        <div className='flex flex-col items-start justify-start py-2 text-xl gap-2'>
-                                            <p className="font-semibold">Problema:</p>
-                                            <p>{row.cha_descricao}</p>
+                                            <div className='flex justify-start gap-2 py-3'>
+                                                <p className='font-semibold'>Tipo de Chamado: </p><p>{row.tipo_chamado}</p>
+                                            </div>
+                                            <div className='flex flex-col items-start justify-start py-3 gap-2'>
+                                                <p className="font-semibold">Problema:</p>
+                                                <p className='text-2xl font-medium'>{row.cha_descricao}</p>
+                                            </div>
                                         </div>
                                     </div>
                                 </Carousel.Item>
@@ -261,7 +264,7 @@ export function VisualizarChamados() {
                         labelDisplayedRows={({ from, to, count }) => `${from}-${to} de ${count}`}
                     />
                 </div >
-            </body>
+            </body >
 
 
             {showSidebar && (
@@ -274,7 +277,8 @@ export function VisualizarChamados() {
                         <IoMenu />
                     </button>
                 </div>
-            )}
+            )
+            }
         </>
     );
 }

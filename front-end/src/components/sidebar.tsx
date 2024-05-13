@@ -24,7 +24,7 @@ export const Sidebar = (props) => {
                 <p className='text-sm'>ProEngControl</p>
             </header>
             <main>
-                <body className="grid text-center gap-4">
+                <body className="grid text-center gap-4 bg-pec">
                     <SidebarButton name={"Menu Principal"} link={"/menu"} icon={FaHome} />
                     <SidebarButton name={"Engenharia de Testes"} link={"/engenharia_testes"} icon={FaGears} />
                 </body>

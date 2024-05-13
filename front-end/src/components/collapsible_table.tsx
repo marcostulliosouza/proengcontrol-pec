@@ -152,7 +152,7 @@ function Row(props: any) {
                                   >
                                     Cancelar chamado
                                   </button>
-                                  <div className="flex items-start justify-start gap-10">
+                                  <div className="flex justify-between gap-10">
                                     <div className='flex items-start justify-start gap-2'>
                                       <p className="font-semibold">Produto:</p><p>{row.produto_nome}</p>
                                     </div>
@@ -171,22 +171,29 @@ function Row(props: any) {
                                   <p className={`flex justify-center items-center rounded p-2 text-gray-100 text-9xl ${row.cha_plano === 1 ? 'bg-no_plano' : row.cha_plano === 0 ? 'bg-fora_plano' : 'bg-engenharia'
                                     }`} style={{ textShadow: '2px 2px 2px black' }}>{calculateDurationAtendimento(row.cha_data_hora_atendimento)}</p>
                                 </header>
-                                <body>
+                                <body className='bg-cinza-300'>
                                   <main>
-                                    <form className="p-5 w-full">
+                                    <form className="px-5 w-full">
                                       <label className="block text-black text-sm font-bold mb-1">
                                         Descrição da solução:
                                       </label>
                                       <textarea className="bg-gray-100 shadow appearance-none border rounded w-full h-60 py-2 px-1 text-black resize-none"></textarea>
                                     </form>
                                   </main>
-                                  <footer className="flex items-center justify-between p-6">
+                                  <footer className="flex items-center justify-between px-12 py-6">
                                     <button
                                       onClick={() => setShowModal(false)}
                                       type="button"
                                       className="text-pec bg-cinza-400 rounded font-bold uppercase px-6 py-3 text-sm outline-none focus:outline-none mr-1 mb-1"
                                     >
                                       Tranferir chamado
+                                    </button>
+                                    <button
+                                      onClick={() => setShowModal(false)}
+                                      type="button"
+                                      className="text-pec bg-cinza-400 rounded font-bold uppercase px-6 py-3 text-sm outline-none focus:outline-none mr-1 mb-1"
+                                    >
+                                      Adicionar ajudante
                                     </button>
                                     <button
                                       onClick={() => setShowModal(false)}
