@@ -25,13 +25,25 @@ function Row(props: any) {
   const calculateDuration = (start: string) => {
     const startDate = new Date(start);
     const currentDate = new Date();
-    const duration = currentDate.getTime() - startDate.getTime();
+    let duration = currentDate.getTime() - startDate.getTime();
+
+    let isNegative = false;
+    if (duration < 0) {
+      isNegative = true;
+      duration *= -1;
+    }
 
     const hours = Math.floor(duration / (1000 * 60 * 60)).toString().padStart(2, '0');
     const minutes = Math.floor((duration % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
     const seconds = Math.floor((duration % (1000 * 60)) / 1000).toString().padStart(2, '0');
 
-    return `${hours}:${minutes}:${seconds}`;
+    let formattedDuration = `${hours}:${minutes}:${seconds}`;
+
+    if (isNegative) {
+      formattedDuration = `-${formattedDuration}`;
+    }
+
+    return formattedDuration;
   };
 
   const calculateDurationAtendimento = (start: string) => {

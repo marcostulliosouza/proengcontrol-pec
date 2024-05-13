@@ -32,13 +32,25 @@ function Row(props: any) {
     const calculateDuration = (start: string) => {
         const startDate = new Date(start);
         const currentDate = new Date();
-        const duration = currentDate.getTime() - startDate.getTime();
-
+        let duration = currentDate.getTime() - startDate.getTime();
+    
+        let isNegative = false;
+        if (duration < 0) {
+            isNegative = true;
+            duration *= -1;
+        }
+    
         const hours = Math.floor(duration / (1000 * 60 * 60)).toString().padStart(2, '0');
         const minutes = Math.floor((duration % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
         const seconds = Math.floor((duration % (1000 * 60)) / 1000).toString().padStart(2, '0');
-
-        return `${hours}:${minutes}:${seconds}`;
+    
+        let formattedDuration = `${hours}:${minutes}:${seconds}`;
+    
+        if (isNegative) {
+            formattedDuration = `-${formattedDuration}`;
+        }
+    
+        return formattedDuration;
     };
 
     useEffect(() => {
@@ -49,24 +61,13 @@ function Row(props: any) {
 
     return (
         <React.Fragment>
-            <TableRow sx={{ '& > *': { borderBottom: 'unset', fontSize: '16px' } }}>
-                <TableCell align="left" sx={{ display: 'flex', alignItems: 'center', borderBottom: 'unset', margin: '8px' }}>
-                    <span
-                        style={{
-                            width: '20px',
-                            height: '20px',
-                            borderRadius: '50%',
-                            backgroundColor:
-                                row.cha_plano === 1
-                                    ? '#DB2E2A'
-                                    : row.cha_plano === 0
-                                        ? '#FFCC6D'
-                                        : '#3366FF',
-                            border: '1px solid black',
-                        }}
-                    ></span>
+            <TableRow sx={{ '& > *': { borderBottom: 'unset', fontSize: '18px' } }}>
+                <TableCell align="left">
+                    <span className={`flex justify-center items-center rounded p-2 text-gray-100 font-semibold ${row.cha_plano === 1 ? 'bg-no_plano' : (row.cha_plano === 0) ? 'bg-fora_plano text-black' : 'bg-engenharia'
+                        }`} style={{}}>
+                        {calculateDuration(row.cha_data_hora_abertura)}
+                    </span>
                 </TableCell>
-                <TableCell align="left">{calculateDuration(row.cha_data_hora_abertura)}</TableCell>
                 <TableCell align="left">{row.tipo_chamado}</TableCell>
                 <TableCell align="left">{row.produto_nome}</TableCell>
                 <TableCell align="left">{row.cliente_nome}</TableCell>
@@ -112,6 +113,30 @@ export function VisualizarChamados() {
     const handleChangeRowsPerPage = (event: any) => {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
+    };
+
+    const calculateDuration = (start: string) => {
+        const startDate = new Date(start);
+        const currentDate = new Date();
+        let duration = currentDate.getTime() - startDate.getTime();
+    
+        let isNegative = false;
+        if (duration < 0) {
+            isNegative = true;
+            duration *= -1;
+        }
+    
+        const hours = Math.floor(duration / (1000 * 60 * 60)).toString().padStart(2, '0');
+        const minutes = Math.floor((duration % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
+        const seconds = Math.floor((duration % (1000 * 60)) / 1000).toString().padStart(2, '0');
+    
+        let formattedDuration = `${hours}:${minutes}:${seconds}`;
+    
+        if (isNegative) {
+            formattedDuration = `-${formattedDuration}`;
+        }
+    
+        return formattedDuration;
     };
 
     const calculateDurationAtendimento = (start: string) => {
@@ -184,10 +209,10 @@ export function VisualizarChamados() {
                             .filter((row: any) => row.cha_status === 2)
                             .map((row: any) => (
                                 <Carousel.Item>
-                                    <div className='ml-10 px-10 pb-10 rounded bg-white shadow shadow-black border-1 border-cinza-300 h-[740px]' key={row.cha_id}>
+                                    <div className='ml-10 px-10 pb-10 rounded bg-white shadow shadow-black border-1 border-cinza-300 h-[800px]' key={row.cha_id}>
                                         <p className='font-semibold text-4xl py-10'>Responsável: {row.responsavel}</p>
                                         <p className={`flex justify-center items-center rounded p-2 text-gray-100 text-9xl ${row.cha_plano === 1 ? 'bg-no_plano' : row.cha_plano === 0 ? 'bg-fora_plano' : 'bg-engenharia'
-                                            }`} style={{ textShadow: '2px 2px 2px black' }}>{calculateDurationAtendimento(row.cha_data_hora_atendimento)}</p>
+                                            }`} style={{ textShadow: '2px 2px 2px black' }}>{row.cha_plano === 1 ? calculateDuration(row.cha_data_hora_abertura) : calculateDurationAtendimento(row.cha_data_hora_atendimento)}</p>
                                         <div className="text-3xl pt-10">
                                             <div className='flex justify-between'>
                                                 <div className='flex items-start justify-start gap-2 py-3'>
@@ -222,9 +247,6 @@ export function VisualizarChamados() {
                         <Table aria-label="collapsible table">
                             <TableHead sx={{ backgroundColor: '#d9d9d9' }}>
                                 <TableRow>
-                                    <TableCell align="left">
-                                        <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>Tipo</Typography>
-                                    </TableCell>
                                     <TableCell align="left">
                                         <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>Duração Total</Typography>
                                     </TableCell>
