@@ -65,7 +65,7 @@ app.get('/api/visualizar_chamados', (req, res) => {
                     produtos.pro_nome AS produto_nome, 
                     clientes.cli_nome AS cliente_nome, 
                     tipos_chamado.tch_descricao AS tipo_chamado, 
-                    colaboradores.col_nome AS responsavel 
+                    colaboradores.col_login AS responsavel 
                 FROM 
                     chamados 
                     LEFT JOIN produtos ON chamados.cha_produto = produtos.pro_id 
@@ -74,9 +74,9 @@ app.get('/api/visualizar_chamados', (req, res) => {
                     LEFT JOIN atendimentos_chamados ON atendimentos_chamados.atc_chamado = cha_id 
                     LEFT JOIN colaboradores ON atendimentos_chamados.atc_colaborador = colaboradores.col_id
                 WHERE 
-                    chamados.cha_status < 3 
+                    chamados.cha_status = 1 OR chamados.cha_status = 2 
                 ORDER BY 
-                    chamados.cha_id DESC;
+                    chamados.cha_status DESC, chamados.cha_data_hora_abertura ASC;
     `;
     pool.query(query, (err, result) => {
         if (err) {
@@ -95,7 +95,7 @@ app.get('/api/chamados', (req, res) => {
                     produtos.pro_nome AS produto_nome, 
                     clientes.cli_nome AS cliente_nome, 
                     tipos_chamado.tch_descricao AS tipo_chamado, 
-                    colaboradores.col_nome AS responsavel 
+                    colaboradores.col_login AS responsavel 
                 FROM 
                     chamados 
                     LEFT JOIN produtos ON chamados.cha_produto = produtos.pro_id 
@@ -104,9 +104,9 @@ app.get('/api/chamados', (req, res) => {
                     LEFT JOIN atendimentos_chamados ON atendimentos_chamados.atc_chamado = cha_id 
                     LEFT JOIN colaboradores ON atendimentos_chamados.atc_colaborador = colaboradores.col_id
                 WHERE 
-                    chamados.cha_status < 3 
+                    chamados.cha_status = 1 OR chamados.cha_status = 2 
                 ORDER BY 
-                    chamados.cha_id DESC;
+                    chamados.cha_status DESC, chamados.cha_data_hora_abertura ASC;
     `;
     pool.query(query, (err, result) => {
         if (err) {

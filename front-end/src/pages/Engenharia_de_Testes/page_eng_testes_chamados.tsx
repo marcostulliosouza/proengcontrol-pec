@@ -50,10 +50,8 @@ export function Chamados() {
                     </div>
                 </div>
             </header>
-            <body className='p-10 mt-24'>
-                <div className="py-5">
+            <body className='p-12 mt-24'>
                     <CollapsibleTable />
-                </div>
             </body>
 
             {showSidebar && (

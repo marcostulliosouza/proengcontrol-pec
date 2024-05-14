@@ -81,25 +81,16 @@ function Row(props: any) {
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        <TableCell align="left" sx={{ display: 'flex', alignItems: 'center', borderBottom: 'unset', margin: '8px' }}>
-          <span
-            style={{
-              width: '20px',
-              height: '20px',
-              borderRadius: '50%',
-              backgroundColor:
-                row.cha_plano === 1
-                  ? '#DB2E2A'
-                  : row.cha_plano === 0
-                    ? '#FFCC6D'
-                    : '#3366FF',
-              border: '1px solid black',
-            }}
-          ></span>
+        <TableCell align="left">
+          <span className={`flex justify-center items-center rounded p-2 text-gray-100 font-semibold w-[80px] 
+              ${row.cha_plano === 1 ? 'bg-no_plano' : (row.cha_plano === 0) ? 'bg-fora_plano text-black' : 'bg-engenharia'
+            }`}
+          >
+            {calculateDuration(row.cha_data_hora_abertura)}
+          </span>
         </TableCell>
-        <TableCell align="left">{row.cha_status === 1 ? 'ABERTO' : row.cha_status === 2 ? 'EM ATENDIMENTO' : ''}</TableCell>
-        <TableCell align="left">{calculateDuration(row.cha_data_hora_abertura)}</TableCell>
-        <TableCell align="left">{calculateDurationAtendimento(row.cha_data_hora_atendimento)}</TableCell>
+        <TableCell align="left"><span className='font-semibold'>{calculateDurationAtendimento(row.cha_data_hora_atendimento)}</span></TableCell>
+        <TableCell align="left"><span className={row.cha_status === 2 ? 'text-green-700 font-bold' : 'text-no_plano font-bold'}>{row.cha_status === 1 ? 'ABERTO' : row.cha_status === 2 ? 'EM ATENDIMENTO' : ''}</span></TableCell>
         <TableCell align="left">{row.tipo_chamado}</TableCell>
         <TableCell align="left">{row.produto_nome}</TableCell>
         <TableCell align="left">{row.cliente_nome}</TableCell>
@@ -180,7 +171,7 @@ function Row(props: any) {
                                   </div>
                                   <p className="font-semibold">Problema:</p>
                                   <p>{row.cha_descricao}</p>
-                                  <p className={`flex justify-center items-center rounded p-2 text-gray-100 text-9xl ${row.cha_plano === 1 ? 'bg-no_plano' : row.cha_plano === 0 ? 'bg-fora_plano' : 'bg-engenharia'
+                                  <p className={`flex justify-center items-center rounded p-2 text-gray-100 text-9xl ${row.cha_plano === 1 ? 'bg-no_plano' : row.cha_plano === 0 ? 'bg-fora_plano text-black' : 'bg-engenharia'
                                     }`} style={{ textShadow: '2px 2px 2px black' }}>{calculateDurationAtendimento(row.cha_data_hora_atendimento)}</p>
                                 </header>
                                 <body className='bg-cinza-300'>
@@ -246,7 +237,11 @@ export function CollapsibleTable() {
         console.log('resposta', response);
         if (response.ok) {
           const data = await response.json();
-          console.log(data)
+          const sortedData = data.sort((a: any) => {
+            if (a.cha_plano === 1) return -1;
+            if (a.cha_plano === 0) return -1;
+            return 1;
+          });
           setDados(data);
         } else {
           console.error('Erro ao buscar dados: ', response.statusText);
@@ -278,16 +273,13 @@ export function CollapsibleTable() {
             <TableRow>
               <TableCell />
               <TableCell align="left">
-                <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>Tipo</Typography>
+                <Typography variant="subtitle1" sx={{ fontWeight: 'bold', width: '80px' }}>Duração Total</Typography>
+              </TableCell>
+              <TableCell align="left">
+                <Typography variant="subtitle1" sx={{ fontWeight: 'bold', width: '80px' }}>Tempo de Atendimento</Typography>
               </TableCell>
               <TableCell align="left">
                 <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>Status</Typography>
-              </TableCell>
-              <TableCell align="left">
-                <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>Duração Total</Typography>
-              </TableCell>
-              <TableCell align="left">
-                <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>Tempo de Atendimento</Typography>
               </TableCell>
               <TableCell align="left">
                 <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>Tipo de Chamado</Typography>

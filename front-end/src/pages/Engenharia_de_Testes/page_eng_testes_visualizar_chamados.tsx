@@ -33,23 +33,23 @@ function Row(props: any) {
         const startDate = new Date(start);
         const currentDate = new Date();
         let duration = currentDate.getTime() - startDate.getTime();
-    
+
         let isNegative = false;
         if (duration < 0) {
             isNegative = true;
             duration *= -1;
         }
-    
+
         const hours = Math.floor(duration / (1000 * 60 * 60)).toString().padStart(2, '0');
         const minutes = Math.floor((duration % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
         const seconds = Math.floor((duration % (1000 * 60)) / 1000).toString().padStart(2, '0');
-    
+
         let formattedDuration = `${hours}:${minutes}:${seconds}`;
-    
+
         if (isNegative) {
             formattedDuration = `-${formattedDuration}`;
         }
-    
+
         return formattedDuration;
     };
 
@@ -91,7 +91,11 @@ export function VisualizarChamados() {
                 console.log('resposta', response);
                 if (response.ok) {
                     const data = await response.json();
-                    console.log(data)
+                    const sortedData = data.sort((a: any) => {
+                        if (a.cha_plano === 1) return -1;
+                        if (a.cha_plano === 0) return -1;
+                        return 1;
+                    });
                     setDados(data);
                 } else {
                     console.error('Erro ao buscar dados: ', response.statusText);
@@ -119,23 +123,23 @@ export function VisualizarChamados() {
         const startDate = new Date(start);
         const currentDate = new Date();
         let duration = currentDate.getTime() - startDate.getTime();
-    
+
         let isNegative = false;
         if (duration < 0) {
             isNegative = true;
             duration *= -1;
         }
-    
+
         const hours = Math.floor(duration / (1000 * 60 * 60)).toString().padStart(2, '0');
         const minutes = Math.floor((duration % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
         const seconds = Math.floor((duration % (1000 * 60)) / 1000).toString().padStart(2, '0');
-    
+
         let formattedDuration = `${hours}:${minutes}:${seconds}`;
-    
+
         if (isNegative) {
             formattedDuration = `-${formattedDuration}`;
         }
-    
+
         return formattedDuration;
     };
 
@@ -186,7 +190,6 @@ export function VisualizarChamados() {
                             <IoIosArrowForward />
                             <p>Visualizar Chamados</p>
                         </div>
-                        {/* <HelloUser user={localStorage.getItem("user")} /> */}
                     </div>
                 </div>
             </header>
@@ -210,21 +213,22 @@ export function VisualizarChamados() {
                             .map((row: any) => (
                                 <Carousel.Item>
                                     <div className='ml-10 px-10 pb-10 rounded bg-white shadow shadow-black border-1 border-cinza-300 h-[800px]' key={row.cha_id}>
-                                        <p className='font-semibold text-4xl py-10'>Responsável: {row.responsavel}</p>
+                                        <div className='flex items-start justify-start gap-2 text-4xl pt-10'>
+                                            <p className='font-semibold'>Responsável: </p><p>{row.responsavel.toUpperCase()}</p>
+                                        </div>
+                                        <div className='flex items-start justify-start gap-2 py-3 text-4xl'>
+                                            <p className='font-semibold'>Local: </p><p>{row.cha_local}</p>
+                                        </div>
                                         <p className={`flex justify-center items-center rounded p-2 text-gray-100 text-9xl ${row.cha_plano === 1 ? 'bg-no_plano' : row.cha_plano === 0 ? 'bg-fora_plano' : 'bg-engenharia'
-                                            }`} style={{ textShadow: '2px 2px 2px black' }}>{row.cha_plano === 1 ? calculateDuration(row.cha_data_hora_abertura) : calculateDurationAtendimento(row.cha_data_hora_atendimento)}</p>
+                                            }`} style={{ textShadow: '2px 2px 2px black' }}>{calculateDurationAtendimento(row.cha_data_hora_atendimento)}</p>
                                         <div className="text-3xl pt-10">
-                                            <div className='flex justify-between'>
                                                 <div className='flex items-start justify-start gap-2 py-3'>
                                                     <p className='font-semibold'>Produto:</p><p>{row.produto_nome}</p>
                                                 </div>
                                                 <div className='flex items-start justify-start gap-2 py-3'>
                                                     <p className='font-semibold'>Cliente: </p><p>{row.cliente_nome}</p>
                                                 </div>
-                                            </div>
-                                            <div className='flex items-start justify-start gap-2 py-3'>
-                                                <p className='font-semibold'>Local: </p><p>{row.cha_local}</p>
-                                            </div>
+
                                             <div className='flex justify-start gap-2 py-3'>
                                                 <p className='font-semibold'>Tipo de Chamado: </p><p>{row.tipo_chamado}</p>
                                             </div>
