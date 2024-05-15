@@ -6,6 +6,7 @@ export default {
   ],
   theme: {
     screens: {
+      'mobile': { 'max': '639px' },
       'sm': { 'min': '640px', 'max': '767px' },
       // Tablet
 

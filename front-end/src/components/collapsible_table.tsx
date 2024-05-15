@@ -15,12 +15,17 @@ import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import Draggable from 'react-draggable';
+import { useMediaQuery } from 'react-responsive';
 
 function Row(props: any) {
   const { row } = props;
   const [open, setOpen] = React.useState(false);
   const [showModal, setShowModal] = useState(false);
   const [tempoInicioAtendimento, setTempoInicioAtendimento] = React.useState<Date | null>(null);
+
+  const isMobile = useMediaQuery({
+    query: '(max-width: 639px)'
+  });
 
   const calculateDuration = (start: string) => {
     const startDate = new Date(start);
@@ -70,156 +75,157 @@ function Row(props: any) {
 
   return (
     <React.Fragment>
-      <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
+      <TableRow>
         <TableCell>
           <IconButton
             aria-label="expand row"
             size="small"
             onClick={() => setOpen(!open)}
             disabled={showModal}
+            className='mobile:w-4'
           >
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        <TableCell align="left">
-          <span className={`flex justify-center items-center rounded p-2 text-gray-100 font-semibold w-[80px] 
+        <TableCell align="center">
+          <p className={`mobile:text-xs flex justify-center items-center rounded p-2 text-gray-100 font-semibold mobile:w-17 w-[80px] 
               ${row.cha_plano === 1 ? 'bg-no_plano' : (row.cha_plano === 0) ? 'bg-fora_plano text-black' : 'bg-engenharia'
             }`}
           >
             {calculateDuration(row.cha_data_hora_abertura)}
-          </span>
+          </p>
         </TableCell>
-        <TableCell align="left"><span className='font-semibold'>{calculateDurationAtendimento(row.cha_data_hora_atendimento)}</span></TableCell>
-        <TableCell align="left"><span className={row.cha_status === 2 ? 'text-green-700 font-bold' : 'text-no_plano font-bold'}>{row.cha_status === 1 ? 'ABERTO' : row.cha_status === 2 ? 'EM ATENDIMENTO' : ''}</span></TableCell>
-        <TableCell align="left">{row.tipo_chamado}</TableCell>
-        <TableCell align="left">{row.produto_nome}</TableCell>
-        <TableCell align="left">{row.cliente_nome}</TableCell>
-        <TableCell align="left">{row.cha_local}</TableCell>
+        <TableCell><p className='mobile:text-[0px] font-semibold'>{calculateDurationAtendimento(row.cha_data_hora_atendimento)}</p></TableCell>
+        <TableCell>
+          <>
+            {row.cha_status === 1 ? (
+              <button
+                onClick={() => setShowModal(true)}
+                type="button"
+                className='mobile:text-xs rounded shadow text-white bg-no_plano hover:bg-red-800 p-2'
+              >
+                Atender chamado
+              </button>
+            ) : (
+              <button
+                onClick={() => setShowModal(true)}
+                type="button"
+                className='mobile:text-xs rounded shadow text-white bg-pec p-2'
+              >
+                Em atendimento
+              </button>
+            )}
+          </>
+        </TableCell>
+        <TableCell><p className='mobile:text-xs mobile:w-12'>{row.tipo_chamado}</p></TableCell>
+        <TableCell><p className='mobile:text-[0px]'>{row.produto_nome}</p></TableCell>
+        <TableCell><p className='mobile:text-[0px]'>{row.cliente_nome}</p></TableCell>
+        <TableCell><p className='mobile:text-xs'>{row.cha_local}</p></TableCell>
       </TableRow>
       <TableRow>
-        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0, backgroundColor: '#d9d9d9' }} colSpan={8}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 1 }}>
-              <Typography variant="h6" gutterBottom component="div">
-                Detalhes
-              </Typography>
+              <p className='text-lg'>Detalhes</p>
               <Table size="small" aria-label="purchases">
                 <TableHead>
                   <TableRow>
-                    <TableCell align="left">
-                      <Typography variant="subtitle2" sx={{ fontWeight: 'bold' }}>Responsável</Typography>
-                    </TableCell>
-                    <TableCell align="left">
-                      <Typography variant="subtitle2" sx={{ fontWeight: 'bold' }}>Descrição</Typography>
-                    </TableCell>
-                    <TableCell align="left">
-                      <Typography variant="subtitle2" sx={{ fontWeight: 'bold' }}>Operador</Typography>
-                    </TableCell>
-                    <TableCell align="left"></TableCell>
+                    <div className='grid'>
+                      <div className='mobile:text-xs inline-flex gap-2'>
+                        <p className='font-bold'>Responsável:</p><p>{row.responsavel}</p>
+                      </div>
+                      <div className='inline-flex gap-2'>
+                        <p className='mobile:text-xs text-[0px] font-bold'>Tempo de Atendimento:</p><p className='mobile:text-xs text-[0px]'>{calculateDurationAtendimento(row.cha_data_hora_atendimento)}</p>
+                      </div>
+                      <div className='inline-flex gap-2'>
+                        <p className='mobile:text-xs text-[0px] font-bold'>Produto:</p><p className='mobile:text-xs text-[0px]'>{row.produto_nome}</p>
+                      </div>
+                      <div className='inline-flex gap-2'>
+                        <p className='mobile:text-xs text-[0px] font-bold'>Cliente:</p><p className='mobile:text-xs text-[0px]'>{row.cliente_nome}</p>
+                      </div>
+                      <div className='mobile:text-xs inline-flex gap-2'>
+                        <p className='font-bold'>Descrição:</p><p className='mobile:w-[240px]'>{row.cha_descricao}</p>
+                      </div>
+                      <div className='mobile:text-xs inline-flex gap-2'>
+                        <p className='font-bold'>Operador:</p><p>{row.cha_operador}</p>
+                      </div>
+                    </div>
                   </TableRow>
                 </TableHead>
-                <TableBody>
-                  <TableRow key={row.cha_produto}>
-                    <TableCell align="left">{row.responsavel}</TableCell>
-                    <TableCell align="left">{row.cha_descricao}</TableCell>
-                    <TableCell align="left">{row.cha_operador}</TableCell>
-                    <TableCell align='left'>
-                      <>
-                        {row.cha_status === 1 ? (
-                          <button
-                            onClick={() => setShowModal(true)}
-                            type="button"
-                            className='rounded shadow text-white font-semibold bg-red-700 hover:bg-red-800 p-2'
-                          >
-                            Atender chamado
-                          </button>
-                        ) : (
-                          <button
-                            onClick={() => setShowModal(true)}
-                            type="button"
-                            className='rounded shadow text-white font-semibold bg-pec p-2'
-                          >
-                            Chamado em atendimento
-                          </button>
-                        )}
-                        {showModal ? (
-                          <>
-                            <Draggable>
-                              <div className="w-[80vw] max-w-[800px] rounded-lg shadow bg-cinza-300 border border-black absolute top-[50%] left-[50%] transform translate[-50%,-50%] z-50">
-                                <header className="rounded-lg shadow-lg cursor-move p-5 bg-cinza-300 text-base flex flex-col gap-2">
-                                  <span className="text-2xl font-semibold">Atendendo chamado</span>
-                                  <button
-                                    onClick={() => setShowModal(false)}
-                                    type="button"
-                                    className="absolute top-5 right-5 text-cinza-100 bg-red-700 rounded font-bold uppercase px-6 py-2 text-sm"
-                                  >
-                                    Cancelar chamado
-                                  </button>
-                                  <div className="flex justify-between gap-10">
-                                    <div className='flex items-start justify-start gap-2'>
-                                      <p className="font-semibold">Produto:</p><p>{row.produto_nome}</p>
-                                    </div>
-                                    <div className='flex items-start justify-start gap-2'>
-                                      <p className="font-semibold">Cliente:</p><p>{row.cliente_nome}</p>
-                                    </div>
-                                    <div className='flex items-start justify-start gap-2'>
-                                      <p className="font-semibold">Local:</p><p>{row.cha_local}</p>
-                                    </div>
-                                  </div>
-                                  <div className='flex items-start justify-start gap-2'>
-                                    <p className="font-semibold">Tipo de chamado:</p><p>{row.tipo_chamado}</p>
-                                  </div>
-                                  <p className="font-semibold">Problema:</p>
-                                  <p>{row.cha_descricao}</p>
-                                  <p className={`flex justify-center items-center rounded p-2 text-gray-100 text-9xl ${row.cha_plano === 1 ? 'bg-no_plano' : row.cha_plano === 0 ? 'bg-fora_plano text-black' : 'bg-engenharia'
-                                    }`} style={{ textShadow: '2px 2px 2px black' }}>{calculateDurationAtendimento(row.cha_data_hora_atendimento)}</p>
-                                </header>
-                                <body className='bg-cinza-300'>
-                                  <main>
-                                    <form className="px-5 w-full">
-                                      <label className="block text-black text-sm font-bold mb-1">
-                                        Descrição da solução:
-                                      </label>
-                                      <textarea className="bg-gray-100 shadow appearance-none border rounded w-full h-60 py-2 px-1 text-black resize-none"></textarea>
-                                    </form>
-                                  </main>
-                                  <footer className="flex items-center justify-between px-12 py-6">
-                                    <button
-                                      onClick={() => setShowModal(false)}
-                                      type="button"
-                                      className="text-pec bg-cinza-400 rounded font-bold uppercase px-6 py-3 text-sm outline-none focus:outline-none mr-1 mb-1"
-                                    >
-                                      Tranferir chamado
-                                    </button>
-                                    <button
-                                      onClick={() => setShowModal(false)}
-                                      type="button"
-                                      className="text-pec bg-cinza-400 rounded font-bold uppercase px-6 py-3 text-sm outline-none focus:outline-none mr-1 mb-1"
-                                    >
-                                      Adicionar ajudante
-                                    </button>
-                                    <button
-                                      onClick={() => setShowModal(false)}
-                                      type="button"
-                                      className="text-cinza-100 bg-pec font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1"
-                                    >
-                                      Encerrar chamado
-                                    </button>
-                                  </footer>
-                                </body>
-                              </div>
-                            </Draggable>
-                          </>
-                        ) : null}
-                      </>
-                    </TableCell>
-                  </TableRow>
-                </TableBody>
               </Table>
             </Box>
           </Collapse>
         </TableCell>
       </TableRow>
+      {showModal ? (
+        <>
+          <Draggable disabled={isMobile}>
+            <div className="mobile:fixed mobile:inset-0 mobile:overflow-hidden mobile:w-screen w-[80vw] max-w-[800px] rounded-lg shadow bg-cinza-300 border border-black absolute top-0 left-0 z-50">
+              <header className="rounded-lg shadow-lg mobile:cursor-auto cursor-move p-5 bg-cinza-300 text-base flex flex-col gap-2">
+                <nav className='flex justify-between items-center'>
+                  <span className="text-2xl font-semibold">Atendendo chamado</span>
+                  <button
+                    onClick={() => setShowModal(false)}
+                    type="button"
+                    className="text-cinza-100 bg-no_plano rounded font-bold uppercase mobile:p-2 px-6 py-2 mobile:text-xs text-sm"
+                  >
+                    Cancelar chamado
+                  </button>
+                </nav>
+                <div className='flex items-start justify-start gap-2'>
+                  <p className="font-semibold">Produto:</p><p>{row.produto_nome}</p>
+                </div>
+                <div className='flex items-start justify-start gap-2'>
+                  <p className="font-semibold">Cliente:</p><p>{row.cliente_nome}</p>
+                </div>
+                <div className='flex items-start justify-start gap-2'>
+                  <p className="font-semibold">Local:</p><p>{row.cha_local}</p>
+                </div>
+                <div className='flex items-start justify-start gap-2'>
+                  <p className="font-semibold">Tipo de chamado:</p><p>{row.tipo_chamado}</p>
+                </div>
+                <p className="font-semibold">Problema:</p>
+                <p>{row.cha_descricao}</p>
+                <p className={`flex justify-center items-center rounded p-2 text-gray-100 mobile:text-5xl text-9xl ${row.cha_plano === 1 ? 'bg-no_plano' : row.cha_plano === 0 ? 'bg-fora_plano text-black' : 'bg-engenharia'
+                  }`} style={{ textShadow: '2px 2px 2px black' }}>{calculateDurationAtendimento(row.cha_data_hora_atendimento)}</p>
+              </header>
+              <body className='bg-cinza-300'>
+                <main>
+                  <form className="px-5 w-full">
+                    <label className="block text-black text-sm font-bold mb-1">
+                      Descrição da solução:
+                    </label>
+                    <textarea className="bg-gray-100 shadow appearance-none border rounded w-full h-60 py-2 px-1 text-black resize-none"></textarea>
+                  </form>
+                </main>
+                <footer className="flex items-center justify-between p-5">
+                  <button
+                    onClick={() => setShowModal(false)}
+                    type="button"
+                    className="text-pec bg-cinza-400 rounded font-bold uppercase p-3 mobile:text-xs text-sm outline-none focus:outline-none mr-1 mb-1"
+                  >
+                    Tranferir chamado
+                  </button>
+                  <button
+                    onClick={() => setShowModal(false)}
+                    type="button"
+                    className="text-pec bg-cinza-400 rounded font-bold uppercase p-3 mobile:text-xs text-sm outline-none focus:outline-none mr-1 mb-1"
+                  >
+                    Adicionar ajudante
+                  </button>
+                  <button
+                    onClick={() => setShowModal(false)}
+                    type="button"
+                    className="text-cinza-100 bg-pec font-bold uppercase mobile:text-xs text-sm p-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1"
+                  >
+                    Encerrar chamado
+                  </button>
+                </footer>
+              </body>
+            </div>
+          </Draggable>
+        </>
+      ) : null}
     </React.Fragment>
   );
 }
@@ -242,7 +248,7 @@ export function CollapsibleTable() {
             if (a.cha_plano === 0) return -1;
             return 1;
           });
-          setDados(data);
+          setDados(sortedData);
         } else {
           console.error('Erro ao buscar dados: ', response.statusText);
         }
@@ -266,32 +272,32 @@ export function CollapsibleTable() {
   };
 
   return (
-    <div className="bg-cinza-100 rounded-md drop-shadow p-5">
+    <div className="bg-cinza-200 mobile:px-2 px-5 h-screen">
       <TableContainer component={Paper}>
         <Table aria-label="collapsible table">
           <TableHead sx={{ backgroundColor: '#d9d9d9' }}>
             <TableRow>
               <TableCell />
-              <TableCell align="left">
-                <Typography variant="subtitle1" sx={{ fontWeight: 'bold', width: '80px' }}>Duração Total</Typography>
+              <TableCell>
+                <p className='font-bold mobile:text-xs text-base mobile:w-17 w-[80px] text-start'>Duração Total</p>
               </TableCell>
-              <TableCell align="left">
-                <Typography variant="subtitle1" sx={{ fontWeight: 'bold', width: '80px' }}>Tempo de Atendimento</Typography>
+              <TableCell>
+                <p className='font-bold mobile:text-[0px] text-base mobile:w-[0px] mobile:h-10 text-start'>Tempo de Atendimento</p>
               </TableCell>
-              <TableCell align="left">
-                <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>Status</Typography>
+              <TableCell>
+                <p className='font-bold mobile:text-xs text-base w-[80px] text-start'>Status</p>
               </TableCell>
-              <TableCell align="left">
-                <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>Tipo de Chamado</Typography>
+              <TableCell>
+                <p className='font-bold mobile:text-xs text-base mobile:w-10 w-[80px] text-start'>Tipo de Chamado</p>
               </TableCell>
-              <TableCell align="left">
-                <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>Produto</Typography>
+              <TableCell>
+                <p className='font-bold mobile:text-[0px] text-base mobile:w-[0px] mobile:h-10 text-start'>Produto</p>
               </TableCell>
-              <TableCell align="left">
-                <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>Cliente</Typography>
+              <TableCell>
+                <p className='font-bold mobile:text-[0px] text-base mobile:w-[0px] mobile:h-10 text-start'>Cliente</p>
               </TableCell>
-              <TableCell align="left">
-                <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>Local</Typography>
+              <TableCell>
+                <p className='font-bold mobile:text-xs text-base w-[80px] text-start'>Local</p>
               </TableCell>
             </TableRow>
           </TableHead>

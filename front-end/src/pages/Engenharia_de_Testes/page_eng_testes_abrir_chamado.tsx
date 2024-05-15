@@ -32,15 +32,14 @@ export function AbrirChamado() {
     return (
 
         <>
-            <div className="bg-cinza-200 fixed inset-y-0 w-screen" />
-            <header className='absolute top-0 left-0 p-10 flex justify-between gap-4 items-start w-screen'>
-                <div className='inline-flex items-start gap-4'>
+            <header className="grid grid-rows-1 bg-cinza-200">
+                <div className='inline-flex p-5 gap-4'>
                     <button
                         onClick={() => setShowSidebar(true)}
-                        className='text-pec text-4xl hover:scale-110 transition duration-200'
-                    >
+                        className='text-pec text-4xl hover:scale-110 transition duration-200 flex justify-start items-start'>
                         <IoMenu />
                     </button>
+
                     <div className="grid justify-items-center items-center text-pec font-semibold">
                         <div className="flex items-center gap-2">
                             <img src={logo} alt="PEC" />
@@ -48,24 +47,21 @@ export function AbrirChamado() {
                         </div>
                         <p className='text-sm'>ProEngControl</p>
                     </div>
-                    <div className='flex flex-col ml-8 mt-3 gap-3'>
-                        <div className='inline-flex items-center gap-2 content font-bold text-pec'>
-                            <Link to={"/menu"} className='inline-flex items-center gap-2'>
-                                <FaHome />
-                                <p>Menu</p>
-                            </Link>
-                            <IoIosArrowForward />
-                            <Link to={"/engenharia_testes"}>
-                                <p>Engenharia de Testes</p>
-                            </Link>
-                            <IoIosArrowForward />
-                            <p>Abrir chamado</p>
-                        </div>
-                        <HelloUser user={localStorage.getItem("user")} />
+                    <div className='inline-flex content font-bold text-pec ml-8 gap-2 justify-center items-center'>
+                        <Link to={"/menu"} className='inline-flex items-center gap-2'>
+                            <FaHome className='mobile:w-0'/>
+                            <p className='mobile:text-[0px]'>Menu</p>
+                        </Link>
+                        <IoIosArrowForward className='mobile:w-0'/>
+                        <Link to={"/engenharia_testes"}>
+                            <p className='mobile:text-[0px]'>Engenharia de Testes</p>
+                        </Link>
+                        <IoIosArrowForward className='mobile:w-0'/>
+                        <p>Abrir chamado</p>
                     </div>
                 </div>
             </header>
-            <body className='w-screen fixed right-0 mt-28 p-10'>
+            <body className='w-screen fixed right-0 p-10 bg-cinza-200'>
                 <form onSubmit={abrirChamado} className='grid gap-4'>
                     <div className='grid grid-cols-3 gap-4 place-content-start w-fit'>
                         {/* Tipo de chamado */}
@@ -154,7 +150,7 @@ export function AbrirChamado() {
                     <Sidebar />
                     <button
                         onClick={() => setShowSidebar(false)}
-                        className='absolute top-10 left-10 text-cinza-200 text-4xl hover:scale-110 transition duration-200'
+                        className='absolute top-5 left-5 text-cinza-200 text-4xl hover:scale-110 transition duration-200'
                     >
                         <IoMenu />
                     </button>
