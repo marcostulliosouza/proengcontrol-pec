@@ -95,7 +95,7 @@ function Row(props: any) {
             {calculateDuration(row.cha_data_hora_abertura)}
           </p>
         </TableCell>
-        <TableCell><p className='mobile:text-[0px] font-semibold'>{calculateDurationAtendimento(row.cha_data_hora_atendimento)}</p></TableCell>
+        <TableCell><p className='mobile:text-[0px] font-semibold'>{row.cha_status === 2 ? calculateDurationAtendimento(row.cha_data_hora_atendimento) : "00:00:00"}</p></TableCell>
         <TableCell>
           <>
             {row.cha_status === 1 ? (
@@ -132,10 +132,10 @@ function Row(props: any) {
                   <TableRow>
                     <div className='grid'>
                       <div className='mobile:text-xs inline-flex gap-2'>
-                        <p className='font-bold'>Responsável:</p><p>{row.responsavel}</p>
+                        <p className='font-bold'>{row.cha_status === 2 ? "Responsável:" : ""}</p><p>{row.responsavel}</p>
                       </div>
                       <div className='inline-flex gap-2'>
-                        <p className='mobile:text-xs text-[0px] font-bold'>Tempo de Atendimento:</p><p className='mobile:text-xs text-[0px]'>{calculateDurationAtendimento(row.cha_data_hora_atendimento)}</p>
+                        <p className='mobile:text-xs text-[0px] font-bold'>{row.cha_status === 2 ? "Tempo de Atendimento: " : ""}</p><p className='mobile:text-xs text-[0px]'>{row.cha_status === 2 ? calculateDurationAtendimento(row.cha_data_hora_atendimento) : ""}</p>
                       </div>
                       <div className='inline-flex gap-2'>
                         <p className='mobile:text-xs text-[0px] font-bold'>Produto:</p><p className='mobile:text-xs text-[0px]'>{row.produto_nome}</p>
