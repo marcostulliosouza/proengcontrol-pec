@@ -102,7 +102,7 @@ function Row(props: any) {
               <button
                 onClick={() => setShowModal(true)}
                 type="button"
-                className='mobile:text-xs rounded shadow text-white bg-no_plano hover:bg-red-800 p-2'
+                className='mobile:text-xs mobile:w-24 w-40 rounded shadow text-white bg-no_plano hover:bg-red-800 p-2'
               >
                 Atender chamado
               </button>
@@ -110,7 +110,7 @@ function Row(props: any) {
               <button
                 onClick={() => setShowModal(true)}
                 type="button"
-                className='mobile:text-xs rounded shadow text-white bg-pec p-2'
+                className='mobile:text-xs mobile:w-24 w-40 rounded shadow text-white bg-pec p-2'
               >
                 Em atendimento
               </button>
