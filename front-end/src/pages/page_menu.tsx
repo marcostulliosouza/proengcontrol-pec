@@ -38,7 +38,7 @@ export function Menu() {
                     {/* <BarraPesquisa /> */}
                 </div>
             </header>
-            <body className='bg-cinza-200 w-screen h-screen p-5'>
+            <body className='bg-cinza-200 w-screen h-screen px-5'>
                 <div className="bg-cinza-100 rounded-md drop-shadow grid mobile:grid-cols-2 sm:grid-cols-5 grid-cols-6 justify-items-center p-10 gap-10">
                     <MenuButton name={"Engenharia de Testes"} link={"/engenharia_testes"} icon={FaGears} />
                     {/* <MenuButton name={"Qualidade"} link={"/qualidade"} icon={FaRegCheckSquare} /> */}

@@ -55,7 +55,7 @@ export function MenuEngTestes() {
                     </div>
                 </div>
             </header>
-            <body className='bg-cinza-200 w-screen h-screen p-5'>
+            <body className='bg-cinza-200 w-screen h-screen px-5'>
                 <div className="bg-cinza-100 rounded-md drop-shadow grid mobile:grid-cols-2 sm:grid-cols-5 grid-cols-6 justify-items-center p-10 gap-10">
                     <MenuButton name={"Visualizar chamados"} link={"/engenharia_testes/visualizar_chamados"} icon={CiViewBoard} />
                     <MenuButton name={"Abrir chamado"} link={"/engenharia_testes/abrir_chamado"} icon={LuUsers2} />
