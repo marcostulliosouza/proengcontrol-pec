@@ -95,7 +95,7 @@ function Row(props: any) {
             {calculateDuration(row.cha_data_hora_abertura)}
           </p>
         </TableCell>
-        <TableCell><p className='mobile:text-[0px] font-semibold'>{row.cha_status === 2 ? calculateDurationAtendimento(row.cha_data_hora_atendimento) : "00:00:00"}</p></TableCell>
+        <TableCell><p className='mobile:hidden font-semibold'>{row.cha_status === 2 ? calculateDurationAtendimento(row.cha_data_hora_atendimento) : "00:00:00"}</p></TableCell>
         <TableCell>
           <>
             {row.cha_status === 1 ? (
@@ -118,8 +118,8 @@ function Row(props: any) {
           </>
         </TableCell>
         <TableCell><p className='mobile:text-xs mobile:w-12'>{row.tipo_chamado}</p></TableCell>
-        <TableCell><p className='mobile:text-[0px]'>{row.produto_nome}</p></TableCell>
-        <TableCell><p className='mobile:text-[0px]'>{row.cliente_nome}</p></TableCell>
+        <TableCell><p className='mobile:hidden'>{row.produto_nome}</p></TableCell>
+        <TableCell><p className='mobile:hidden'>{row.cliente_nome}</p></TableCell>
         <TableCell><p className='mobile:text-xs'>{row.cha_local}</p></TableCell>
       </TableRow>
       <TableRow>
@@ -282,7 +282,7 @@ export function CollapsibleTable() {
                 <p className='font-bold mobile:text-xs text-base mobile:w-17 w-[80px] text-start'>Duração Total</p>
               </TableCell>
               <TableCell>
-                <p className='font-bold mobile:text-[0px] text-base mobile:w-[0px] mobile:h-10 text-start'>Tempo de Atendimento</p>
+                <p className='font-bold mobile:hidden text-base text-start'>Tempo de Atendimento</p>
               </TableCell>
               <TableCell>
                 <p className='font-bold mobile:text-xs text-base w-[80px] text-start'>Status</p>
@@ -291,10 +291,10 @@ export function CollapsibleTable() {
                 <p className='font-bold mobile:text-xs text-base mobile:w-10 w-[80px] text-start'>Tipo de Chamado</p>
               </TableCell>
               <TableCell>
-                <p className='font-bold mobile:text-[0px] text-base mobile:w-[0px] mobile:h-10 text-start'>Produto</p>
+                <p className='font-bold mobile:hidden text-base text-start'>Produto</p>
               </TableCell>
               <TableCell>
-                <p className='font-bold mobile:text-[0px] text-base mobile:w-[0px] mobile:h-10 text-start'>Cliente</p>
+                <p className='font-bold mobile:hidden text-base text-start'>Cliente</p>
               </TableCell>
               <TableCell>
                 <p className='font-bold mobile:text-xs text-base w-[80px] text-start'>Local</p>
