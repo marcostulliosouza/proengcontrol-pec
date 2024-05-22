@@ -1,7 +1,7 @@
-export function HelloUser ({user}) {
+export function HelloUser () {
     return (
-        <div className='w-9/12 text-cinza-500'>
-            <p className='text-sm text-nowrap'>Olá, {user}</p>
+        <div className='w-9/12 text-cinza-500 mobile:hidden'>
+            <p className='text-sm text-nowrap'>Olá, {localStorage.getItem("user")}</p>
         </div>
     )
 }

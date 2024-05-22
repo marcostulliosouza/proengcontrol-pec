@@ -2,10 +2,9 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 // Componentes
 import { Sidebar } from '../../components/sidebar';
-import { BarraPesquisa } from '../../components/barra_pesquisa';
 import { HelloUser } from '../../components/hello_user';
 import { MenuButton } from '../../components/button_menu';
-import logo from "../../assets/icon_pec.svg"
+import { Logo } from '../../components/logo';
 
 // Icones
 import { IoMenu } from "react-icons/io5";
@@ -37,21 +36,17 @@ export function MenuEngTestes() {
                         className='text-pec text-4xl hover:scale-110 transition duration-200 flex justify-start items-start'>
                         <IoMenu />
                     </button>
-
-                    <div className="grid justify-items-center items-center text-pec font-semibold">
-                        <div className="flex items-center gap-2">
-                            <img src={logo} alt="PEC" />
-                            <h1 className='text-xl'>PEC</h1>
+                    <Logo />
+                    <div className='flex-col-1 ml-8 mt-4'>
+                        <div className='inline-flex content font-bold text-pec gap-2 justify-center items-center'>
+                            <Link to={"/menu"} className='inline-flex items-center gap-2'>
+                                <FaHome className='mobile:w-0' />
+                                <p className='mobile:text-[0px]'>Menu</p>
+                            </Link>
+                            <IoIosArrowForward className='mobile:w-0' />
+                            <p>Engenharia de Testes</p>
                         </div>
-                        <p className='text-sm'>ProEngControl</p>
-                    </div>
-                    <div className='inline-flex content font-bold text-pec ml-8 gap-2 justify-center items-center'>
-                        <Link to={"/menu"} className='inline-flex items-center gap-2'>
-                            <FaHome className='mobile:w-0'/>
-                            <p className='mobile:text-[0px]'>Menu</p>
-                        </Link>
-                        <IoIosArrowForward className='mobile:w-0'/>
-                        <p>Engenharia de Testes</p>
+                        <HelloUser />
                     </div>
                 </div>
             </header>
@@ -60,19 +55,18 @@ export function MenuEngTestes() {
                     <MenuButton name={"Visualizar chamados"} link={"/engenharia_testes/visualizar_chamados"} icon={CiViewBoard} />
                     <MenuButton name={"Abrir chamado"} link={"/engenharia_testes/abrir_chamado"} icon={LuUsers2} />
                     <MenuButton name={"Atendimento de chamado"} link={"/engenharia_testes/chamados"} icon={BsListColumnsReverse} />
-                                            
-                        {/* <MenuButton name={"Chamado de Engenharia"} link={"/engenharia_testes/chamados_engenharia"} icon={PiCircuitry} />
-                        <MenuButton name={"Relatório de chamados"} link={"/engenharia_testes/relatorio_chamados"} icon={BsGraphUpArrow} />
-                        <MenuButton name={"Enviar Plano de Produção"} link={"/engenharia_testes/enviar_plano_de_producao"} icon={TbTableImport} />
-                        <MenuButton name={"Pesquisa de Indicadores"} link={"/engenharia_testes/pesquisa_de_indicadores"} icon={MdOutlineContentPasteSearch} />
-                        <MenuButton name={"Vincular Equipamentos e Produtos"} link={"/engenharia_testes/vincular_equipamento_produto"} icon={BiLink} />
-                        <MenuButton name={"Listar Produtos"} link={"/engenharia_testes/listar_produtos"} icon={AiOutlineUnorderedList} />
-                        <MenuButton name={"Receber Equipamento"} link={"/engenharia_testes/receber_equipamento"} icon={BsBoxArrowInRight} />
-                        <MenuButton name={"Devolver Equipamento"} link={"/engenharia_testes/devolver_equipamento"} icon={BsBoxArrowRight} />
-                        <MenuButton name={"Manutenção Preventiva"} link={"/engenharia_testes/manutencao_preventiva"} icon={GrHostMaintenance} />
-                        <MenuButton name={"Formulários de Manutenção"} link={"/engenharia_testes/formularios_de_manutencao"} icon={FaWpforms} />
-                        <MenuButton name={"Listar Notas Fiscais"} link={"/engenharia_testes/listar_notas_fiscais"} icon={CgNotes} />
-                        <MenuButton name={"Adicionar Nota"} link={"/engenharia_testes/adicionar_nota"} icon={AiOutlineFileAdd} /> */}
+                    <MenuButton name={"Chamado de Engenharia"} link={"/engenharia_testes/chamados_engenharia"} icon={PiCircuitry} />
+                    <MenuButton name={"Relatório de chamados"} link={"/engenharia_testes/relatorio_chamados"} icon={BsGraphUpArrow} />
+                    <MenuButton name={"Enviar Plano de Produção"} link={"/engenharia_testes/enviar_plano_de_producao"} icon={TbTableImport} />
+                    <MenuButton name={"Pesquisa de Indicadores"} link={"/engenharia_testes/pesquisa_de_indicadores"} icon={MdOutlineContentPasteSearch} />
+                    <MenuButton name={"Vincular Equipamentos e Produtos"} link={"/engenharia_testes/vincular_equipamento_produto"} icon={BiLink} />
+                    <MenuButton name={"Listar Produtos"} link={"/engenharia_testes/listar_produtos"} icon={AiOutlineUnorderedList} />
+                    <MenuButton name={"Receber Equipamento"} link={"/engenharia_testes/receber_equipamento"} icon={BsBoxArrowInRight} />
+                    <MenuButton name={"Devolver Equipamento"} link={"/engenharia_testes/devolver_equipamento"} icon={BsBoxArrowRight} />
+                    <MenuButton name={"Manutenção Preventiva"} link={"/engenharia_testes/manutencao_preventiva"} icon={GrHostMaintenance} />
+                    <MenuButton name={"Formulários de Manutenção"} link={"/engenharia_testes/formularios_de_manutencao"} icon={FaWpforms} />
+                    <MenuButton name={"Listar Notas Fiscais"} link={"/engenharia_testes/listar_notas_fiscais"} icon={CgNotes} />
+                    <MenuButton name={"Adicionar Nota"} link={"/engenharia_testes/adicionar_nota"} icon={AiOutlineFileAdd} />
                 </div>
             </body>
 

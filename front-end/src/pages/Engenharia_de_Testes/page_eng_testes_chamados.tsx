@@ -4,9 +4,9 @@ import { Link } from 'react-router-dom';
 import { Sidebar } from '../../components/sidebar';
 import { HelloUser } from '../../components/hello_user';
 import { CollapsibleTable } from "../../components/collapsible_table"
+import { Logo } from '../../components/logo';
 
 // Icones
-import logo from "../../assets/icon_pec.svg"
 import { IoMenu } from "react-icons/io5";
 import { IoIosArrowForward } from "react-icons/io";
 import { FaHome } from "react-icons/fa";
@@ -23,30 +23,26 @@ export function Chamados() {
                         className='text-pec text-4xl hover:scale-110 transition duration-200 flex justify-start items-start'>
                         <IoMenu />
                     </button>
-
-                    <div className="grid justify-items-center items-center text-pec font-semibold">
-                        <div className="flex items-center gap-2">
-                            <img src={logo} alt="PEC" />
-                            <h1 className='text-xl'>PEC</h1>
+                    <Logo />
+                    <div className='flex-col-1 ml-8 mt-4'>
+                        <div className='inline-flex content font-bold text-pec gap-2 justify-center items-center'>
+                            <Link to={"/menu"} className='inline-flex items-center gap-2'>
+                                <FaHome className='mobile:w-0' />
+                                <p className='mobile:text-[0px]'>Menu</p>
+                            </Link>
+                            <IoIosArrowForward className='mobile:w-0' />
+                            <Link to={"/engenharia_testes"}>
+                                <p className='mobile:text-[0px]'>Engenharia de Testes</p>
+                            </Link>
+                            <IoIosArrowForward className='mobile:w-0' />
+                            <p>Atendimento de chamado</p>
                         </div>
-                        <p className='text-sm'>ProEngControl</p>
-                    </div>
-                    <div className='inline-flex content font-bold text-pec ml-8 gap-2 justify-center items-center'>
-                        <Link to={"/menu"} className='inline-flex items-center gap-2'>
-                            <FaHome className='mobile:w-0'/>
-                            <p className='mobile:text-[0px]'>Menu</p>
-                        </Link>
-                        <IoIosArrowForward className='mobile:w-0'/>
-                        <Link to={"/engenharia_testes"}>
-                            <p className='mobile:text-[0px]'>Engenharia de Testes</p>
-                        </Link>
-                        <IoIosArrowForward className='mobile:w-0'/>
-                        <p>Atendimento de chamado</p>
+                        <HelloUser />
                     </div>
                 </div>
             </header>
             <body>
-                    <CollapsibleTable />
+                <CollapsibleTable />
             </body>
 
             {showSidebar && (
