@@ -30,8 +30,8 @@ export function AbrirChamado() {
     }
 
     return (
-        <>
-            <header className="grid grid-rows-1 bg-cinza-200">
+        <div className='bg-cinza-200 min-h-screen flex-col-1 w-screen'>
+            <header className="grid grid-rows-1">
                 <div className='inline-flex p-5 gap-4'>
                     <button
                         onClick={() => setShowSidebar(true)}
@@ -56,17 +56,17 @@ export function AbrirChamado() {
                     </div>
                 </div>
             </header>
-            <body className='w-screen fixed right-0 p-10 bg-cinza-200'>
-                <form onSubmit={abrirChamado} className='grid gap-4'>
-                    <div className='grid grid-cols-3 gap-4 place-content-start w-fit'>
+            <body>
+                <form onSubmit={abrirChamado} className='grid gap-4 p-10 absolute overflow-hidden left-1/2 -translate-x-1/2 mobile:w-screen mobile:p-5'>
+                    <div className='grid grid-cols-3 gap-4 place-content-startsmobile:text-sm mobile:gap-2 mobile:flex-col-3 mobile:justify-between mobile:w-screen'>
                         {/* Tipo de chamado */}
-                        <label className='text-lg font-bold text-cinza-500'>Tipo de chamado: </label>
+                        <label className='mobile:text-sm text-lg font-bold text-pec'>Tipo de chamado: </label>
                         <select
                             name="tipo"
                             required
                             autoFocus
                             onChange={event => setChamado({ ...chamado, cha_tipo: parseInt(event.target.value) })}
-                            className='border border-1 border-cinza-500 rounded p-2 shadow-sm bg-cinza-300'
+                            className='mobile:text-sm border border-1 border-cinza-500 rounded p-2 shadow-sm bg-cinza-300'
                         >
                             <option value=""></option>
                             <option value="1">INSTALAÇÃO DE JIGA</option>
@@ -77,40 +77,40 @@ export function AbrirChamado() {
                         </select>
                         <p className='text-red-600 text-lg font-bold'>*</p>
                         {/* Local */}
-                        <label className='text-lg font-bold text-cinza-500'>Local: </label>
+                        <label className='mobile:text-sm text-lg font-bold text-pec'>Local: </label>
                         <select
                             name="local"
                             required
                             onChange={event => setChamado({ ...chamado, cha_local: event.target.value })}
-                            className='border border-1 border-cinza-500 rounded p-2 shadow-sm bg-cinza-300'
+                            className='mobile:text-sm border border-1 border-cinza-500 rounded p-2 shadow-sm bg-cinza-300'
                         >
                             <option value=""></option>
                         </select>
                         <p className='text-red-600 text-lg font-bold'>*</p>
                         {/* Cliente */}
-                        <label className='text-lg font-bold text-cinza-500'>Cliente: </label>
+                        <label className='mobile:text-sm text-lg font-bold text-pec'>Cliente: </label>
                         <select
                             name="cliente"
                             required
                             onChange={event => setChamado({ ...chamado, cha_cliente: parseInt(event.target.value) })}
-                            className='border border-1 border-cinza-500 rounded p-2 shadow-sm bg-cinza-300'
+                            className='mobile:text-sm border border-1 border-cinza-500 rounded p-2 shadow-sm bg-cinza-300'
                         >
                             <option value=""></option>
                         </select>
                         <p className='text-red-600 text-lg font-bold'>*</p>
                         {/* Produto */}
-                        <label className='text-lg font-bold text-cinza-500'>Produto: </label>
+                        <label className='mobile:text-sm text-lg font-bold text-pec'>Produto: </label>
                         <select
                             name="produto"
                             required
                             onChange={event => setChamado({ ...chamado, cha_produto: parseInt(event.target.value) })}
-                            className='border border-1 border-cinza-500 rounded p-2 shadow-sm bg-cinza-300'
+                            className='mobile:text-sm border border-1 border-cinza-500 rounded p-2 shadow-sm bg-cinza-300'
                         >
                             <option value=""></option>
                         </select>
                         <p className='text-red-600 text-lg font-bold'>*</p>
                         {/* Dispositivo de Teste - DT */}
-                        <label className='text-lg font-bold text-cinza-500'>Dispositivo de Teste - DT: </label>
+                        <label className='mobile:text-sm text-lg font-bold text-pec'>Dispositivo de Teste - DT: </label>
                         <input
                             name='dt'
                             type="text"
@@ -121,18 +121,18 @@ export function AbrirChamado() {
                         />
                         <p className='text-red-600 text-lg font-bold'>*</p>
                         {/* Descrição do chamado */}
-                        <label className='text-lg font-bold text-cinza-500'>Breve descrição sobre o Chamado: </label>
+                        <label className='mobile:text-sm text-lg font-bold text-pec'>Breve descrição sobre o Chamado: </label>
                         <p className='text-red-600 text-lg font-bold'>*</p>
                     </div>
                     <textarea
                         name='descricao'
                         value={chamado.cha_descricao}
                         onChange={(event) => setChamado({ ...chamado, cha_descricao: event.target.value })}
-                        className="bg-gray-100 shadow appearance-none border border-1 border-cinza-500 rounded w-[600px] h-60 indent-1 text-black resize-none"
+                        className="mobile:w-11/12 bg-gray-100 shadow appearance-none border border-1 border-cinza-500 rounded w-[600px] h-60 indent-1 text-black resize-none"
                     />
                     <button
                         type='submit'
-                        className='w-[600px] h-10 bg-pec text-cinza-200 font-bold rounded'
+                        className='mobile:w-11/12 w-[600px] h-10 bg-pec text-cinza-200 font-bold rounded'
                     >
                         ABRIR CHAMADO
                     </button>
@@ -151,6 +151,6 @@ export function AbrirChamado() {
                     </button>
                 </div>
             )}
-        </>
+        </div>
     )
 }
