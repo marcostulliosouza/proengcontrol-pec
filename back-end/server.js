@@ -59,6 +59,82 @@ app.post('/login', (req, res) => {
     });
 });
 
+// Rota para coletar dados dos locais
+app.get('/api/locais', (req, res) => {
+    const query = `
+        SELECT
+            *
+        FROM
+            local_chamado
+        ORDER BY
+            loc_nome
+    `;
+    pool.query(query, (err, result) => {
+        if (err) {
+            console.error('Erro:', err);
+            return res.status(500).json({ message: 'Erro interno do servidor' });
+        }
+        return res.status(200), res.json(result);
+    });
+});
+
+// Rota para coletar dados dos tipos de chamados
+app.get('/api/tiposChamados', (req, res) => {
+    const query = `
+        SELECT
+            *
+        FROM
+            tipos_chamado
+        ORDER BY
+            tch_descricao
+    `;
+    pool.query(query, (err, result) => {
+        if (err) {
+            console.error('Erro:', err);
+            return res.status(500).json({ message: 'Erro interno do servidor' });
+        }
+        return res.status(200), res.json(result);
+    });
+});
+
+// Rota para coletar dados dos clientes
+app.get('/api/clientes', (req, res) => {
+    const query = `
+        SELECT
+            *
+        FROM
+            clientes
+        ORDER BY
+            cli_nome
+    `;
+    pool.query(query, (err, result) => {
+        if (err) {
+            console.error('Erro:', err);
+            return res.status(500).json({ message: 'Erro interno do servidor' });
+        }
+        return res.status(200), res.json(result);
+    });
+});
+
+// Rota para coletar dados dos produtos
+app.get('/api/produtos', (req, res) => {
+    const query = `
+        SELECT
+            *
+        FROM
+            produtos
+        ORDER BY
+            pro_nome
+    `;
+    pool.query(query, (err, result) => {
+        if (err) {
+            console.error('Erro:', err);
+            return res.status(500).json({ message: 'Erro interno do servidor' });
+        }
+        return res.status(200), res.json(result);
+    });
+});
+
 // Rota para buscar chamados
 app.get('/api/visualizarchamados', (req, res) => {
     const query = `

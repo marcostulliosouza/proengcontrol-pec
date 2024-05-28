@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import Select from 'react-select';
 // Componentes
 import { Sidebar } from '../../components/sidebar';
 import { HelloUser } from '../../components/hello_user';
@@ -24,10 +25,75 @@ export function AbrirChamado() {
         cha_plano: 0,
     });
     const [showSidebar, setShowSidebar] = useState(false);
+    const [locais, setLocais] = useState([]);
+    const [tiposChamados, setTiposChamados] = useState([]);
+    const [clientes, setClientes] = useState([]);
+    const [produtos, setProdutos] = useState([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                // Locais
+                const responseLocais = await fetch('http://127.0.0.1:5000/api/locais');
+                if (responseLocais.ok) {
+                    const data = await responseLocais.json();
+                    setLocais(data);
+                } else {
+                    console.error('Erro ao buscar locais: ', responseLocais.statusText);
+                }
+
+                // Tipos de chamados
+                const responseTipos = await fetch('http://127.0.0.1:5000/api/tiposChamados');
+                if (responseTipos.ok) {
+                    const data = await responseTipos.json();
+                    setTiposChamados(data);
+                } else {
+                    console.error('Erro ao buscar tipos de chamados: ', responseTipos.statusText);
+                }
+
+                // Clientes
+                const responseClientes = await fetch('http://127.0.0.1:5000/api/clientes');
+                if (responseClientes.ok) {
+                    const data = await responseClientes.json();
+                    setClientes(data);
+                } else {
+                    console.error('Erro ao buscar clientes: ', responseClientes.statusText);
+                }
+
+                // Produtos
+                const responseProdutos = await fetch('http://127.0.0.1:5000/api/produtos');
+                if (responseProdutos.ok) {
+                    const data = await responseProdutos.json();
+                    setProdutos(data);
+                } else {
+                    console.error('Erro ao buscar produtos: ', responseProdutos.statusText);
+                }
+            } catch (error) {
+                console.error("Erro fetching dados: ", error)
+            }
+        };
+        fetchData();
+    }, []);
 
     const abrirChamado = (event: any) => {
+        event.preventDefault();
 
+        console.log(chamado);
     }
+
+    const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        const validChars = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'Backspace'];
+        if (!validChars.includes(event.key)) {
+            event.preventDefault();
+        }
+    };
+
+    const customStyles = {
+        control: (provided: any) => ({
+            ...provided,
+            border: '1px solid black'
+        })
+    };
 
     return (
         <div className='bg-cinza-200 min-h-screen flex-col-1 w-screen'>
@@ -59,80 +125,81 @@ export function AbrirChamado() {
             <body>
                 <form onSubmit={abrirChamado} className='grid gap-4 p-10 absolute overflow-hidden left-1/2 -translate-x-1/2 mobile:w-screen mobile:p-5'>
                     <div className='grid grid-cols-3 gap-4 place-content-startsmobile:text-sm mobile:gap-2 mobile:flex-col-3 mobile:justify-between mobile:w-screen'>
+
                         {/* Tipo de chamado */}
                         <label className='mobile:text-sm text-lg font-bold text-pec'>Tipo de chamado: </label>
-                        <select
-                            name="tipo"
-                            required
-                            autoFocus
-                            onChange={event => setChamado({ ...chamado, cha_tipo: parseInt(event.target.value) })}
-                            className='mobile:text-sm border border-1 border-cinza-500 rounded p-2 shadow-sm bg-cinza-300'
-                        >
-                            <option value=""></option>
-                            <option value="1">INSTALAÇÃO DE JIGA</option>
-                            <option value="2">TREINAMENTO DE OPERADOR</option>
-                            <option value="3">JIGA COM DEFEITO</option>
-                            <option value="4">REMOÇÃO DE JIGA</option>
-                            <option value="5">MUDANÇA DE POSIÇÃO</option>
-                        </select>
+                        <Select
+                            options={tiposChamados.map((tipo: any) => ({ value: tipo.tch_id, label: tipo.tch_descricao }))}
+                            onChange={(selectedOption) => setChamado({ ...chamado, cha_tipo: selectedOption?.value || 0 })}
+                            className='mobile:text-sm'
+                            placeholder='Selecione o tipo de chamado'
+                            styles={customStyles}
+                        />
                         <p className='text-red-600 text-lg font-bold'>*</p>
+
                         {/* Local */}
                         <label className='mobile:text-sm text-lg font-bold text-pec'>Local: </label>
-                        <select
-                            name="local"
-                            required
-                            onChange={event => setChamado({ ...chamado, cha_local: event.target.value })}
-                            className='mobile:text-sm border border-1 border-cinza-500 rounded p-2 shadow-sm bg-cinza-300'
-                        >
-                            <option value=""></option>
-                        </select>
+                        <Select
+                            options={locais.map((local: any) => ({ value: local.loc_id, label: local.loc_nome }))}
+                            onChange={(selectedOption) => setChamado({ ...chamado, cha_local: selectedOption?.value || '' })}
+                            className='mobile:text-sm'
+                            placeholder='Selecione o local'
+                            styles={customStyles}
+                        />
                         <p className='text-red-600 text-lg font-bold'>*</p>
+
                         {/* Cliente */}
                         <label className='mobile:text-sm text-lg font-bold text-pec'>Cliente: </label>
-                        <select
-                            name="cliente"
-                            required
-                            onChange={event => setChamado({ ...chamado, cha_cliente: parseInt(event.target.value) })}
-                            className='mobile:text-sm border border-1 border-cinza-500 rounded p-2 shadow-sm bg-cinza-300'
-                        >
-                            <option value=""></option>
-                        </select>
+                        <Select
+                            options={clientes.map((cliente: any) => ({ value: cliente.cli_id, label: cliente.cli_nome }))}
+                            onChange={(selectedOption) => setChamado({ ...chamado, cha_cliente: selectedOption?.value || 0 })}
+                            className='mobile:text-sm'
+                            placeholder='Selecione o cliente'
+                            styles={customStyles}
+                        />
                         <p className='text-red-600 text-lg font-bold'>*</p>
+
                         {/* Produto */}
                         <label className='mobile:text-sm text-lg font-bold text-pec'>Produto: </label>
-                        <select
-                            name="produto"
-                            required
-                            onChange={event => setChamado({ ...chamado, cha_produto: parseInt(event.target.value) })}
-                            className='mobile:text-sm border border-1 border-cinza-500 rounded p-2 shadow-sm bg-cinza-300'
-                        >
-                            <option value=""></option>
-                        </select>
+                        <Select
+                            options={produtos
+                                .filter((produto: any) => produto.pro_cliente === chamado.cha_cliente)
+                                .map((produto: any) => ({ value: produto.pro_id, label: produto.pro_nome }))}
+                            onChange={(selectedOption) => setChamado({ ...chamado, cha_produto: selectedOption?.value || 0 })}
+                            className='mobile:text-sm'
+                            placeholder='Selecione o produto'
+                            styles={customStyles}
+                        />
                         <p className='text-red-600 text-lg font-bold'>*</p>
+
                         {/* Dispositivo de Teste - DT */}
-                        <label className='mobile:text-sm text-lg font-bold text-pec'>Dispositivo de Teste - DT: </label>
+                        <label className='mobile:text-sm text-lg font-bold text-pec'>Dispositivo de Teste - DT: (apenas números)</label>
                         <input
                             name='dt'
                             type="text"
                             value={chamado.cha_DT}
-                            onChange={(event) => setChamado({ ...chamado, cha_DT: event.target.value })}
-                            placeholder='XXXXXX'
-                            className='indent-1 border border-1 border-cinza-500 rounded p-2 shadow-sm bg-cinza-300'
+                            onChange={(event) => setChamado({ ...chamado, cha_DT: chamado.cha_tipo === 1 ? '000000' : event.target.value })}
+                            placeholder={chamado.cha_tipo === 1 ? '000000' : 'XXXXXX'}
+                            disabled={chamado.cha_tipo === 1}
+                            onKeyDown={handleKeyDown}
+                            className='indent-1 border border-1 border-black rounded p-2 shadow-sm bg-white h-10'
                         />
                         <p className='text-red-600 text-lg font-bold'>*</p>
+
                         {/* Descrição do chamado */}
-                        <label className='mobile:text-sm text-lg font-bold text-pec'>Breve descrição sobre o Chamado: </label>
+                        <label className='mobile:text-sm text-lg font-bold text-pec w-80'>Breve descrição sobre o Chamado: </label>
                         <p className='text-red-600 text-lg font-bold'>*</p>
                     </div>
                     <textarea
                         name='descricao'
                         value={chamado.cha_descricao}
                         onChange={(event) => setChamado({ ...chamado, cha_descricao: event.target.value })}
-                        className="mobile:w-11/12 bg-gray-100 shadow appearance-none border border-1 border-cinza-500 rounded w-[600px] h-60 indent-1 text-black resize-none"
+                        className="mobile:w-11/12 bg-gray-100 shadow appearance-none border border-1 border-cinza-500 rounded w-[580px] h-32 indent-1 text-black resize-none"
                     />
+                    <p className='text-red-600 text-sm font-bold'>Verifique as informações preenchidas antes de abrir o chamado</p>
                     <button
                         type='submit'
-                        className='mobile:w-11/12 w-[600px] h-10 bg-pec text-cinza-200 font-bold rounded'
+                        className='mobile:w-11/12 w-[580px] h-10 bg-pec text-cinza-200 font-bold rounded'
                     >
                         ABRIR CHAMADO
                     </button>
