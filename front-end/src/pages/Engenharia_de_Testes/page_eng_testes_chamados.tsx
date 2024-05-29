@@ -15,8 +15,8 @@ export function Chamados() {
     const [showSidebar, setShowSidebar] = useState(false);
 
     return (
-        <>
-            <header className="grid grid-rows-1 bg-cinza-200">
+        <div className='w-screen h-screen'>
+            <header className="grid grid-rows-1 bg-cinza-200 h-1/6">
                 <div className='inline-flex p-5 gap-4'>
                     <button
                         onClick={() => setShowSidebar(true)}
@@ -56,6 +56,6 @@ export function Chamados() {
                     </button>
                 </div>
             )}
-        </>
+        </div>
     )
 }

@@ -96,8 +96,8 @@ export function AbrirChamado() {
     };
 
     return (
-        <div className='bg-cinza-200 min-h-screen flex-col-1 w-screen'>
-            <header className="grid grid-rows-1">
+        <div className='w-screen h-screen'>
+            <header className="grid grid-rows-1 h-1/6 bg-cinza-200 ">
                 <div className='inline-flex p-5 gap-4'>
                     <button
                         onClick={() => setShowSidebar(true)}
@@ -122,9 +122,9 @@ export function AbrirChamado() {
                     </div>
                 </div>
             </header>
-            <body>
+            <body className='h-5/6 bg-cinza-200 '>
                 <form onSubmit={abrirChamado} className='grid gap-4 p-10 absolute overflow-hidden left-1/2 -translate-x-1/2 mobile:w-screen mobile:p-5'>
-                    <div className='grid grid-cols-3 gap-4 place-content-startsmobile:text-sm mobile:gap-2 mobile:flex-col-3 mobile:justify-between mobile:w-screen'>
+                    <div className='grid grid-cols-3 gap-4 place-content-start mobile:text-sm mobile:gap-2 mobile:flex-col-3 mobile:justify-between mobile:w-screen'>
 
                         {/* Tipo de chamado */}
                         <label className='mobile:text-sm text-lg font-bold text-pec'>Tipo de chamado: </label>

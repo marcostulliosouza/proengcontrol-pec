@@ -10,6 +10,7 @@ import { AbrirChamado } from './pages/Engenharia_de_Testes/page_eng_testes_abrir
 import { Chamados } from './pages/Engenharia_de_Testes/page_eng_testes_chamados';
 import { ChamadoEng } from './pages/Engenharia_de_Testes/page_eng_testes_chamado_eng';
 import { RelatorioChamados } from './pages/Engenharia_de_Testes/page_eng_testes_relatorio_chamadas';
+import { ConsultarComputadores } from './pages/Engenharia_de_Testes/page_eng_testes_consultar_computadores';
 import { EnviarPlano } from './pages/Engenharia_de_Testes/page_eng_testes_enviar_plano';
 import { PesquisaIndicadores } from './pages/Engenharia_de_Testes/page_eng_testes_pesquisa_indicadores';
 import { VincularEquipamentoProduto } from './pages/Engenharia_de_Testes/page_eng_testes_vincular_equipamento_produto';
@@ -55,6 +56,9 @@ export function App() {
         </PrivateRoute>} />
         <Route path="/engenharia_testes/relatorio_chamados" element={<PrivateRoute redirectTo="/">
           <RelatorioChamados />
+        </PrivateRoute>} />
+        <Route path="/engenharia_testes/consultar_computadores" element={<PrivateRoute redirectTo="/">
+          <ConsultarComputadores />
         </PrivateRoute>} />
         <Route path="/engenharia_testes/enviar_plano_de_producao" element={<PrivateRoute redirectTo="/">
           <EnviarPlano />

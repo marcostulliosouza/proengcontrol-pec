@@ -15,8 +15,8 @@ export function ChamadoEng() {
     const [showSidebar, setShowSidebar] = useState(false);
 
     return (
-        <>
-            <header className="grid grid-rows-1 bg-cinza-200">
+        <div className='w-screen h-screen'>
+            <header className="grid grid-rows-1 h-1/6 bg-cinza-200">
                 <div className='inline-flex p-5 gap-4'>
                     <button
                         onClick={() => setShowSidebar(true)}
@@ -41,7 +41,7 @@ export function ChamadoEng() {
                     </div>
                 </div>
             </header>
-            <body className='bg-cinza-200 w-screen h-screen px-5'>
+            <body className='bg-cinza-200 w-screen px-5 h-5/6'>
                 <main>
                     <div>
                         Chamado de Engenharia
@@ -60,6 +60,6 @@ export function ChamadoEng() {
                     </button>
                 </div>
             )}
-        </>
+        </div>
     )
 }

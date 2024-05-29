@@ -271,7 +271,7 @@ export function CollapsibleTable() {
   };
 
   return (
-    <div className="bg-cinza-200 mobile:px-2 px-5 h-screen">
+    <div className="h-5/6 bg-cinza-200 mobile:px-2 px-5">
       <TableContainer component={Paper}>
         <Table aria-label="collapsible table">
           <TableHead sx={{ backgroundColor: '#d9d9d9' }}>

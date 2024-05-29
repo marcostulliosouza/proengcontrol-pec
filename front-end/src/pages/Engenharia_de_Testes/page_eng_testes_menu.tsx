@@ -21,15 +21,15 @@ import { BiLink } from "react-icons/bi";
 import { AiOutlineUnorderedList, AiOutlineFileAdd } from "react-icons/ai";
 import { BsBoxArrowInRight, BsBoxArrowRight } from "react-icons/bs";
 import { GrHostMaintenance } from "react-icons/gr";
-import { FaWpforms } from "react-icons/fa6";
+import { FaComputer, FaWpforms } from "react-icons/fa6";
 import { CgNotes } from "react-icons/cg";
 
 export function MenuEngTestes() {
     const [showSidebar, setShowSidebar] = useState(false);
 
     return (
-        <>
-            <header className="grid grid-rows-1 bg-cinza-200">
+        <div className='w-screen h-screen'>
+            <header className="grid grid-rows-1 bg-cinza-200 h-1/6">
                 <div className='inline-flex p-5 gap-4'>
                     <button
                         onClick={() => setShowSidebar(true)}
@@ -50,11 +50,12 @@ export function MenuEngTestes() {
                     </div>
                 </div>
             </header>
-            <body className='bg-cinza-200 w-screen h-screen px-5'>
+            <body className='bg-cinza-200 w-screen h-5/6 px-5'>
                 <div className="bg-cinza-100 rounded-md drop-shadow grid mobile:grid-cols-2 sm:grid-cols-5 grid-cols-6 justify-items-center p-10 gap-10">
                     <MenuButton name={"Visualizar chamados"} link={"/engenharia_testes/visualizar_chamados"} icon={CiViewBoard} />
                     <MenuButton name={"Abrir chamado"} link={"/engenharia_testes/abrir_chamado"} icon={LuUsers2} />
                     <MenuButton name={"Atendimento de chamado"} link={"/engenharia_testes/chamados"} icon={BsListColumnsReverse} />
+                    <MenuButton name={"Consultar Computadores"} link={"/engenharia_testes/consultar_computadores"} icon={FaComputer} />
                     {/* <MenuButton name={"Chamado de Engenharia"} link={"/engenharia_testes/chamados_engenharia"} icon={PiCircuitry} />
                     <MenuButton name={"Relatório de chamados"} link={"/engenharia_testes/relatorio_chamados"} icon={BsGraphUpArrow} />
                     <MenuButton name={"Enviar Plano de Produção"} link={"/engenharia_testes/enviar_plano_de_producao"} icon={TbTableImport} />
@@ -81,6 +82,6 @@ export function MenuEngTestes() {
                     </button>
                 </div>
             )}
-        </>
+        </div>
     )
 }

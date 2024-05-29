@@ -14,8 +14,8 @@ export function Menu() {
     const [showSidebar, setShowSidebar] = useState(false);
 
     return (
-        <>
-            <header className="grid grid-rows-1 bg-cinza-200">
+        <div className='w-screen h-screen'>
+            <header className="grid grid-rows-1 bg-cinza-200 h-1/6">
                 <div className='inline-flex p-5 gap-4'>
                     <button
                         onClick={() => setShowSidebar(true)}
@@ -32,7 +32,7 @@ export function Menu() {
                     </div>
                 </div>
             </header>
-            <body className='bg-cinza-200 w-screen h-screen px-5'>
+            <body className='bg-cinza-200 w-screen h-5/6 px-5'>
                 <div className="bg-cinza-100 rounded-md drop-shadow grid mobile:grid-cols-2 sm:grid-cols-5 grid-cols-6 justify-items-center p-10 gap-10">
                     <MenuButton name={"Engenharia de Testes"} link={"/engenharia_testes"} icon={FaGears} />
                     {/* <MenuButton name={"Qualidade"} link={"/qualidade"} icon={FaRegCheckSquare} /> */}
@@ -50,6 +50,6 @@ export function Menu() {
                     </button>
                 </div>
             )}
-        </>
+        </div>
     )
 }
