@@ -178,7 +178,7 @@ export function ConsultarComputadores() {
                         type="text"
                         value={pesqComputador}
                         onChange={handleSearchChange}
-                        placeholder="Pesquisar"
+                        placeholder="Pesquisar por ID"
                         className="p-2 border border-black rounded"
                     />
                 </div>
