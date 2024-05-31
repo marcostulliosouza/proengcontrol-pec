@@ -28,7 +28,7 @@ function Row(props: any) {
                     <p className='text-start'>{row.cmp_identificacao}</p>
                 </TableCell>
                 <TableCell>
-                    <p className='text-start'>{row.cmp_localizacao}</p>
+                    <p className='text-start'>{row.cmp_localizacao ? row.cmp_localizacao : "DESCONHECIDA"}</p>
                 </TableCell>
                 <TableCell>
                     <p className='text-start'>{row.cmp_proprietario}</p>
@@ -37,7 +37,7 @@ function Row(props: any) {
                     <p className='text-start'>{row.cmp_etapa_teste}</p>
                 </TableCell>
                 <TableCell>
-                    <p className='text-start'>{row.cmp_sis_operacional}</p>
+                    <p className='text-start'>{row.cmp_programas_instalados}</p>
                 </TableCell>
                 <TableCell>
                     <p className='text-start'>{row.cmp_observacao}</p>
@@ -49,18 +49,74 @@ function Row(props: any) {
 
 export function ConsultarComputadores() {
     const [showSidebar, setShowSidebar] = useState(false);
-    const [computadores, setComputadores] = useState([]);
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [pesqComputador, setPesqComputador] = useState('');
+    const [computadores, setComputadores] = useState([]);
 
     useEffect(() => {
         const fetchComputadores = async () => {
             try {
+                // Computadores
                 const responseComputadores = await fetch('http://127.0.0.1:5000/api/computadores');
                 if (responseComputadores.ok) {
-                    const data = await responseComputadores.json();
-                    setComputadores(data);
+                    const dataComputadores = await responseComputadores.json();
+
+                    // Clientes
+                    const responseClientes = await fetch('http://127.0.0.1:5000/api/clientes');
+                    if (responseClientes.ok) {
+                        const dataClientes = await responseClientes.json();
+
+                        // Cria um mapa para os clientes
+                        const clientesMap = dataClientes.reduce((map: any, cliente: any) => {
+                            map[cliente.cli_id] = cliente.cli_nome;
+                            return map;
+                        }, {});
+
+                        // Atualiza os computadores com os nomes dos proprietários
+                        const updatedComputadores = dataComputadores.map((computador: any) => {
+                            if (clientesMap[computador.cmp_proprietario]) {
+                                computador.cmp_proprietario = clientesMap[computador.cmp_proprietario];
+                            }
+                            return computador;
+                        });
+
+                        setComputadores(updatedComputadores);
+                    } else {
+                        console.error('Erro ao buscar clientes: ', responseClientes.statusText);
+                    }
+
+                    // Produtos e Vinculo de Produtos
+                    const responseProdutos = await fetch('http://127.0.0.1:5000/api/produtos');
+                    const responseVinculoProdutos = await fetch('http://127.0.0.1:5000/api/vinculoComputadores');
+                    if (responseProdutos.ok && responseVinculoProdutos.ok) {
+                        const dataProdutos = await responseProdutos.json();
+                        const dataVinculoProdutos = await responseVinculoProdutos.json();
+
+                        const updatedComputadores = dataComputadores.map((computador: any) => {
+                            // Filtra os produtos vinculados a este computador
+                            const produtosVinculados = dataVinculoProdutos
+                                .filter((vinculo: any) => vinculo.vcp_computadores_cmp_id === computador.cmp_id)
+                                .map((vinculo: any) => {
+                                    // Encontra o nome do produto correspondente
+                                    const produto = dataProdutos.find((produto: any) => produto.pro_id === vinculo.vcp_produtos_pro_id);
+                                    computador.cmp_etapa_teste = computador.cmp_etapa_teste === "GRAVAÇÃO/FUNCIONAL" || computador.cmp_etapa_teste === "GRAVAÇÃO/TESTE" ? computador.cmp_etapa_teste : 
+                                                                    vinculo.vcp_etapa_teste === "" || vinculo.vcp_etapa_teste === null && computador.cmp_etapa_teste === "" ? 'NÃO INFORMADO' :
+                                                                    vinculo.vcp_etapa_teste === "" || vinculo.vcp_etapa_teste === null && computador.cmp_etapa_teste !== "" ? computador.cmp_etapa_teste :
+                                                                    vinculo.vcp_etapa_teste;
+                                    return produto ? produto.pro_nome : '';
+                                });
+                            // Cria uma string com os nomes dos produtos vinculados
+                            computador.cmp_programas_instalados = produtosVinculados.join(' | ');
+                            return computador;
+                        });
+
+                        setComputadores(updatedComputadores);
+
+                    } else {
+                        console.error('Erro ao buscar produtos e vinculo de produtos: ', responseProdutos.statusText);
+                    }
+
                 } else {
                     console.error('Erro ao buscar os computadores: ', responseComputadores.statusText);
                 }

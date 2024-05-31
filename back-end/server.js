@@ -139,16 +139,30 @@ app.get('/api/produtos', (req, res) => {
 app.get('/api/computadores', (req, res) => {
     const query = `
         SELECT
-            computadores.*,
-            vinculacao_computadores_produtos.vcp_produtos_pro_id AS vcp_produto_id,
-            vinculacao_computadores_produtos.vcp_computadores_cmp_id AS vcp_computador_id
+            *
         FROM
             computadores
-            LEFT JOIN vinculacao_computadores_produtos ON computadores.cmp_id = vinculacao_computadores_produtos.vcp_computadores_cmp_id
-        WHERE
-            cmp_localizacao <> ''
         ORDER BY
             cmp_id
+    `;
+    pool.query(query, (err, result) => {
+        if (err) {
+            console.error('Erro:', err);
+            return res.status(500).json({ message: 'Erro interno do servidor' });
+        }
+        return res.status(200), res.json(result);
+    });
+});
+
+// Rota para coletar dados dos produtos vinculados aos computadores
+app.get('/api/vinculoComputadores', (req, res) => {
+    const query = `
+        SELECT
+            *
+        FROM
+            vinculacao_computadores_produtos
+        ORDER BY
+            vcp_produtos_pro_id
     `;
     pool.query(query, (err, result) => {
         if (err) {
