@@ -125,28 +125,28 @@ function Row(props: any) {
         <TableCell style={{ paddingBottom: 0, paddingTop: 0, backgroundColor: '#d9d9d9' }} colSpan={8}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 1 }}>
-              <p className='text-lg'>Detalhes</p>
+              <p className='text-lg text-pec font-bold'>Detalhes</p>
               <Table size="small" aria-label="purchases">
                 <TableHead>
                   <TableRow>
                     <div className='grid'>
                       <div className='mobile:text-xs inline-flex gap-2'>
-                        <p className='font-bold'>{row.cha_status === 2 ? "Responsável:" : ""}</p><p>{row.responsavel}</p>
+                        <p className='font-bold text-pec'>{row.cha_status === 2 ? "Responsável:" : ""}</p><p>{row.responsavel}</p>
                       </div>
                       <div className='inline-flex gap-2'>
                         <p className='mobile:text-xs text-[0px] font-bold'>{row.cha_status === 2 ? "Tempo de Atendimento: " : ""}</p><p className='mobile:text-xs text-[0px]'>{row.cha_status === 2 ? calculateDurationAtendimento(row.cha_data_hora_atendimento) : ""}</p>
                       </div>
                       <div className='inline-flex gap-2'>
-                        <p className='mobile:text-xs text-[0px] font-bold'>Produto:</p><p className='mobile:text-xs text-[0px]'>{row.produto_nome}</p>
+                        <p className='mobile:text-xs text-[0px] font-bold text-pec'>Produto:</p><p className='mobile:text-xs text-[0px]'>{row.produto_nome}</p>
                       </div>
                       <div className='inline-flex gap-2'>
-                        <p className='mobile:text-xs text-[0px] font-bold'>Cliente:</p><p className='mobile:text-xs text-[0px]'>{row.cliente_nome}</p>
+                        <p className='mobile:text-xs text-[0px] font-bold text-pec'>Cliente:</p><p className='mobile:text-xs text-[0px]'>{row.cliente_nome}</p>
                       </div>
                       <div className='mobile:text-xs inline-flex gap-2'>
-                        <p className='font-bold'>Descrição:</p><p className='mobile:w-[240px]'>{row.cha_descricao}</p>
+                        <p className='font-bold text-pec'>Descrição:</p><p className='mobile:w-[240px]'>{row.cha_descricao}</p>
                       </div>
                       <div className='mobile:text-xs inline-flex gap-2'>
-                        <p className='font-bold'>Operador:</p><p>{row.cha_operador}</p>
+                        <p className='font-bold text-pec'>Operador:</p><p>{row.cha_operador}</p>
                       </div>
                     </div>
                   </TableRow>
@@ -278,25 +278,25 @@ export function CollapsibleTable() {
             <TableRow>
               <TableCell />
               <TableCell>
-                <p className='font-bold mobile:text-xs text-base mobile:w-17 w-[80px] text-start'>Duração Total</p>
+                <p className='font-bold mobile:text-xs text-base mobile:w-17 w-[80px] text-center text-pec'>Duração Total</p>
               </TableCell>
               <TableCell>
-                <p className='font-bold mobile:hidden text-base text-start'>Tempo de Atendimento</p>
+                <p className='font-bold mobile:hidden text-base text-start text-pec'>Tempo de Atendimento</p>
               </TableCell>
               <TableCell>
-                <p className='font-bold mobile:text-xs text-base w-[80px] text-start'>Status</p>
+                <p className='font-bold mobile:text-xs text-base w-[80px] text-start text-pec'>Status</p>
               </TableCell>
               <TableCell>
-                <p className='font-bold mobile:text-xs text-base mobile:w-10 w-[80px] text-start'>Tipo de Chamado</p>
+                <p className='font-bold mobile:text-xs text-base mobile:w-10 w-[80px] text-start text-pec'>Tipo de Chamado</p>
               </TableCell>
               <TableCell>
-                <p className='font-bold mobile:hidden text-base text-start'>Produto</p>
+                <p className='font-bold mobile:hidden text-base text-start text-pec'>Produto</p>
               </TableCell>
               <TableCell>
-                <p className='font-bold mobile:hidden text-base text-start'>Cliente</p>
+                <p className='font-bold mobile:hidden text-base text-start text-pec'>Cliente</p>
               </TableCell>
               <TableCell>
-                <p className='font-bold mobile:text-xs text-base w-[80px] text-start'>Local</p>
+                <p className='font-bold mobile:text-xs text-base w-[80px] text-start text-pec'>Local</p>
               </TableCell>
             </TableRow>
           </TableHead>

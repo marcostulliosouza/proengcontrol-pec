@@ -188,22 +188,22 @@ export function ConsultarComputadores() {
                             <TableHead sx={{ backgroundColor: '#d9d9d9' }}>
                                 <TableRow>
                                     <TableCell>
-                                        <p className='font-bold text-base text-start'>Identificação</p>
+                                        <p className='font-bold text-base text-start text-pec'>Identificação</p>
                                     </TableCell>
                                     <TableCell>
-                                        <p className='font-bold text-base text-start'>Localização</p>
+                                        <p className='font-bold text-base text-start text-pec'>Localização</p>
                                     </TableCell>
                                     <TableCell>
-                                        <p className='font-bold text-base text-start'>Proprietário</p>
+                                        <p className='font-bold text-base text-start text-pec'>Proprietário</p>
                                     </TableCell>
                                     <TableCell>
-                                        <p className='font-bold text-base text-start'>Etapa de Teste</p>
+                                        <p className='font-bold text-base text-start text-pec'>Etapa de Teste</p>
                                     </TableCell>
                                     <TableCell>
-                                        <p className='font-bold text-base text-start'>Produtos Relacionados</p>
+                                        <p className='font-bold text-base text-start text-pec'>Produtos Relacionados</p>
                                     </TableCell>
                                     <TableCell>
-                                        <p className='font-bold text-base text-start'>Observação</p>
+                                        <p className='font-bold text-base text-start text-pec'>Observação</p>
                                     </TableCell>
                                 </TableRow>
                             </TableHead>
