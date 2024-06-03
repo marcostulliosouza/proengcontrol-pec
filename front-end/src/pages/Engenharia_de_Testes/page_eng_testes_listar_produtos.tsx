@@ -15,12 +15,12 @@ export function ListarProdutos() {
     const [showSidebar, setShowSidebar] = useState(false);
 
     return (
-        <>
-            <header className="grid grid-rows-1 bg-cinza-200">
+        <div className='w-screen h-screen'>
+            <header className="grid grid-rows-1 bg-cinza-200 h-1/6">
                 <div className='inline-flex p-5 gap-4'>
                     <button
                         onClick={() => setShowSidebar(true)}
-                        className='text-pec text-4xl hover:scale-110 transition duration-200 flex justify-start items-start'>
+                        className='text-pec text-4xl hover:scale-110 transition duration-200 flex justify-start items-start h-9'>
                         <IoMenu />
                     </button>
                     <Logo />
@@ -35,7 +35,7 @@ export function ListarProdutos() {
                                 <p className='mobile:text-[0px]'>Engenharia de Testes</p>
                             </Link>
                             <IoIosArrowForward className='mobile:w-0' />
-                            <p>Listar Produtos</p>
+                            <p>Consultar Computadores</p>
                         </div>
                         <HelloUser />
                     </div>
@@ -60,6 +60,6 @@ export function ListarProdutos() {
                     </button>
                 </div>
             )}
-        </>
+        </div>
     )
 }

@@ -154,6 +154,25 @@ app.get('/api/computadores', (req, res) => {
     });
 });
 
+// Rota para coletar dados dos dispositivos (jigas)
+app.get('/api/dispositivos', (req, res) => {
+    const query = `
+        SELECT
+            *
+        FROM
+            dispositivos
+        ORDER BY
+            dis_id DESC
+    `;
+    pool.query(query, (err, result) => {
+        if (err) {
+            console.error('Erro:', err);
+            return res.status(500).json({ message: 'Erro interno do servidor' });
+        }
+        return res.status(200), res.json(result);
+    });
+});
+
 // Rota para coletar dados dos produtos vinculados aos computadores
 app.get('/api/vinculoComputadores', (req, res) => {
     const query = `
@@ -176,30 +195,31 @@ app.get('/api/vinculoComputadores', (req, res) => {
 // Rota para buscar chamados
 app.get('/api/visualizarchamados', (req, res) => {
     const query = `
-                SELECT 
-                    chamados.*, 
-                    produtos.pro_nome AS produto_nome, 
-                    clientes.cli_nome AS cliente_nome, 
-                    tipos_chamado.tch_descricao AS tipo_chamado, 
-                    colaboradores.col_login AS responsavel 
-                FROM 
-                    chamados 
-                    LEFT JOIN produtos ON chamados.cha_produto = produtos.pro_id 
-                    LEFT JOIN clientes ON chamados.cha_cliente = clientes.cli_id 
-                    LEFT JOIN tipos_chamado ON cha_tipo = tch_id 
-                    LEFT JOIN atendimentos_chamados ON atendimentos_chamados.atc_chamado = cha_id 
-                    LEFT JOIN colaboradores ON atendimentos_chamados.atc_colaborador = colaboradores.col_id
-                WHERE 
-                    chamados.cha_status = 1 OR chamados.cha_status = 2 
-                ORDER BY 
-                    chamados.cha_status DESC, chamados.cha_data_hora_abertura ASC;
+        SELECT 
+            chamados.*, 
+            produtos.pro_nome AS produto_nome, 
+            clientes.cli_nome AS cliente_nome, 
+            tipos_chamado.tch_descricao AS tipo_chamado, 
+            colaboradores.col_id AS responsavel
+        FROM 
+            chamados 
+            LEFT JOIN produtos ON chamados.cha_produto = produtos.pro_id 
+            LEFT JOIN clientes ON chamados.cha_cliente = clientes.cli_id 
+            LEFT JOIN tipos_chamado ON cha_tipo = tch_id 
+            LEFT JOIN atendimentos_chamados ON atendimentos_chamados.atc_chamado = cha_id 
+            LEFT JOIN colaboradores ON atendimentos_chamados.atc_colaborador = colaboradores.col_id
+            LEFT JOIN local_chamado ON cha_local = loc_nome
+        WHERE 
+            chamados.cha_status < 3
+        ORDER BY 
+            chamados.cha_data_hora_abertura DESC;
     `;
     pool.query(query, (err, result) => {
         if (err) {
             console.error('Erro:', err);
             return res.status(500).json({ message: 'Erro interno do servidor' });
         }
-        return res.status(200), res.json(result);
+        return res.status(200).json(result);
     });
 });
 
@@ -232,111 +252,336 @@ app.get('/api/chamados', (req, res) => {
         return res.status(200), res.json(result);
     });
 });
-// Rota para obter os indicadores diários de chamadas
+
+// Rota para obter os indicadores diários de chamados
 app.get('/api/indicadoresdiarios', (req, res) => {
-    const query = `
-        SELECT 
-            COUNT(cha_id) AS dailyTotalCalls,
-            SEC_TO_TIME(AVG(TIMESTAMPDIFF(SECOND, cha_data_hora_abertura, cha_data_hora_atendimento))) AS dailyAvgAnswering,
-            SEC_TO_TIME(AVG(IF(cha_data_hora_abertura < cha_data_hora_atendimento, TIMESTAMPDIFF(SECOND, cha_data_hora_abertura, cha_data_hora_atendimento), 0))) AS dailyAvgLate,
-            IFNULL(ROUND((SUM(pdp_total_horas * 60) - SUM(IF(cha_data_hora_abertura < cha_data_hora_atendimento, TIMESTAMPDIFF(SECOND, cha_data_hora_abertura, cha_data_hora_atendimento), 0)) - SUM(IF(cha_data_hora_abertura < cha_data_hora_termino, TIMESTAMPDIFF(SECOND, cha_data_hora_atendimento, cha_data_hora_termino), 0))) / SUM(pdp_total_horas * 60) * 100, 2), 0) AS dailyUpTime
-        FROM 
-            chamados
-            LEFT JOIN atendimentos_chamados ON chamados.cha_id = atendimentos_chamados.atc_chamado
-            LEFT JOIN planos_de_producao ON DATE(chamados.cha_data_hora_abertura) = planos_de_producao.pdp_data
-        WHERE 
-            chamados.cha_status = 3
-            AND chamados.cha_plano = 1
-            AND DATE(chamados.cha_data_hora_abertura) = CURDATE()
+    const query1 = `
+        SELECT
+            COUNT(cha_id) AS totalCalls,
+            SUM(
+                IF(
+                    cha_data_hora_abertura < cha_data_hora_termino,
+                    TIMESTAMPDIFF(
+                        MINUTE,
+                        IF(
+                            cha_data_hora_abertura > cha_data_hora_atendimento,
+                            cha_data_hora_abertura,
+                            cha_data_hora_atendimento
+                        ),
+                        cha_data_hora_termino
+                    ),
+                    0
+                )
+            ) AS totalAnsweringTime,
+            SUM(
+                IF(
+                    cha_data_hora_abertura < cha_data_hora_atendimento,
+                    TIMESTAMPDIFF(MINUTE, cha_data_hora_abertura, cha_data_hora_atendimento),
+                    0
+                )
+            ) AS totalLateTime
+        FROM chamados
+        LEFT JOIN acoes_chamados ON cha_acao = ach_id
+        LEFT JOIN detratores ON ach_detrator = dtr_id
+        WHERE
+            cha_status = 3 AND
+            cha_plano = 1 AND
+            DAY(cha_data_hora_abertura) = DAY(NOW()) AND
+            WEEK(cha_data_hora_abertura) = WEEK(NOW()) AND
+            MONTH(cha_data_hora_abertura) = MONTH(NOW()) AND
+            YEAR(cha_data_hora_abertura) = YEAR(NOW()) AND
+            dtr_indicador > 0
     `;
-    
-    pool.query(query, (err, result) => {
+
+    pool.query(query1, (err, rows1) => {
         if (err) {
             console.error('Erro:', err);
-            return res.status(500).json({ message: 'Erro interno do servidor' });
+            return res.status(500).json({ error: 'Erro ao buscar os indicadores semanais.' });
         }
-        
-        const dailyIndicators = {
-            dailyTotalCalls: result[0].dailyTotalCalls,
-            dailyAvgAnswering: result[0].dailyAvgAnswering,
-            dailyAvgLate: result[0].dailyAvgLate,
-            dailyUpTime: result[0].dailyUpTime.toFixed(2) + "%"
-        };
-        return res.status(200).json(dailyIndicators);
+
+        let { totalCalls, totalAnsweringTime, totalLateTime } = rows1[0];
+        totalAnsweringTime = totalAnsweringTime || 0;
+        totalLateTime = totalLateTime || 0;
+
+        let dailyTotalCalls = totalCalls;
+        let dailyAvgAnswering = "00:00";
+        let dailyAvgLate = "00:00";
+
+        if (totalCalls > 0) {
+            let avgAnswering = Math.round(totalAnsweringTime / totalCalls);
+            let avgLate = Math.round(totalLateTime / totalCalls);
+            dailyAvgAnswering = `${String(Math.floor(avgAnswering / 60)).padStart(2, '0')}:${String(avgAnswering % 60).padStart(2, '0')}`;
+            dailyAvgLate = `${String(Math.floor(avgLate / 60)).padStart(2, '0')}:${String(avgLate % 60).padStart(2, '0')}`;
+        }
+
+        const query2 = `
+            SELECT SUM(pdp_total_horas * 60) AS totalHours
+            FROM planos_de_producao
+            WHERE
+                DAY(pdp_data) = DAY(NOW()) AND
+                WEEK(pdp_data) = WEEK(NOW()) AND
+                MONTH(pdp_data) = MONTH(NOW()) AND
+                YEAR(pdp_data) = YEAR(NOW())
+        `;
+
+        pool.query(query2, (err, rows2) => {
+            if (err) {
+                console.error('Erro:', err);
+                return res.status(500).json({ error: 'Erro ao buscar os indicadores semanais.' });
+            }
+
+            let totalHours = rows2[0].totalHours || 0;
+            let dailyUpTime = "0.00%";
+
+            if (totalHours > 0) {
+                let uptime = 1 - ((totalAnsweringTime + totalLateTime) / totalHours);
+                dailyUpTime = `${(uptime * 100).toFixed(2)}%`;
+            } else {
+                dailyUpTime = "100.00%";
+            }
+
+            res.json({
+                dailyTotalCalls,
+                dailyAvgAnswering,
+                dailyAvgLate,
+                dailyUpTime
+            });
+        });
     });
 });
 
-// Rota para obter os indicadores semanais de chamadas
+// Rota para obter os indicadores semanais de chamados
 app.get('/api/indicadoressemanais', (req, res) => {
-    const query = `
-        SELECT 
+    const query1 = `
+        SELECT
             COUNT(cha_id) AS totalCalls,
-            SEC_TO_TIME(AVG(TIMESTAMPDIFF(SECOND, cha_data_hora_abertura, cha_data_hora_atendimento))) AS avgAnswering,
-            SEC_TO_TIME(AVG(IF(cha_data_hora_abertura < cha_data_hora_atendimento, TIMESTAMPDIFF(SECOND, cha_data_hora_abertura, cha_data_hora_atendimento), 0))) AS avgLate,
-            IFNULL(ROUND((SUM(pdp_total_horas * 60) - SUM(IF(cha_data_hora_abertura < cha_data_hora_atendimento, TIMESTAMPDIFF(SECOND, cha_data_hora_abertura, cha_data_hora_atendimento), 0)) - SUM(IF(cha_data_hora_abertura < cha_data_hora_termino, TIMESTAMPDIFF(SECOND, cha_data_hora_atendimento, cha_data_hora_termino), 0))) / SUM(pdp_total_horas * 60) * 100, 2), 0) AS uptime
-        FROM 
-            chamados
-            LEFT JOIN atendimentos_chamados ON chamados.cha_id = atendimentos_chamados.atc_chamado
-            LEFT JOIN planos_de_producao ON DATE(chamados.cha_data_hora_abertura) = planos_de_producao.pdp_data
-        WHERE 
-            chamados.cha_status = 3
-            AND chamados.cha_plano = 1
-            AND WEEK(chamados.cha_data_hora_abertura) = WEEK(CURDATE())
-            AND YEAR(chamados.cha_data_hora_abertura) = YEAR(CURDATE())
+            SUM(
+                IF(
+                    cha_data_hora_abertura < cha_data_hora_termino,
+                    TIMESTAMPDIFF(
+                        MINUTE,
+                        IF(
+                            cha_data_hora_abertura > cha_data_hora_atendimento,
+                            cha_data_hora_abertura,
+                            cha_data_hora_atendimento
+                        ),
+                        cha_data_hora_termino
+                    ),
+                    0
+                )
+            ) AS totalAnsweringTime,
+            SUM(
+                IF(
+                    cha_data_hora_abertura < cha_data_hora_atendimento,
+                    TIMESTAMPDIFF(MINUTE, cha_data_hora_abertura, cha_data_hora_atendimento),
+                    0
+                )
+            ) AS totalLateTime
+        FROM chamados
+        LEFT JOIN acoes_chamados ON cha_acao = ach_id
+        LEFT JOIN detratores ON ach_detrator = dtr_id
+        WHERE
+            cha_status = 3 AND
+            cha_plano = 1 AND
+            WEEK(cha_data_hora_abertura) = WEEK(NOW()) AND
+            MONTH(cha_data_hora_abertura) = MONTH(NOW()) AND
+            YEAR(cha_data_hora_abertura) = YEAR(NOW()) AND
+            dtr_indicador > 0
     `;
-    
-    pool.query(query, (err, result) => {
+
+    pool.query(query1, (err, rows1) => {
         if (err) {
             console.error('Erro:', err);
-            return res.status(500).json({ message: 'Erro interno do servidor' });
+            return res.status(500).json({ error: 'Erro ao buscar os indicadores semanais.' });
         }
-        
-        const weeklyIndicators = {
-            weeklyTotalCalls: result[0].totalCalls,
-            weeklyAvgAnswering: result[0].avgAnswering,
-            weeklyAvgLate: result[0].avgLate,
-            weeklyUpTime: result[0].uptime.toFixed(2) + "%"
-        };
 
-        return res.status(200).json(weeklyIndicators);
+        let { totalCalls, totalAnsweringTime, totalLateTime } = rows1[0];
+        totalAnsweringTime = totalAnsweringTime || 0;
+        totalLateTime = totalLateTime || 0;
+
+        let weeklyTotalCalls = totalCalls;
+        let weeklyAvgAnswering = "00:00";
+        let weeklyAvgLate = "00:00";
+
+        if (totalCalls > 0) {
+            let avgAnswering = Math.round(totalAnsweringTime / totalCalls);
+            let avgLate = Math.round(totalLateTime / totalCalls);
+            weeklyAvgAnswering = `${String(Math.floor(avgAnswering / 60)).padStart(2, '0')}:${String(avgAnswering % 60).padStart(2, '0')}`;
+            weeklyAvgLate = `${String(Math.floor(avgLate / 60)).padStart(2, '0')}:${String(avgLate % 60).padStart(2, '0')}`;
+        }
+
+        const query2 = `
+            SELECT SUM(pdp_total_horas * 60) AS totalHours
+            FROM planos_de_producao
+            WHERE
+                WEEK(pdp_data) = WEEK(NOW()) AND
+                MONTH(pdp_data) = MONTH(NOW()) AND
+                YEAR(pdp_data) = YEAR(NOW())
+        `;
+
+        pool.query(query2, (err, rows2) => {
+            if (err) {
+                console.error('Erro:', err);
+                return res.status(500).json({ error: 'Erro ao buscar os indicadores semanais.' });
+            }
+
+            let totalHours = rows2[0].totalHours || 0;
+            let weeklyUpTime = "0.00%";
+
+            if (totalHours > 0) {
+                let uptime = 1 - ((totalAnsweringTime + totalLateTime) / totalHours);
+                weeklyUpTime = `${(uptime * 100).toFixed(2)}%`;
+            } else {
+                weeklyUpTime = "100.00%";
+            }
+
+            res.json({
+                weeklyTotalCalls,
+                weeklyAvgAnswering,
+                weeklyAvgLate,
+                weeklyUpTime
+            });
+        });
     });
 });
 
-// Rota para obter os indicadores mensais de chamadas
-app.get('/api/indicadores_mensais', (req, res) => {
-    const query = `
-        SELECT 
+// Rota para obter os indicadores mensais de chamados
+app.get('/api/indicadoresmensais', (req, res) => {
+    const query1 = `
+        SELECT
             COUNT(cha_id) AS totalCalls,
-            SEC_TO_TIME(AVG(TIMESTAMPDIFF(SECOND, cha_data_hora_abertura, cha_data_hora_atendimento))) AS avgAnswering,
-            SEC_TO_TIME(AVG(IF(cha_data_hora_abertura < cha_data_hora_atendimento, TIMESTAMPDIFF(SECOND, cha_data_hora_abertura, cha_data_hora_atendimento), 0))) AS avgLate,
-            IFNULL(ROUND((SUM(pdp_total_horas * 60) - SUM(IF(cha_data_hora_abertura < cha_data_hora_atendimento, TIMESTAMPDIFF(SECOND, cha_data_hora_abertura, cha_data_hora_atendimento), 0)) - SUM(IF(cha_data_hora_abertura < cha_data_hora_termino, TIMESTAMPDIFF(SECOND, cha_data_hora_atendimento, cha_data_hora_termino), 0))) / SUM(pdp_total_horas * 60) * 100, 2), 0) AS uptime
-        FROM 
-            chamados
-            LEFT JOIN atendimentos_chamados ON chamados.cha_id = atendimentos_chamados.atc_chamado
-            LEFT JOIN planos_de_producao ON DATE(chamados.cha_data_hora_abertura) = planos_de_producao.pdp_data
-        WHERE 
-            chamados.cha_status = 3
-            AND chamados.cha_plano = 1
-            AND MONTH(chamados.cha_data_hora_abertura) = MONTH(CURDATE())
-            AND YEAR(chamados.cha_data_hora_abertura) = YEAR(CURDATE())
+            SUM(
+                IF(
+                    cha_data_hora_abertura < cha_data_hora_termino,
+                    TIMESTAMPDIFF(
+                        MINUTE,
+                        IF(
+                            cha_data_hora_abertura > cha_data_hora_atendimento,
+                            cha_data_hora_abertura,
+                            cha_data_hora_atendimento
+                        ),
+                        cha_data_hora_termino
+                    ),
+                    0
+                )
+            ) AS totalAnsweringTime,
+            SUM(
+                IF(
+                    cha_data_hora_abertura < cha_data_hora_atendimento,
+                    TIMESTAMPDIFF(MINUTE, cha_data_hora_abertura, cha_data_hora_atendimento),
+                    0
+                )
+            ) AS totalLateTime
+        FROM chamados
+        LEFT JOIN acoes_chamados ON cha_acao = ach_id
+        LEFT JOIN detratores ON ach_detrator = dtr_id
+        WHERE
+            cha_status = 3 AND
+            cha_plano = 1 AND
+            MONTH(cha_data_hora_abertura) = MONTH(NOW()) AND
+            YEAR(cha_data_hora_abertura) = YEAR(NOW()) AND
+            dtr_indicador > 0
     `;
-    
-    pool.query(query, (err, result) => {
+
+    pool.query(query1, (err, rows1) => {
         if (err) {
             console.error('Erro:', err);
-            return res.status(500).json({ message: 'Erro interno do servidor' });
+            return res.status(500).json({ error: 'Erro ao buscar os indicadores semanais.' });
         }
-        
-        const monthlyIndicators = {
-            monthlyTotalCalls: result[0].totalCalls,
-            monthlyAvgAnswering: result[0].avgAnswering,
-            monthlyAvgLate: result[0].avgLate,
-            monthlyUpTime: result[0].uptime.toFixed(2) + "%"
-        };
 
-        return res.status(200).json(monthlyIndicators);
+        let { totalCalls, totalAnsweringTime, totalLateTime } = rows1[0];
+        totalAnsweringTime = totalAnsweringTime || 0;
+        totalLateTime = totalLateTime || 0;
+
+        let monthlyTotalCalls = totalCalls;
+        let monthlyAvgAnswering = "00:00";
+        let monthlyAvgLate = "00:00";
+
+        if (totalCalls > 0) {
+            let avgAnswering = Math.round(totalAnsweringTime / totalCalls);
+            let avgLate = Math.round(totalLateTime / totalCalls);
+            monthlyAvgAnswering = `${String(Math.floor(avgAnswering / 60)).padStart(2, '0')}:${String(avgAnswering % 60).padStart(2, '0')}`;
+            monthlyAvgLate = `${String(Math.floor(avgLate / 60)).padStart(2, '0')}:${String(avgLate % 60).padStart(2, '0')}`;
+        }
+
+        const query2 = `
+            SELECT SUM(pdp_total_horas * 60) AS totalHours
+            FROM planos_de_producao
+            WHERE
+                MONTH(pdp_data) = MONTH(NOW()) AND
+                YEAR(pdp_data) = YEAR(NOW())
+        `;
+
+        pool.query(query2, (err, rows2) => {
+            if (err) {
+                console.error('Erro:', err);
+                return res.status(500).json({ error: 'Erro ao buscar os indicadores semanais.' });
+            }
+
+            let totalHours = rows2[0].totalHours || 0;
+            let monthlyUpTime = "0.00%";
+
+            if (totalHours > 0) {
+                let uptime = 1 - ((totalAnsweringTime + totalLateTime) / totalHours);
+                monthlyUpTime = `${(uptime * 100).toFixed(2)}%`;
+            } else {
+                monthlyUpTime = "100.00%";
+            }
+
+            res.json({
+                monthlyTotalCalls,
+                monthlyAvgAnswering,
+                monthlyAvgLate,
+                monthlyUpTime
+            });
+        });
     });
 });
+
+// Função para verificar e notificar chamados atrasados
+app.get('/api/notificacaochamadosatrasados', (req, res) => {
+    const query = `
+        SELECT 
+            chamados.*,
+            produtos.pro_nome AS produto_nome, 
+            clientes.cli_nome AS cliente_nome, 
+            tipos_chamado.tch_descricao AS tipo_chamado, 
+            colaboradores.col_login AS responsavel,
+            local_chamado.loc_nome AS cha_local,
+            TIMESTAMPDIFF(MINUTE, cha_data_hora_abertura, NOW()) AS minutos_desde_abertura
+        FROM 
+            chamados
+            LEFT JOIN produtos ON chamados.cha_produto = produtos.pro_id 
+            LEFT JOIN clientes ON chamados.cha_cliente = clientes.cli_id 
+            LEFT JOIN tipos_chamado ON cha_tipo = tch_id 
+            LEFT JOIN atendimentos_chamados ON atendimentos_chamados.atc_chamado = cha_id 
+            LEFT JOIN colaboradores ON atendimentos_chamados.atc_colaborador = colaboradores.col_id
+            LEFT JOIN local_chamado ON cha_local = local_chamado.loc_id
+        WHERE 
+            cha_status < 2 AND
+            cha_plano >= 0 AND cha_plano <= 1
+    `;
+    pool.query(query, (err, result) => {
+        if (err) {
+            console.error('Erro ao verificar chamados atrasados:', err);
+            return res.status(500).json({ message: 'Erro ao verificar chamados atrasados', error: err });
+        }
+
+        const chamadosAtrasados = result.filter(chamado => {
+            const now = new Date();
+            const previsao = new Date(chamado.cha_data_hora_abertura);
+            previsao.setMinutes(previsao.getMinutes() + 1); // Adiciona 1 minuto
+            return now > previsao;
+        });
+
+        if (chamadosAtrasados.length > 0) {
+            io.emit('chamadosAtrasados', chamadosAtrasados);
+        }
+
+        res.json({chamadosAtrasados});
+    });
+});
+
 // Rota para contar os atendimentos por colaborador
 app.get('/api/atendimentosPorColaborador', (req, res) => {
     const query = `

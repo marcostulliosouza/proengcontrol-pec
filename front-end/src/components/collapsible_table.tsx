@@ -87,8 +87,8 @@ function Row(props: any) {
           </IconButton>
         </TableCell>
         <TableCell align="center">
-          <p className={`mobile:text-xs flex justify-center items-center rounded p-2 text-gray-100 font-semibold mobile:w-17 w-[80px] 
-              ${row.cha_plano === 1 ? 'bg-no_plano' : (row.cha_plano === 0) ? 'bg-fora_plano text-black' : 'bg-engenharia'
+          <p className={`mobile:text-xs flex justify-center items-center rounded p-2 font-semibold mobile:w-17 w-[80px] 
+              ${row.cha_plano === 1 ? 'bg-no_plano text-gray-100' : (row.cha_plano === 0) ? 'bg-fora_plano text-black' : 'bg-engenharia text-gray-100'
             }`}
           >
             {calculateDuration(row.cha_data_hora_abertura)}

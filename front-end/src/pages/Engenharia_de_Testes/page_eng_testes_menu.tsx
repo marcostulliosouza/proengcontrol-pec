@@ -15,7 +15,7 @@ import { LuUsers2 } from "react-icons/lu";
 import { BsListColumnsReverse } from "react-icons/bs";
 import { PiCircuitry } from "react-icons/pi";
 import { BsGraphUpArrow } from "react-icons/bs";
-import { TbTableImport } from "react-icons/tb";
+import { TbTableImport, TbDeviceDesktopCog } from "react-icons/tb";
 import { MdOutlineContentPasteSearch } from "react-icons/md";
 import { BiLink } from "react-icons/bi";
 import { AiOutlineUnorderedList, AiOutlineFileAdd } from "react-icons/ai";
@@ -56,6 +56,7 @@ export function MenuEngTestes() {
                     <MenuButton name={"Abrir chamado"} link={"/engenharia_testes/abrir_chamado"} icon={LuUsers2} />
                     <MenuButton name={"Atendimento de chamado"} link={"/engenharia_testes/chamados"} icon={BsListColumnsReverse} />
                     <MenuButton name={"Consultar Computadores"} link={"/engenharia_testes/consultar_computadores"} icon={FaComputer} />
+                    <MenuButton name={"Listar Dispositivos"} link={"/engenharia_testes/listar_dispositivos"} icon={TbDeviceDesktopCog} />
                     {/* <MenuButton name={"Chamado de Engenharia"} link={"/engenharia_testes/chamados_engenharia"} icon={PiCircuitry} />
                     <MenuButton name={"Relatório de chamados"} link={"/engenharia_testes/relatorio_chamados"} icon={BsGraphUpArrow} />
                     <MenuButton name={"Enviar Plano de Produção"} link={"/engenharia_testes/enviar_plano_de_producao"} icon={TbTableImport} />
