@@ -173,6 +173,44 @@ app.get('/api/dispositivos', (req, res) => {
     });
 });
 
+// Rota para coletar dados das notas fiscais das jigas
+app.get('/api/entradaSaidaEquipamento', (req, res) => {
+    const query = `
+        SELECT
+            *
+        FROM
+            entrada_saida_equipamento
+        ORDER BY
+            ese_id DESC
+    `;
+    pool.query(query, (err, result) => {
+        if (err) {
+            console.error('Erro:', err);
+            return res.status(500).json({ message: 'Erro interno do servidor' });
+        }
+        return res.status(200), res.json(result);
+    });
+});
+
+// Rota para coletar dados das notas fiscais das jigas
+app.get('/api/notasFiscais', (req, res) => {
+    const query = `
+        SELECT
+            *
+        FROM
+            notas_fiscais
+        ORDER BY
+            nof_id DESC
+    `;
+    pool.query(query, (err, result) => {
+        if (err) {
+            console.error('Erro:', err);
+            return res.status(500).json({ message: 'Erro interno do servidor' });
+        }
+        return res.status(200), res.json(result);
+    });
+});
+
 // Rota para coletar dados dos produtos vinculados aos computadores
 app.get('/api/vinculoComputadores', (req, res) => {
     const query = `

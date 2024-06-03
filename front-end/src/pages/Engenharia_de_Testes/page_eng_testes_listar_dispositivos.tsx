@@ -44,7 +44,7 @@ function Row(props: any) {
                     <p className='text-start'>{row.dis_nota_fiscal_atual}</p>
                 </TableCell>
                 <TableCell>
-                    <p className='text-start'>{row.cmp_observacao}</p>
+                    <p className='text-start'>{row.dis_observacao}</p>
                 </TableCell>
             </TableRow>
         </React.Fragment>
@@ -93,6 +93,27 @@ export function ListarDispositivos() {
                         setDispositivos(updatedDispositivos);
                     } else {
                         console.error('Erro ao buscar clientes: ', responseClientes.statusText);
+                    }
+
+                    // Notas Fiscais
+                    const responseNotasFiscais = await fetch('http://127.0.0.1:5000/api/notasFiscais');
+                    const responseEntradaSaidaEquipamento = await fetch('http://127.0.0.1:5000/api/entradaSaidaEquipamento');
+                    if (responseEntradaSaidaEquipamento.ok && responseNotasFiscais.ok) {
+                        const dataEntradaSaidaEquipamento = await responseEntradaSaidaEquipamento.json();
+                        const dataNotas = await responseNotasFiscais.json();
+
+                        // Atualiza os dispositivos com as notas fiscais de entrada e saída
+                        const updatedDispositivos = dataDispositivos.map((dispositivo: any) => {
+                            const entradaSaida = dataEntradaSaidaEquipamento.filter((nota: any) => nota.ese_dispositivo === dispositivo.dis_id);
+
+                            
+
+                            return dispositivo;
+                        });
+
+                        setDispositivos(updatedDispositivos);
+                    } else {
+                        console.error('Erro ao buscar as notas fiscais: ', responseEntradaSaidaEquipamento.statusText);
                     }
 
                 } else {
