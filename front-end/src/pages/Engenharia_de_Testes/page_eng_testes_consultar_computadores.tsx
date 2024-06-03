@@ -25,7 +25,7 @@ function Row(props: any) {
         <React.Fragment>
             <TableRow>
                 <TableCell>
-                    <p className='text-start'>{row.cmp_identificacao}</p>
+                    <p className='text-start'>PC-{row.cmp_identificacao}</p>
                 </TableCell>
                 <TableCell>
                     <p className='text-start'>{row.cmp_localizacao ? row.cmp_localizacao : "DESCONHECIDA"}</p>
