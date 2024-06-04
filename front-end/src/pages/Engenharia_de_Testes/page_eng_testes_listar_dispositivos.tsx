@@ -102,24 +102,29 @@ export function ListarDispositivos() {
                         const dataEntradaSaidaEquipamento = await responseEntradaSaidaEquipamento.json();
                         const dataNotasFiscais = await responseNotasFiscais.json();
 
-                        // Cria um mapa para as notas fiscais de entrada
-                        const entradaEquipamentoMap = dataEntradaSaidaEquipamento.reduce((map: any, entrada: any) => {
-                            map[entrada.ese_dispositivo] = entrada.ese_nota_fiscal_entrada;
+                        // Cria um mapa para as notas fiscais
+                        const notasFiscaisMap = dataNotasFiscais.reduce((map: any, notaFiscal: any) => {
+                            map[notaFiscal.nof_id] = notaFiscal.nof_numero;
                             return map;
                         }, {});
 
-                        // Atualiza os dispositivos com as notas fiscais de entrada
-                        const updatedEntradaDispositivos = dataDispositivos.map((dispositivo: any) => {
+                        // Cria um mapa para as entradas de equipamento
+                        const entradaEquipamentoMap = dataEntradaSaidaEquipamento.reduce((map: any, entrada: any) => {
+                            map[entrada.ese_dispositivo] = notasFiscaisMap[entrada.ese_nota_fiscal_entrada];
+                            return map;
+                        }, {});
+
+                        // Atualiza os dispositivos com os números das notas fiscais
+                        const updatedDispositivos = dataDispositivos.map((dispositivo: any) => {
                             if (entradaEquipamentoMap[dispositivo.dis_id]) {
                                 dispositivo.dis_nota_fiscal_atual = entradaEquipamentoMap[dispositivo.dis_id];
-                                
                             } else {
-                                dispositivo.dis_nota_fiscal_atual = 'Sem nota fiscal de entrada';
+                                dispositivo.dis_nota_fiscal_atual = 'Sem número de nota fiscal';
                             }
 
                             return dispositivo;
                         });
-                        setDispositivos(updatedEntradaDispositivos);
+                        setDispositivos(updatedDispositivos);
 
                         // Cria um mapa para as notas fiscais de saidas
                         const saidaEquipamentoMap = dataEntradaSaidaEquipamento.reduce((map: any, saida: any) => {
