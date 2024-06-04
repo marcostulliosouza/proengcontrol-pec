@@ -8,6 +8,8 @@ import { FaHome } from "react-icons/fa";
 import { Sidebar } from '../../components/sidebar';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 interface Chamado {
     cha_status: number;
