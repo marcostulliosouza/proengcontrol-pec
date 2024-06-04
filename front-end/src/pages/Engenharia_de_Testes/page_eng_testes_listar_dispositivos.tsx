@@ -96,22 +96,49 @@ export function ListarDispositivos() {
                     }
 
                     // Notas Fiscais
-                    const responseNotasFiscais = await fetch('http://127.0.0.1:5000/api/notasFiscais');
                     const responseEntradaSaidaEquipamento = await fetch('http://127.0.0.1:5000/api/entradaSaidaEquipamento');
+                    const responseNotasFiscais = await fetch('http://127.0.0.1:5000/api/notasFiscais');
                     if (responseEntradaSaidaEquipamento.ok && responseNotasFiscais.ok) {
                         const dataEntradaSaidaEquipamento = await responseEntradaSaidaEquipamento.json();
-                        const dataNotas = await responseNotasFiscais.json();
+                        const dataNotasFiscais = await responseNotasFiscais.json();
 
-                        // Atualiza os dispositivos com as notas fiscais de entrada e saída
-                        const updatedDispositivos = dataDispositivos.map((dispositivo: any) => {
-                            const entradaSaida = dataEntradaSaidaEquipamento.filter((nota: any) => nota.ese_dispositivo === dispositivo.dis_id);
+                        // Cria um mapa para as notas fiscais de entrada
+                        const entradaEquipamentoMap = dataEntradaSaidaEquipamento.reduce((map: any, entrada: any) => {
+                            map[entrada.ese_dispositivo] = entrada.ese_nota_fiscal_entrada;
+                            return map;
+                        }, {});
 
-                            
+                        // Atualiza os dispositivos com as notas fiscais de entrada
+                        const updatedEntradaDispositivos = dataDispositivos.map((dispositivo: any) => {
+                            if (entradaEquipamentoMap[dispositivo.dis_id]) {
+                                dispositivo.dis_nota_fiscal_atual = entradaEquipamentoMap[dispositivo.dis_id];
+                                
+                            } else {
+                                dispositivo.dis_nota_fiscal_atual = 'Sem nota fiscal de entrada';
+                            }
 
                             return dispositivo;
                         });
+                        setDispositivos(updatedEntradaDispositivos);
 
-                        setDispositivos(updatedDispositivos);
+                        // Cria um mapa para as notas fiscais de saidas
+                        const saidaEquipamentoMap = dataEntradaSaidaEquipamento.reduce((map: any, saida: any) => {
+                            map[saida.ese_dispositivo] = saida.ese_numero_nota_fiscal_saida;
+                            return map;
+                        }, {});
+
+                        // Atualiza os dispositivos com as notas fiscais de saída
+                        const updatedSaidaDispositivos = dataDispositivos.map((dispositivo: any) => {
+                            if (saidaEquipamentoMap[dispositivo.dis_id]) {
+                                dispositivo.dis_observacao = saidaEquipamentoMap[dispositivo.dis_id];
+                            } else {
+                                dispositivo.dis_observacao = 'Sem nota fiscal de saída';
+                            }
+
+                            return dispositivo;
+                        });
+                        setDispositivos(updatedSaidaDispositivos);
+
                     } else {
                         console.error('Erro ao buscar as notas fiscais: ', responseEntradaSaidaEquipamento.statusText);
                     }
