@@ -105,10 +105,12 @@ export function VisualizarChamados() {
                     const dataNotificacaoChamados = await responseNotificacaoChamados.json();
                     const novosChamadosAtrasados: NotificacaoAtrasoChamado[] = dataNotificacaoChamados.chamadosAtrasados;
 
+                    // Compare new data with previous data to detect new delayed calls
                     const novosChamados = novosChamadosAtrasados.filter((novo: NotificacaoAtrasoChamado) =>
                         !prevNotificacoesRef.current.some((prev: NotificacaoAtrasoChamado) => prev.cha_id === novo.cha_id)
                     );
 
+                    // Find resolved calls to remove notifications
                     const resolvedChamados = prevNotificacoesRef.current.filter((prev: NotificacaoAtrasoChamado) =>
                         !novosChamadosAtrasados.some((novo: NotificacaoAtrasoChamado) => novo.cha_id === prev.cha_id)
                     );
@@ -121,6 +123,7 @@ export function VisualizarChamados() {
                     });
 
                     if (novosChamados.length > 0) {
+                        // Show notifications for new delayed calls
                         novosChamados.forEach((chamado: NotificacaoAtrasoChamado) => {
                             const toastId = toast.error(
                                 <div className='w-auto m-auto '>
@@ -131,7 +134,7 @@ export function VisualizarChamados() {
                                     </div>
                                 </div>, {
                                 position: "top-right",
-                                autoClose: false,
+                                autoClose: false, // Remove autoClose to make notifications permanent
                                 hideProgressBar: false,
                                 closeOnClick: true,
                                 pauseOnHover: true,
@@ -154,7 +157,7 @@ export function VisualizarChamados() {
         };
 
         fetchData();
-        const intervalId = setInterval(fetchData, 10000);
+        const intervalId = setInterval(fetchData, 10000); // Update interval to 10 seconds for better performance
         return () => clearInterval(intervalId);
     }, []);
 

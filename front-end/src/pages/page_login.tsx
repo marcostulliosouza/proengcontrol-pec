@@ -32,7 +32,7 @@ export function Login() {
   const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://127.0.0.1:5000/login', {
+      const response = await fetch('http://172.17.4.23:5000/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
