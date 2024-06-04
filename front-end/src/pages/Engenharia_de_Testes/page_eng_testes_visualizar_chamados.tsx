@@ -69,7 +69,7 @@ export function VisualizarChamados() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const responseCall = await fetch('http://127.0.0.1:5000/api/visualizarchamados');
+                const responseCall = await fetch('http://172.17.4.23:5000/api/visualizarchamados');
                 if (responseCall.ok) {
                     const dataCall = await responseCall.json();
                     setDadosChamado(dataCall);
@@ -77,7 +77,7 @@ export function VisualizarChamados() {
                     console.error('Erro ao buscar dados: ', responseCall.statusText);
                 }
 
-                const responseDailyIndex = await fetch('http://127.0.0.1:5000/api/indicadoresdiarios');
+                const responseDailyIndex = await fetch('http://172.17.4.23:5000/api/indicadoresdiarios');
                 if (responseDailyIndex.ok) {
                     const dataDailyIndex = await responseDailyIndex.json();
                     setDadosIndicesDiario(dataDailyIndex);
@@ -85,7 +85,7 @@ export function VisualizarChamados() {
                     console.error('Erro ao buscar dados: ', responseDailyIndex.statusText);
                 }
 
-                const responseWeekIndex = await fetch('http://127.0.0.1:5000/api/indicadoressemanais');
+                const responseWeekIndex = await fetch('http://172.17.4.23:5000/api/indicadoressemanais');
                 if (responseWeekIndex.ok) {
                     const dataWeekIndex = await responseWeekIndex.json();
                     setDadosIndicesSemanal(dataWeekIndex);
@@ -93,14 +93,14 @@ export function VisualizarChamados() {
                     console.error('Erro ao buscar dados: ', responseWeekIndex.statusText);
                 }
 
-                const responseMonthIndex = await fetch('http://127.0.0.1:5000/api/indicadoresmensais');
+                const responseMonthIndex = await fetch('http://172.17.4.23:5000/api/indicadoresmensais');
                 if (responseMonthIndex.ok) {
                     const dataMonthIndex = await responseMonthIndex.json();
                     setDadosIndicesMensal(dataMonthIndex);
                 } else {
                     console.error('Erro ao buscar dados: ', responseMonthIndex.statusText);
                 }
-                const responseNotificacaoChamados = await fetch('http://127.0.0.1:5000/api/notificacaochamadosatrasados');
+                const responseNotificacaoChamados = await fetch('http://172.17.4.23:5000/api/notificacaochamadosatrasados');
                 if (responseNotificacaoChamados.ok) {
                     const dataNotificacaoChamados = await responseNotificacaoChamados.json();
                     const novosChamadosAtrasados: NotificacaoAtrasoChamado[] = dataNotificacaoChamados.chamadosAtrasados;
