@@ -199,7 +199,7 @@ export function ListarDispositivos() {
 
     return (
         <div className='w-screen h-screen'>
-            <header className="grid grid-rows-1 bg-cinza-200 h-1/6">
+            <div className="grid grid-rows-1 bg-cinza-200 h-1/6">
                 <div className='inline-flex p-5 gap-4'>
                     <button
                         onClick={() => setShowSidebar(true)}
@@ -223,7 +223,7 @@ export function ListarDispositivos() {
                         <HelloUser />
                     </div>
                 </div>
-            </header>
+            </div>
             <div className='bg-cinza-200 mobile:px-3'>
                 <div className='bg-cinza-200 mx-10 h-5/6'>
                     <TableContainer component={Paper}>
