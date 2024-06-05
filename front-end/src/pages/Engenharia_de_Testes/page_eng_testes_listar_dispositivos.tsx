@@ -26,12 +26,12 @@ function Row(props: any) {
         <React.Fragment>
             <TableRow>
                 <TableCell className="border-2 border-gray-300">
-                    <p className={`mobile:text-xs flex justify-center items-center rounded p-2 font-semibold mobile:w-17 w-[80px] 
+                    <p className={`mobile:text-xs flex justify-center items-center rounded p-2 font-semibold mobile:w-17 w-full 
                     ${row.dis_status === 1 ? 'bg-red-600 text-gray-100' : row.dis_status === 2 ? 'bg-green-600' : 'bg-yellow-400'}`}>
                         {row.dis_id}
                     </p>
                 </TableCell>
-                <TableCell className="border-2 border-gray-300 flex items-center justify-center text-center">
+                <TableCell className="border-2 border-gray-300 flex items-center justify-center text-center w-10">
                     <IoDocumentOutline className={`scale-150 ${row.dis_doc_enviado === 0 ? 'text-red-600' : 'text-green-600'}`} />
                 </TableCell>
                 <TableCell className="border-2 border-gray-300">
@@ -122,7 +122,7 @@ export function ListarDispositivos() {
                             if (entradaEquipamentoMap[dispositivo.dis_id]) {
                                 dispositivo.dis_nota_fiscal_atual = entradaEquipamentoMap[dispositivo.dis_id];
                             } else {
-                                dispositivo.dis_nota_fiscal_atual = 'Sem número de nota fiscal';
+                                dispositivo.dis_nota_fiscal_atual = 'Sem nota fiscal de entrada';
                             }
 
                             return dispositivo;
