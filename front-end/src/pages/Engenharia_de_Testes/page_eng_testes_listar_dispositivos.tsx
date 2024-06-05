@@ -15,7 +15,7 @@ import { HelloUser } from '../../components/hello_user';
 import { Logo } from '../../components/logo';
 
 // Icones
-import { IoMenu } from "react-icons/io5";
+import { IoMenu, IoDocumentOutline } from "react-icons/io5";
 import { IoIosArrowForward } from "react-icons/io";
 import { FaHome } from "react-icons/fa";
 
@@ -25,25 +25,28 @@ function Row(props: any) {
     return (
         <React.Fragment>
             <TableRow>
-                <TableCell>
+                <TableCell className="border-2 border-gray-300">
                     <p className={`mobile:text-xs flex justify-center items-center rounded p-2 font-semibold mobile:w-17 w-[80px] 
                     ${row.dis_status === 1 ? 'bg-red-600 text-gray-100' : row.dis_status === 2 ? 'bg-green-600' : 'bg-yellow-400'}`}>
                         {row.dis_id}
                     </p>
                 </TableCell>
-                <TableCell>
+                <TableCell className="border-2 border-gray-300 flex items-center justify-center text-center">
+                    <IoDocumentOutline className={`scale-150 ${row.dis_doc_enviado === 0 ? 'text-red-600' : 'text-green-600'}`} />
+                </TableCell>
+                <TableCell className="border-2 border-gray-300">
                     <p className='text-start'>{row.dis_descricao}</p>
                 </TableCell>
-                <TableCell>
+                <TableCell className="border-2 border-gray-300">
                     <p className='text-start'>{row.dis_cliente}</p>
                 </TableCell>
-                <TableCell>
+                <TableCell className="border-2 border-gray-300">
                     <p className='text-start'>{row.dis_codigo_sap}</p>
                 </TableCell>
-                <TableCell>
+                <TableCell className="border-2 border-gray-300">
                     <p className='text-start'>{row.dis_nota_fiscal_atual}</p>
                 </TableCell>
-                <TableCell>
+                <TableCell className="border-2 border-gray-300">
                     <p className='text-start'>{row.dis_observacao}</p>
                 </TableCell>
             </TableRow>
@@ -239,6 +242,7 @@ export function ListarDispositivos() {
                                             />
                                         </div>
                                     </TableCell>
+                                    <TableCell />
                                     <TableCell>
                                         <p className='font-bold text-base text-start text-pec'>Descrição</p>
                                         <div className='mb-4'>

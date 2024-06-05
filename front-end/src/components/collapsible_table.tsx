@@ -75,7 +75,7 @@ function Row(props: any) {
   return (
     <React.Fragment>
       <TableRow>
-        <TableCell>
+        <TableCell className='border-2 border-gray-300 w-10'>
           <IconButton
             aria-label="expand row"
             size="small"
@@ -86,7 +86,7 @@ function Row(props: any) {
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        <TableCell align="center">
+        <TableCell align="center" className="border-2 border-gray-300 w-[100px]">
           <p className={`mobile:text-xs flex justify-center items-center rounded p-2 font-semibold mobile:w-17 w-[80px] 
               ${row.cha_plano === 1 ? 'bg-no_plano text-gray-100' : (row.cha_plano === 0) ? 'bg-fora_plano text-black' : 'bg-engenharia text-gray-100'
             }`}
@@ -94,8 +94,8 @@ function Row(props: any) {
             {calculateDuration(row.cha_data_hora_abertura)}
           </p>
         </TableCell>
-        <TableCell><p className='mobile:hidden font-semibold'>{row.cha_status === 2 ? calculateDurationAtendimento(row.cha_data_hora_atendimento) : "00:00:00"}</p></TableCell>
-        <TableCell>
+        <TableCell align='center' className="border-2 border-gray-300 w-[140px]"><p className='mobile:hidden font-semibold'>{row.cha_status === 2 ? calculateDurationAtendimento(row.cha_data_hora_atendimento) : "00:00:00"}</p></TableCell>
+        <TableCell align="center" className="border-2 border-gray-300 w-40">
           <>
             {row.cha_status === 1 ? (
               <button
@@ -116,10 +116,10 @@ function Row(props: any) {
             )}
           </>
         </TableCell>
-        <TableCell><p className='mobile:text-xs mobile:w-12'>{row.tipo_chamado}</p></TableCell>
-        <TableCell><p className='mobile:hidden'>{row.produto_nome}</p></TableCell>
-        <TableCell><p className='mobile:hidden'>{row.cliente_nome}</p></TableCell>
-        <TableCell><p className='mobile:text-xs'>{row.cha_local}</p></TableCell>
+        <TableCell align="center" className="border-2 border-gray-300 w-[200px]"><p className='mobile:text-xs mobile:w-20'>{row.tipo_chamado}</p></TableCell>
+        <TableCell align="center" className="border-2 border-gray-300 w-[200px] mobile:hidden"><p className='mobile:hidden'>{row.produto_nome}</p></TableCell>
+        <TableCell className='border-2 border-gray-300'><p className='mobile:hidden'>{row.cliente_nome}</p></TableCell>
+        <TableCell align="center" className="border-2 border-gray-300 w-[140px]"><p className='mobile:text-xs'>{row.cha_local}</p></TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0, backgroundColor: '#d9d9d9' }} colSpan={8}>
@@ -281,22 +281,22 @@ export function CollapsibleTable() {
                 <p className='font-bold mobile:text-xs text-base mobile:w-17 w-[80px] text-center text-pec'>Duração Total</p>
               </TableCell>
               <TableCell>
-                <p className='font-bold mobile:hidden text-base text-start text-pec'>Tempo de Atendimento</p>
+                <p className='font-bold mobile:hidden text-base text-center text-pec'>Tempo de Atendimento</p>
               </TableCell>
               <TableCell>
-                <p className='font-bold mobile:text-xs text-base w-[80px] text-start text-pec'>Status</p>
+                <p className='font-bold mobile:text-xs text-base mobile:w-10 w-[200px] text-center text-pec'>Status</p>
               </TableCell>
               <TableCell>
-                <p className='font-bold mobile:text-xs text-base mobile:w-10 w-[80px] text-start text-pec'>Tipo de Chamado</p>
+                <p className='font-bold mobile:text-xs text-base mobile:w-10 w-[200px] text-center text-pec'>Tipo de Chamado</p>
               </TableCell>
               <TableCell>
-                <p className='font-bold mobile:hidden text-base text-start text-pec'>Produto</p>
+                <p className='font-bold mobile:hidden text-base w-[180px] text-center text-pec'>Produto</p>
               </TableCell>
               <TableCell>
                 <p className='font-bold mobile:hidden text-base text-start text-pec'>Cliente</p>
               </TableCell>
               <TableCell>
-                <p className='font-bold mobile:text-xs text-base w-[80px] text-start text-pec'>Local</p>
+                <p className='font-bold mobile:text-xs text-base w-[100px] text-center text-pec'>Local</p>
               </TableCell>
             </TableRow>
           </TableHead>

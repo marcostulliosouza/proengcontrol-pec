@@ -24,22 +24,22 @@ function Row(props: any) {
     return (
         <React.Fragment>
             <TableRow>
-                <TableCell>
+                <TableCell className='border-2 border-gray-300'>
                     <p className='text-start'>PC-{row.cmp_identificacao}</p>
                 </TableCell>
-                <TableCell>
+                <TableCell className='border-2 border-gray-300'>
                     <p className='text-start'>{row.cmp_localizacao ? row.cmp_localizacao : "DESCONHECIDA"}</p>
                 </TableCell>
-                <TableCell>
+                <TableCell className='border-2 border-gray-300'>
                     <p className='text-start'>{row.cmp_proprietario}</p>
                 </TableCell>
-                <TableCell>
+                <TableCell className='border-2 border-gray-300'>
                     <p className='text-start'>{row.cmp_etapa_teste}</p>
                 </TableCell>
-                <TableCell>
+                <TableCell className='border-2 border-gray-300'>
                     <p className='text-start'>{row.cmp_programas_instalados}</p>
                 </TableCell>
-                <TableCell>
+                <TableCell className='border-2 border-gray-300'>
                     <p className='text-start'>{row.cmp_observacao}</p>
                 </TableCell>
             </TableRow>
@@ -187,7 +187,7 @@ export function ConsultarComputadores() {
                         <Table aria-label="simple table">
                             <TableHead sx={{ backgroundColor: '#d9d9d9' }}>
                                 <TableRow>
-                                    <TableCell>
+                                    <TableCell className='w-[120px]'>
                                         <p className='font-bold text-base text-start text-pec'>Identificação</p>
                                     </TableCell>
                                     <TableCell>
