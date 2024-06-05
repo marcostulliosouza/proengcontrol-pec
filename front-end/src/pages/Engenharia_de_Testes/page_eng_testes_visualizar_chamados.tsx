@@ -209,7 +209,7 @@ export function VisualizarChamados() {
                                 <p className='mobile:text-[0px]'>Engenharia de Testes</p>
                             </Link>
                             <IoIosArrowForward className='mobile:w-0' />
-                            <p>Listar Dispositivos</p>
+                            <p>Visualizar chamados</p>
                         </div>
                         <HelloUser />
                     </div>
@@ -316,7 +316,7 @@ export function VisualizarChamados() {
                     <Sidebar />
                     <button
                         onClick={() => setShowSidebar(false)}
-                        className='absolute top-5 left-5 text-cinza-200 text-4xl hover:scale-110 transition duration-200'
+                        className='absolute top-12 left-12 text-cinza-200 text-4xl hover:scale-110 transition duration-200'
                     >
                         <IoMenu />
                     </button>

@@ -44,7 +44,7 @@ export function Menu() {
                     <Sidebar />
                     <button
                         onClick={() => setShowSidebar(false)}
-                        className='absolute top-5 left-5 text-cinza-200 text-4xl hover:scale-110 transition duration-200'
+                        className='absolute top-12 left-12 text-cinza-200 text-4xl hover:scale-110 transition duration-200'
                     >
                         <IoMenu />
                     </button>
