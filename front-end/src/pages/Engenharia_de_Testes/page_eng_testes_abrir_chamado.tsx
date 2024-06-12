@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Select from 'react-select';
+import { Button } from '@mui/material';
 // Componentes
 import { Sidebar } from '../../components/sidebar';
 import { HelloUser } from '../../components/hello_user';
@@ -97,32 +98,51 @@ export function AbrirChamado() {
 
     return (
         <div className='w-screen h-screen'>
-            <header className="grid grid-rows-1 h-1/6 bg-cinza-200 ">
+            <div className="grid grid-rows-1 bg-cinza-200 h-1/6">
                 <div className='inline-flex p-5 gap-4'>
                     <button
                         onClick={() => setShowSidebar(true)}
-                        className='text-pec text-4xl hover:scale-110 transition duration-200 flex justify-start items-start'>
+                        className='text-pec text-4xl hover:scale-110 transition duration-200 flex justify-start items-start h-9'>
                         <IoMenu />
                     </button>
                     <Logo />
-                    <div className='flex-col-1 ml-8 mt-4'>
-                        <div className='inline-flex content font-bold text-pec gap-2 justify-center items-center'>
-                            <Link to={"/menu"} className='inline-flex items-center gap-2'>
-                                <FaHome className='mobile:w-0' />
-                                <p className='mobile:text-[0px]'>Menu</p>
-                            </Link>
-                            <IoIosArrowForward className='mobile:w-0' />
-                            <Link to={"/engenharia_testes"}>
-                                <p className='mobile:text-[0px]'>Engenharia de Testes</p>
-                            </Link>
-                            <IoIosArrowForward className='mobile:w-0' />
-                            <p>Abrir chamado</p>
+                    <div className='inline-flex justify-between w-full'>
+                        <div className='flex-col-1 ml-8 mt-4'>
+                            <div className='inline-flex content font-bold text-pec gap-2 justify-center items-center'>
+                                <Link to={"/menu"} className='inline-flex items-center gap-2'>
+                                    <FaHome className='mobile:w-0' />
+                                    <p className='mobile:text-[0px]'>Menu</p>
+                                </Link>
+                                <IoIosArrowForward className='mobile:w-0' />
+                                <Link to={"/engenharia_testes"}>
+                                    <p className='mobile:text-[0px]'>Engenharia de Testes</p>
+                                </Link>
+                                <IoIosArrowForward className='mobile:w-0' />
+                                <p>Abrir Chamado</p>
+                            </div>
+                            <HelloUser />
                         </div>
-                        <HelloUser />
+                        <Link to={"/engenharia_testes/chamados_engenharia"}>
+                            <Button style={{
+                                backgroundColor: "#d9d9d9",
+                                color: "#020c3e",
+                                textAlign: "center",
+                                textDecoration: "none",
+                                fontSize: "16px",
+                                fontWeight: "bold",
+                                cursor: "pointer",
+                                borderRadius: "4px",
+                                boxShadow: "2px 4px 2px 0 rgba(2, 12, 62, 0.1)",
+                                height: "40px",
+                                gap: "10px",
+                            }}>
+                                Abrir Chamado de Engenharia
+                            </Button>
+                        </Link>
                     </div>
                 </div>
-            </header>
-            <body className='h-5/6 bg-cinza-200 '>
+            </div>
+            <div className='h-5/6 bg-cinza-200 '>
                 <form onSubmit={abrirChamado} className='grid gap-4 p-10 absolute overflow-hidden left-1/2 -translate-x-1/2 mobile:w-screen mobile:p-5'>
                     <div className='grid grid-cols-3 gap-4 place-content-start mobile:text-sm mobile:gap-2 mobile:flex-col-3 mobile:justify-between mobile:w-screen'>
 
@@ -205,7 +225,7 @@ export function AbrirChamado() {
                     </button>
                     <p className='text-red-600 text-lg font-bold'>* Campo obrigatório</p>
                 </form>
-            </body>
+            </div>
 
             {showSidebar && (
                 <div className='backdrop-blur-xs fixed inset-y-0 w-screen z-50'>

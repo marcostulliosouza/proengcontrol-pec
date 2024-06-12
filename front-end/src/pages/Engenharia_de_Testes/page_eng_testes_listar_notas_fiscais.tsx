@@ -9,6 +9,7 @@ import TableRow from '@mui/material/TableRow';
 import TablePagination from '@mui/material/TablePagination';
 import Paper from '@mui/material/Paper';
 import { format, parseISO } from 'date-fns';
+import { Button, Checkbox } from '@mui/material';
 
 // Componentes
 import { Sidebar } from '../../components/sidebar';
@@ -19,7 +20,6 @@ import { Logo } from '../../components/logo';
 import { IoMenu, IoDocumentOutline } from "react-icons/io5";
 import { IoIosArrowForward } from "react-icons/io";
 import { FaHome } from "react-icons/fa";
-import { Button, Checkbox } from '@mui/material';
 import { MdUploadFile } from "react-icons/md";
 
 function Row(props: any) {

@@ -279,10 +279,10 @@ export function ListarDispositivos() {
                                             />
                                         </div>
                                     </TableCell>
-                                    <TableCell>
+                                    <TableCell className='align-top'>
                                         <p className='font-bold text-base text-start text-pec'>NF de Entrada</p>
                                     </TableCell>
-                                    <TableCell>
+                                    <TableCell className='align-top'>
                                         <p className='font-bold text-base text-start text-pec'>NF de Saída</p>
                                     </TableCell>
                                 </TableRow>
