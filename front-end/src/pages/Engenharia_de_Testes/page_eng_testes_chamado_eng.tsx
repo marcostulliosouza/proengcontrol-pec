@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Select from 'react-select';
-import { Button } from '@mui/material';
 // Componentes
 import { Sidebar } from '../../components/sidebar';
 import { HelloUser } from '../../components/hello_user';
@@ -26,32 +25,12 @@ export function ChamadoEng() {
         cha_plano: 0,
     });
     const [showSidebar, setShowSidebar] = useState(false);
-    const [locais, setLocais] = useState([]);
-    const [tiposChamados, setTiposChamados] = useState([]);
     const [clientes, setClientes] = useState([]);
     const [produtos, setProdutos] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                // Locais
-                const responseLocais = await fetch('http://172.17.4.23:5000/api/locais');
-                if (responseLocais.ok) {
-                    const data = await responseLocais.json();
-                    setLocais(data);
-                } else {
-                    console.error('Erro ao buscar locais: ', responseLocais.statusText);
-                }
-
-                // Tipos de chamados
-                const responseTipos = await fetch('http://172.17.4.23:5000/api/tiposChamados');
-                if (responseTipos.ok) {
-                    const data = await responseTipos.json();
-                    setTiposChamados(data);
-                } else {
-                    console.error('Erro ao buscar tipos de chamados: ', responseTipos.statusText);
-                }
-
                 // Clientes
                 const responseClientes = await fetch('http://172.17.4.23:5000/api/clientes');
                 if (responseClientes.ok) {
