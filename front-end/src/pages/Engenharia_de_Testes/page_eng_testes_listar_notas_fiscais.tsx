@@ -99,6 +99,7 @@ export function ListarNotasFiscais() {
                             // Formatar a data de retorno
                             if (notaFiscal.nof_data_retorno) {
                                 const parsedDate = parseISO(notaFiscal.nof_data_retorno);
+                                console.log('parsedDate: ', notaFiscal.nof_data_retorno);
                                 notaFiscal.nof_data_retorno = format(parsedDate, 'dd/MM/yyyy');
                             } else {
                                 notaFiscal.nof_data_retorno = 'Sem data de retorno';
@@ -193,22 +194,24 @@ export function ListarNotasFiscais() {
                             </div>
                             <HelloUser />
                         </div>
-                        <Button style={{
-                            backgroundColor: "#d9d9d9",
-                            color: "#020c3e",
-                            textAlign: "center",
-                            textDecoration: "none",
-                            fontSize: "16px",
-                            fontWeight: "bold",
-                            cursor: "pointer",
-                            borderRadius: "4px",
-                            boxShadow: "2px 4px 2px 0 rgba(2, 12, 62, 0.1)",
-                            height: "40px",
-                            gap: "10px",
-                        }}>
-                            <MdUploadFile />
-                            Adicionar Nota Fiscal
-                        </Button>
+                        <Link to={"/engenharia_testes/listar_notas_fiscais/adicionar_nota"}>
+                            <Button style={{
+                                backgroundColor: "#d9d9d9",
+                                color: "#020c3e",
+                                textAlign: "center",
+                                textDecoration: "none",
+                                fontSize: "16px",
+                                fontWeight: "bold",
+                                cursor: "pointer",
+                                borderRadius: "4px",
+                                boxShadow: "2px 4px 2px 0 rgba(2, 12, 62, 0.1)",
+                                height: "40px",
+                                gap: "10px",
+                            }}>
+                                <MdUploadFile />
+                                Adicionar Nota Fiscal
+                            </Button>
+                        </Link>
                     </div>
                 </div>
             </div>

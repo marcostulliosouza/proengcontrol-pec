@@ -52,7 +52,7 @@ export function App() {
         <Route path="/engenharia_testes/chamados" element={<PrivateRoute redirectTo="/">
           <Chamados />
         </PrivateRoute>} />
-        <Route path="/engenharia_testes/chamados_engenharia" element={<PrivateRoute redirectTo="/">
+        <Route path="/engenharia_testes/abrir_chamado/chamado_engenharia" element={<PrivateRoute redirectTo="/">
           <ChamadoEng />
         </PrivateRoute>} />
         <Route path="/engenharia_testes/relatorio_chamados" element={<PrivateRoute redirectTo="/">
@@ -91,7 +91,7 @@ export function App() {
         <Route path="/engenharia_testes/listar_notas_fiscais" element={<PrivateRoute redirectTo="/">
           <ListarNotasFiscais />
         </PrivateRoute>} />
-        <Route path="/engenharia_testes/adicionar_nota" element={<PrivateRoute redirectTo="/">
+        <Route path="/engenharia_testes/listar_notas_fiscais/adicionar_nota" element={<PrivateRoute redirectTo="/">
           <AdicionarNota />
         </PrivateRoute>} />
         <Route path="/qualidade" element={<PrivateRoute redirectTo="/">

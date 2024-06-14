@@ -122,7 +122,7 @@ export function AbrirChamado() {
                             </div>
                             <HelloUser />
                         </div>
-                        <Link to={"/engenharia_testes/chamados_engenharia"}>
+                        <Link to={"/engenharia_testes/abrir_chamado/chamado_engenharia"}>
                             <Button style={{
                                 backgroundColor: "#d9d9d9",
                                 color: "#020c3e",
