@@ -1,6 +1,12 @@
 import { Link } from 'react-router-dom';
 
-export function SidebarButton({ name, link, icon: Icon }) {
+interface ButtonProps {
+    name: string;
+    link: string;
+    icon: React.ComponentType;
+  }
+
+export function SidebarButton({ name, link, icon: Icon }: ButtonProps) {
     return (
         <Link to={link}>
             <button

@@ -64,7 +64,6 @@ export function VisualizarChamados() {
     const [dadosIndicesDiario, setDadosIndicesDiario] = useState<IndiceDiario | null>(null);
     const [dadosIndicesSemanal, setDadosIndicesSemanal] = useState<IndiceSemanal | null>(null);
     const [dadosIndicesMensal, setDadosIndicesMensal] = useState<IndiceMensal | null>(null);
-    const [dadosNotificacaoAtrasoChamados, setDadosNotificacaoAtrasoChamados] = useState<NotificacaoAtrasoChamado[]>([]);
     const [showSidebar, setShowSidebar] = useState(false);
     const prevNotificacoesRef = useRef<NotificacaoAtrasoChamado[]>([]);
     const toastIdMapRef = useRef<Record<number, React.ReactText>>({});
@@ -150,7 +149,6 @@ export function VisualizarChamados() {
 
                         prevNotificacoesRef.current = novosChamadosAtrasados;
                     }
-                    setDadosNotificacaoAtrasoChamados(novosChamadosAtrasados);
                 } else {
                     console.error('Erro ao buscar dados: ', responseNotificacaoChamados.statusText);
                 }

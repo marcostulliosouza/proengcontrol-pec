@@ -17,7 +17,7 @@ import { HelloUser } from '../../components/hello_user';
 import { Logo } from '../../components/logo';
 
 // Icones
-import { IoMenu, IoDocumentOutline } from "react-icons/io5";
+import { IoMenu } from "react-icons/io5";
 import { IoIosArrowForward } from "react-icons/io";
 import { FaHome } from "react-icons/fa";
 import { MdUploadFile } from "react-icons/md";
@@ -124,6 +124,8 @@ export function ListarNotasFiscais() {
 
     const handleChangePage = (event: any, newPage: any) => {
         setPage(newPage);
+        const aux = (event.target.value)
+        console.log(aux)
     };
 
     const handleChangeRowsPerPage = (event: any) => {
@@ -292,7 +294,7 @@ export function ListarNotasFiscais() {
                             </TableHead>
                             <TableBody>
                                 {filteredNotasFiscais
-                                    .filter(notaFiscal => !showWithReturnDate || notaFiscal.nof_data_retorno !== 'Sem data de retorno')
+                                    .filter((notaFiscal: any) => !showWithReturnDate || notaFiscal.nof_data_retorno !== 'Sem data de retorno')
                                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                     .map((row: any) => (
                                         <Row key={row.cmp_id} row={row} />

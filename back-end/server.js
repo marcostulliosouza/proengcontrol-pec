@@ -269,7 +269,7 @@ app.get('/api/chamados', (req, res) => {
                     produtos.pro_nome AS produto_nome, 
                     clientes.cli_nome AS cliente_nome, 
                     tipos_chamado.tch_descricao AS tipo_chamado, 
-                    colaboradores.col_login AS responsavel 
+                    colaboradores.col_id AS responsavel 
                 FROM 
                     chamados 
                     LEFT JOIN produtos ON chamados.cha_produto = produtos.pro_id 
@@ -287,6 +287,7 @@ app.get('/api/chamados', (req, res) => {
             console.error('Erro:', err);
             return res.status(500).json({ message: 'Erro interno do servidor' });
         }
+        console.log('result:', result);
         return res.status(200), res.json(result);
     });
 });

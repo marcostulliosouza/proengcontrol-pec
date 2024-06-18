@@ -8,7 +8,7 @@ import { FaGears } from "react-icons/fa6";
 import { LuLogOut } from "react-icons/lu";
 import { FaHome } from "react-icons/fa";
 
-export const Sidebar = (props) => {
+export const Sidebar = () => {
     const handleLogout = () => {
         localStorage.clear();
         sessionStorage.clear();
@@ -43,7 +43,6 @@ export const Sidebar = (props) => {
                     </p> */}
                 </footer>
             </main>
-            {props.children}
         </div>
     )
 }

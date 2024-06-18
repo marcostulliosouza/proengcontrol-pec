@@ -13,15 +13,8 @@ import { IoIosArrowForward } from "react-icons/io";
 import { CiViewBoard } from "react-icons/ci";
 import { LuUsers2 } from "react-icons/lu";
 import { BsListColumnsReverse } from "react-icons/bs";
-import { PiCircuitry } from "react-icons/pi";
-import { BsGraphUpArrow } from "react-icons/bs";
-import { TbTableImport, TbDeviceDesktopCog } from "react-icons/tb";
-import { MdOutlineContentPasteSearch } from "react-icons/md";
-import { BiLink } from "react-icons/bi";
-import { AiOutlineUnorderedList, AiOutlineFileAdd } from "react-icons/ai";
-import { BsBoxArrowInRight, BsBoxArrowRight } from "react-icons/bs";
-import { GrHostMaintenance } from "react-icons/gr";
-import { FaComputer, FaWpforms } from "react-icons/fa6";
+import { TbDeviceDesktopCog } from "react-icons/tb";
+import { FaComputer } from "react-icons/fa6";
 import { CgNotes } from "react-icons/cg";
 
 export function MenuEngTestes() {

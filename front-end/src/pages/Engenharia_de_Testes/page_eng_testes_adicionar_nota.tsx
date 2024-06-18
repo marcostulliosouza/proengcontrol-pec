@@ -5,14 +5,13 @@ import { Link } from 'react-router-dom';
 import { Sidebar } from '../../components/sidebar';
 import { HelloUser } from '../../components/hello_user';
 import { Logo } from '../../components/logo';
-import { Button, Checkbox } from '@mui/material';
+import { Checkbox } from '@mui/material';
 import Select from 'react-select';
 
 // Icones
 import { IoMenu } from "react-icons/io5";
 import { IoIosArrowForward } from "react-icons/io";
 import { FaHome } from "react-icons/fa";
-import { set } from 'date-fns';
 
 export function AdicionarNota() {
     const [showSidebar, setShowSidebar] = useState(false);

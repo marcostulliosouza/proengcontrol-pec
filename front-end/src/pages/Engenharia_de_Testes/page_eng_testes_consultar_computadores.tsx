@@ -129,6 +129,8 @@ export function ConsultarComputadores() {
 
     const handleChangePage = (event: any, newPage: any) => {
         setPage(newPage);
+        const aux = (event.target.value)
+        console.log(aux)
     };
 
     const handleChangeRowsPerPage = (event: any) => {
