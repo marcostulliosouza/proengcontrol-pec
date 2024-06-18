@@ -8,7 +8,7 @@ import { Logo } from '../components/logo';
 // Icons
 import { FaGears } from "react-icons/fa6";
 import { IoMenu } from "react-icons/io5";
-import { FaHome, FaRegCheckSquare } from "react-icons/fa";
+import { FaHome } from "react-icons/fa";
 
 export function Menu() {
     const [showSidebar, setShowSidebar] = useState(false);
