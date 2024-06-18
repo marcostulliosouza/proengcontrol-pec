@@ -1,8 +1,10 @@
 {
   "name": "front-end",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
   "type": "module",
+  "description": "Samuel Grontoski & Marcos Tullio",
+  "homepage": "pec.hi-mix.com.br",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
