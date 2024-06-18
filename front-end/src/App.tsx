@@ -22,8 +22,6 @@ import { ManutencaoPreventiva } from './pages/Engenharia_de_Testes/page_eng_test
 import { FormulariosManutencao } from './pages/Engenharia_de_Testes/page_eng_testes_formularios_matuncao';
 import { ListarNotasFiscais } from './pages/Engenharia_de_Testes/page_eng_testes_listar_notas_fiscais';
 import { AdicionarNota } from './pages/Engenharia_de_Testes/page_eng_testes_adicionar_nota';
-// Rotas Qualidade
-import { Qualidade } from './pages/Qualidade/page_qualidade';
 
 const PrivateRoute = ({ children, redirectTo }: { children: React.ReactNode, redirectTo: string }) => {
   const isAuthenticated = sessionStorage.getItem("token") !== null;
@@ -93,9 +91,6 @@ export function App() {
         </PrivateRoute>} />
         <Route path="/engenharia_testes/listar_notas_fiscais/adicionar_nota" element={<PrivateRoute redirectTo="/">
           <AdicionarNota />
-        </PrivateRoute>} />
-        <Route path="/qualidade" element={<PrivateRoute redirectTo="/">
-          <Qualidade />
         </PrivateRoute>} />
         <Route path='*' element={<NotFound />} />
       </Routes>
