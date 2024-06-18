@@ -35,7 +35,7 @@ export function Chamados() {
                                 <p className='mobile:text-[0px]'>Engenharia de Testes</p>
                             </Link>
                             <IoIosArrowForward className='mobile:w-0' />
-                            <p>Atendimento de chamado</p>
+                            <p className='mobile:text-sm mobile:absolute mobile:right-0 mobile:mr-4 mobile:w-24 mobile:text-center'>Atendimento de chamado</p>
                         </div>
                         <HelloUser />
                     </div>

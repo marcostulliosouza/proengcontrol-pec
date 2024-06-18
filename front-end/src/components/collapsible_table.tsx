@@ -271,7 +271,7 @@ export function CollapsibleTable() {
   };
 
   return (
-    <div className="h-5/6 bg-cinza-200 mobile:px-2 px-5">
+    <div className="h-5/6 bg-cinza-200 px-2">
       <TableContainer component={Paper}>
         <Table aria-label="collapsible table">
           <TableHead sx={{ backgroundColor: '#d9d9d9' }}>
@@ -309,17 +309,19 @@ export function CollapsibleTable() {
           </TableBody>
         </Table>
       </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[5, 10, 20]}
-        component="div"
-        count={dados.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-        labelRowsPerPage="Linhas por página"
-        labelDisplayedRows={({ from, to, count }) => `${from}-${to} de ${count}`}
-      />
+      <Box className='flex justify-end mobile:text-xs mobile:justify-center'>
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 20]}
+          component="div"
+          count={dados.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+          labelRowsPerPage="Linhas por página"
+          labelDisplayedRows={({ from, to, count }) => `${from}-${to} de ${count}`}
+        />
+      </Box>
     </div >
   );
 }
