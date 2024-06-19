@@ -80,7 +80,6 @@ function Row(props: any) {
             aria-label="expand row"
             size="small"
             onClick={() => setOpen(!open)}
-            disabled={showModal}
             className='mobile:w-4'
           >
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
