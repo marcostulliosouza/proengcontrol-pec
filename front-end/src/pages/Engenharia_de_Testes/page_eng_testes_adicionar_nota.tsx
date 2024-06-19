@@ -117,9 +117,7 @@ export function AdicionarNota() {
             </div>
             <div className='bg-cinza-200 w-screen h-5/6 p-5'>
                 <main className='flex justify-center'>
-                    <form
-                        className='grid grid-cols-2 content-center gap-4 w-4/12 text-lg mobile:text-sm'
-                    >
+                    <form className='grid grid-cols-2 content-center gap-4 w-4/12 text-lg mobile:text-sm mobile:w-screen'>
                         <label className='text-pec font-bold'>Número da Nota Fiscal:</label>
                         <input
                             name='numero'
@@ -127,7 +125,7 @@ export function AdicionarNota() {
                             placeholder='Ex: 123456'
                             value={notaFiscal.numero}
                             onChange={handleChange}
-                            className='indent-1 border border-1 border-black rounded p-2 shadow-sm h-10 w-[300px]'
+                            className='indent-1 border border-1 border-black rounded p-2 shadow-sm h-10 w-[300px] mobile:w-full'
                         />
                         <label className='text-pec font-bold'>Número Doc. SAP:</label>
                         <input
@@ -136,7 +134,7 @@ export function AdicionarNota() {
                             placeholder='Ex: 123456'
                             value={notaFiscal.numeroDocSAP}
                             onChange={handleChange}
-                            className='indent-1 border border-1 border-black rounded p-2 shadow-sm h-10 w-[300px]'
+                            className='indent-1 border border-1 border-black rounded p-2 shadow-sm h-10 w-[300px] mobile:w-full'
                         />
                         <label className='text-pec font-bold'>Cliente:</label>
                         <Select

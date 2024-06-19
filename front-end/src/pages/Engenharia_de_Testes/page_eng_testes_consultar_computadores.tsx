@@ -168,7 +168,7 @@ export function ConsultarComputadores() {
                                 <p className='mobile:text-[0px]'>Engenharia de Testes</p>
                             </Link>
                             <IoIosArrowForward className='mobile:w-0' />
-                            <p>Consultar Computadores</p>
+                            <p className='mobile:text-sm mobile:absolute mobile:right-0 mobile:mr-4 mobile:w-24 mobile:text-center mobile:mb-5'>Consultar Computadores</p>
                         </div>
                         <HelloUser />
                     </div>
@@ -184,7 +184,7 @@ export function ConsultarComputadores() {
                         className="p-2 border border-black rounded"
                     />
                 </div>
-                <div className='bg-cinza-200 mx-10'>
+                <div className='bg-cinza-200 mx-10 mobile:mx-0'>
                     <TableContainer component={Paper}>
                         <Table aria-label="simple table">
                             <TableHead sx={{ backgroundColor: '#d9d9d9' }}>

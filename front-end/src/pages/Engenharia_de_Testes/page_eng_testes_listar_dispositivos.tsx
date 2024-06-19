@@ -220,14 +220,14 @@ export function ListarDispositivos() {
                                 <p className='mobile:text-[0px]'>Engenharia de Testes</p>
                             </Link>
                             <IoIosArrowForward className='mobile:w-0' />
-                            <p>Listar Dispositivos</p>
+                            <p className='mobile:text-sm mobile:absolute mobile:right-0 mobile:mr-4 mobile:w-24 mobile:text-center mobile:mb-5'>Listar Dispositivos</p>
                         </div>
                         <HelloUser />
                     </div>
                 </div>
             </div>
-            <div className='bg-cinza-200 mobile:px-3'>
-                <div className='bg-cinza-200 mx-10 h-5/6'>
+            <div className='bg-cinza-200 mobile:px-0'>
+                <div className='bg-cinza-200 mx-10 mobile:mx-3 h-5/6'>
                     <TableContainer component={Paper}>
                         <Table aria-label="simple table">
                             <TableHead sx={{ backgroundColor: '#d9d9d9' }}>

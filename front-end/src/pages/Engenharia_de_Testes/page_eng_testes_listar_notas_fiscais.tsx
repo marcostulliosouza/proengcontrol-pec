@@ -192,11 +192,11 @@ export function ListarNotasFiscais() {
                                     <p className='mobile:text-[0px]'>Engenharia de Testes</p>
                                 </Link>
                                 <IoIosArrowForward className='mobile:w-0' />
-                                <p>Listar Notas Fiscais</p>
+                                <p className='mobile:text-sm mobile:absolute mobile:right-0 mobile:mr-4 mobile:w-24 mobile:text-center mobile:mb-5'>Listar Notas Fiscais</p>
                             </div>
                             <HelloUser />
                         </div>
-                        <Link to={"/engenharia_testes/listar_notas_fiscais/adicionar_nota"}>
+                        <Link to={"/engenharia_testes/listar_notas_fiscais/adicionar_nota"} className='mobile:hidden'>
                             <Button style={{
                                 backgroundColor: "#d9d9d9",
                                 color: "#020c3e",

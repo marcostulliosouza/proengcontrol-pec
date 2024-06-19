@@ -7,8 +7,8 @@ import { NotFound } from './pages/page_notfound';
 import { MenuEngTestes } from './pages/Engenharia_de_Testes/page_eng_testes_menu';
 import { VisualizarChamados } from './pages/Engenharia_de_Testes/page_eng_testes_visualizar_chamados';
 import { AbrirChamado } from './pages/Engenharia_de_Testes/page_eng_testes_abrir_chamado';
+import { AbrirChamadoEng } from './pages/Engenharia_de_Testes/page_eng_testes_abrir_chamado_eng';
 import { Chamados } from './pages/Engenharia_de_Testes/page_eng_testes_chamados';
-import { ChamadoEng } from './pages/Engenharia_de_Testes/page_eng_testes_chamado_eng';
 import { RelatorioChamados } from './pages/Engenharia_de_Testes/page_eng_testes_relatorio_chamadas';
 import { ConsultarComputadores } from './pages/Engenharia_de_Testes/page_eng_testes_consultar_computadores';
 import { ListarDispositivos } from './pages/Engenharia_de_Testes/page_eng_testes_listar_dispositivos';
@@ -47,11 +47,11 @@ export function App() {
         <Route path="/engenharia_testes/abrir_chamado" element={<PrivateRoute redirectTo="/">
           <AbrirChamado />
         </PrivateRoute>} />
+        <Route path="/engenharia_testes/abrir_chamado/chamado_engenharia" element={<PrivateRoute redirectTo="/">
+          <AbrirChamadoEng />
+        </PrivateRoute>} />
         <Route path="/engenharia_testes/chamados" element={<PrivateRoute redirectTo="/">
           <Chamados />
-        </PrivateRoute>} />
-        <Route path="/engenharia_testes/abrir_chamado/chamado_engenharia" element={<PrivateRoute redirectTo="/">
-          <ChamadoEng />
         </PrivateRoute>} />
         <Route path="/engenharia_testes/relatorio_chamados" element={<PrivateRoute redirectTo="/">
           <RelatorioChamados />

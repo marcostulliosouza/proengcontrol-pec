@@ -159,8 +159,8 @@ function Row(props: any) {
       {showModal ? (
         <>
           <Draggable disabled={isMobile}>
-            <div className="mobile:fixed mobile:inset-0 mobile:overflow-hidden mobile:w-screen w-[80vw] max-w-[800px] rounded-lg shadow bg-cinza-300 border border-black absolute top-0 left-0 z-50">
-              <header className="rounded-lg shadow-lg mobile:cursor-auto cursor-move p-5 bg-cinza-300 text-base flex flex-col gap-2">
+            <div className="mobile:fixed mobile:inset-0 mobile:overflow-hidden mobile:w-screen w-[80vw] max-w-[800px] rounded-lg shadow bg-cinza-300 border border-black absolute top-20 left-40 z-50 p-3">
+              <header className="rounded-lg mobile:cursor-auto cursor-move text-base flex flex-col gap-2">
                 <nav className='flex justify-between items-center'>
                   <span className="text-2xl font-semibold">Atendendo chamado</span>
                   <button
@@ -190,14 +190,14 @@ function Row(props: any) {
               </header>
               <body className='bg-cinza-300'>
                 <main>
-                  <form className="px-5 w-full">
-                    <label className="block text-black text-sm font-bold mb-1">
+                  <form>
+                    <label className="block text-black text-sm font-bold mt-4 mb-1">
                       Descrição da solução:
                     </label>
                     <textarea className="bg-gray-100 shadow appearance-none border rounded w-full h-60 py-2 px-1 text-black resize-none"></textarea>
                   </form>
                 </main>
-                <footer className="flex items-center justify-between p-5">
+                <footer className="flex items-center justify-between gap-2 mt-4">
                   <button
                     onClick={() => setShowModal(false)}
                     type="button"

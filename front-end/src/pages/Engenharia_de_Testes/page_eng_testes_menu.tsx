@@ -37,7 +37,7 @@ export function MenuEngTestes() {
                                 <p className='mobile:text-[0px]'>Menu</p>
                             </Link>
                             <IoIosArrowForward className='mobile:w-0' />
-                            <p>Engenharia de Testes</p>
+                            <p className='mobile:text-sm mobile:absolute mobile:right-0 mobile:mr-4 mobile:w-24 mobile:text-center mobile:mb-5'>Engenharia de Testes</p>
                         </div>
                         <HelloUser />
                     </div>
