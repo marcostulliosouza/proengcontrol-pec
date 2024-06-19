@@ -15,8 +15,8 @@ export const Sidebar = () => {
     };
 
     return (
-        <div className="bg-pec fixed inset-y-0 left-0 w-[200px] transition duration-200 flex flex-col gap-8 items-center">
-            <header className="grid justify-items-center items-center text-cinza-200 font-semibold mt-24">
+        <div className="bg-pec fixed inset-y-0 left-0 w-[200px] flex flex-col gap-8 items-center">
+            <header className="grid justify-items-center items-center text-cinza-200 font-semibold mt-10 ml-20">
                 <div className="flex items-center gap-2">
                     <img src={logo} alt="PEC" />
                     <h1 className='text-xl'>PEC</h1>
