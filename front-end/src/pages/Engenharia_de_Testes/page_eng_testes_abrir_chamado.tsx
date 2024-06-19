@@ -210,7 +210,7 @@ export function AbrirChamado() {
                                 placeholder={chamado.cha_tipo === 1 ? '000000' : 'XXXXXX'}
                                 disabled={chamado.cha_tipo === 1}
                                 onKeyDown={handleKeyDown}
-                                className='indent-1 border border-1 border-black rounded p-2 shadow-sm bg-white h-10 w-full'
+                                className='indent-1 border border-1 border-black rounded p-2 shadow-sm bg-white h-10 w-full text-sm'
                             />
                             <p className='text-red-600 text-lg font-bold'>*</p>
                         </div>
