@@ -159,7 +159,7 @@ function Row(props: any) {
       {showModal ? (
         <>
           <Draggable disabled={isMobile}>
-            <div className="mobile:fixed mobile:inset-0 mobile:overflow-hidden mobile:w-screen w-[80vw] max-w-[800px] rounded-lg shadow bg-cinza-300 border border-black absolute top-20 left-40 z-50 p-3">
+            <div className={`mobile:fixed mobile:inset-0 mobile:overflow-hidden mobile:w-screen w-[80vw] max-w-[800px] rounded-lg shadow bg-cinza-300 border-5 mobile:border-none absolute top-20 left-40 z-50 p-3 ${row.cha_plano === 1 ? 'border-no_plano' : row.cha_plano === 0 ? 'border-fora_plano text-black' : 'border-engenharia'}`}>
               <header className="rounded-lg mobile:cursor-auto cursor-move text-base flex flex-col gap-2">
                 <nav className='flex justify-between items-center'>
                   <span className="text-2xl font-semibold">Atendendo chamado</span>
