@@ -54,7 +54,7 @@ function Row(props: any) {
     )
 }
 
-export function ListarDispositivos() {
+export function ConsultarDispositivos() {
     const [showSidebar, setShowSidebar] = useState(false);
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -220,7 +220,7 @@ export function ListarDispositivos() {
                                 <p className='mobile:text-[0px]'>Engenharia de Testes</p>
                             </Link>
                             <IoIosArrowForward className='mobile:w-0' />
-                            <p className='mobile:text-sm mobile:absolute mobile:right-0 mobile:mr-4 mobile:w-24 mobile:text-center mobile:mb-5'>Listar Dispositivos</p>
+                            <p className='mobile:text-sm mobile:absolute mobile:right-0 mobile:mr-4 mobile:w-24 mobile:text-center mobile:mb-5'>Consultar Dispositivos</p>
                         </div>
                         <HelloUser />
                     </div>

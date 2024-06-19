@@ -8,13 +8,12 @@ import { Logo } from '../../components/logo';
 
 // Icones
 import { IoMenu } from "react-icons/io5";
-import { FaHome } from "react-icons/fa";
+import { FaHome, FaRegListAlt } from "react-icons/fa";
 import { IoIosArrowForward } from "react-icons/io";
-import { CiViewBoard } from "react-icons/ci";
 import { LuUsers2 } from "react-icons/lu";
-import { BsListColumnsReverse } from "react-icons/bs";
+import { BsWindowDesktop } from "react-icons/bs";
 import { TbDeviceDesktopCog } from "react-icons/tb";
-import { FaComputer } from "react-icons/fa6";
+import { FaComputer, FaEarListen } from "react-icons/fa6";
 import { CgNotes } from "react-icons/cg";
 
 export function MenuEngTestes() {
@@ -45,11 +44,12 @@ export function MenuEngTestes() {
             </header>
             <body className='bg-cinza-200 w-screen h-5/6 px-5'>
                 <div className="bg-cinza-100 rounded-md drop-shadow grid mobile:grid-cols-2 sm:grid-cols-5 grid-cols-6 justify-items-center p-10 gap-10">
-                    <MenuButton name={"Visualizar chamados"} link={"/engenharia_testes/visualizar_chamados"} icon={CiViewBoard} />
                     <MenuButton name={"Abrir chamado"} link={"/engenharia_testes/abrir_chamado"} icon={LuUsers2} />
-                    <MenuButton name={"Atendimento de chamado"} link={"/engenharia_testes/chamados"} icon={BsListColumnsReverse} />
+                    <MenuButton name={"Visualizar chamados"} link={"/engenharia_testes/visualizar_chamados"} icon={FaRegListAlt} />
+                    <MenuButton name={"Gestão Visual de chamados"} link={"/engenharia_testes/gestao_visual_chamados"} icon={BsWindowDesktop} />
+                    <MenuButton name={"Atendimento de chamado"} link={"/engenharia_testes/chamados"} icon={FaEarListen} />
                     <MenuButton name={"Consultar Computadores"} link={"/engenharia_testes/consultar_computadores"} icon={FaComputer} />
-                    <MenuButton name={"Listar Dispositivos"} link={"/engenharia_testes/listar_dispositivos"} icon={TbDeviceDesktopCog} />
+                    <MenuButton name={"Consultar Dispositivos"} link={"/engenharia_testes/consultar_dispositivos"} icon={TbDeviceDesktopCog} />
                     {/* <MenuButton name={"Chamado de Engenharia"} link={"/engenharia_testes/chamados_engenharia"} icon={PiCircuitry} />
                     <MenuButton name={"Relatório de chamados"} link={"/engenharia_testes/relatorio_chamados"} icon={BsGraphUpArrow} />
                     <MenuButton name={"Enviar Plano de Produção"} link={"/engenharia_testes/enviar_plano_de_producao"} icon={TbTableImport} />

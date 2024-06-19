@@ -5,13 +5,14 @@ import { Menu } from './pages/page_menu';
 import { NotFound } from './pages/page_notfound';
 // Rotas Engenharia de Testes
 import { MenuEngTestes } from './pages/Engenharia_de_Testes/page_eng_testes_menu';
-import { VisualizarChamados } from './pages/Engenharia_de_Testes/page_eng_testes_visualizar_chamados';
 import { AbrirChamado } from './pages/Engenharia_de_Testes/page_eng_testes_abrir_chamado';
 import { AbrirChamadoEng } from './pages/Engenharia_de_Testes/page_eng_testes_abrir_chamado_eng';
+import { VisualizarChamados } from './pages/Engenharia_de_Testes/page_eng_testes_visualizar_chamados';
+import { GestaoVisualChamados } from './pages/Engenharia_de_Testes/page_eng_testes_gestao_visual_chamados';
 import { Chamados } from './pages/Engenharia_de_Testes/page_eng_testes_chamados';
 import { RelatorioChamados } from './pages/Engenharia_de_Testes/page_eng_testes_relatorio_chamadas';
 import { ConsultarComputadores } from './pages/Engenharia_de_Testes/page_eng_testes_consultar_computadores';
-import { ListarDispositivos } from './pages/Engenharia_de_Testes/page_eng_testes_listar_dispositivos';
+import { ConsultarDispositivos } from './pages/Engenharia_de_Testes/page_eng_testes_consultar_dispositivos';
 import { EnviarPlano } from './pages/Engenharia_de_Testes/page_eng_testes_enviar_plano';
 import { PesquisaIndicadores } from './pages/Engenharia_de_Testes/page_eng_testes_pesquisa_indicadores';
 import { VincularEquipamentoProduto } from './pages/Engenharia_de_Testes/page_eng_testes_vincular_equipamento_produto';
@@ -44,6 +45,9 @@ export function App() {
         <Route path="/engenharia_testes/visualizar_chamados" element={<PrivateRoute redirectTo="/">
           <VisualizarChamados />
         </PrivateRoute>} />
+        <Route path="/engenharia_testes/gestao_visual_chamados" element={<PrivateRoute redirectTo="/">
+          <GestaoVisualChamados />
+        </PrivateRoute>} />
         <Route path="/engenharia_testes/abrir_chamado" element={<PrivateRoute redirectTo="/">
           <AbrirChamado />
         </PrivateRoute>} />
@@ -59,8 +63,8 @@ export function App() {
         <Route path="/engenharia_testes/consultar_computadores" element={<PrivateRoute redirectTo="/">
           <ConsultarComputadores />
         </PrivateRoute>} />
-        <Route path="/engenharia_testes/listar_dispositivos" element={<PrivateRoute redirectTo="/">
-          <ListarDispositivos />
+        <Route path="/engenharia_testes/consultar_dispositivos" element={<PrivateRoute redirectTo="/">
+          <ConsultarDispositivos />
         </PrivateRoute>} />
         <Route path="/engenharia_testes/enviar_plano_de_producao" element={<PrivateRoute redirectTo="/">
           <EnviarPlano />
