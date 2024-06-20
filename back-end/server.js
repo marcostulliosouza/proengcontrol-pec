@@ -287,7 +287,6 @@ app.get('/api/chamados', (req, res) => {
             console.error('Erro:', err);
             return res.status(500).json({ message: 'Erro interno do servidor' });
         }
-        console.log('result:', result);
         return res.status(200), res.json(result);
     });
 });
@@ -318,7 +317,6 @@ app.get('/api/chamadosatendidos', (req, res) => {
             console.error('Erro:', err);
             return res.status(500).json({ message: 'Erro interno do servidor' });
         }
-        console.log('result:', result);
         return res.status(200), res.json(result);
     });
 });
