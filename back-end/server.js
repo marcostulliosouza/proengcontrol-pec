@@ -269,7 +269,7 @@ app.get('/api/chamados', (req, res) => {
                     produtos.pro_nome AS produto_nome, 
                     clientes.cli_nome AS cliente_nome, 
                     tipos_chamado.tch_descricao AS tipo_chamado, 
-                    colaboradores.col_id AS responsavel 
+                    colaboradores.col_nome AS responsavel 
                 FROM 
                     chamados 
                     LEFT JOIN produtos ON chamados.cha_produto = produtos.pro_id 
