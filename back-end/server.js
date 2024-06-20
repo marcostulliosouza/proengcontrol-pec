@@ -292,6 +292,37 @@ app.get('/api/chamados', (req, res) => {
     });
 });
 
+// Rota para buscar chamados atendidos
+app.get('/api/chamadosatendidos', (req, res) => {
+    const query = `
+                SELECT 
+                    chamados.*, 
+                    produtos.pro_nome AS produto_nome, 
+                    clientes.cli_nome AS cliente_nome, 
+                    tipos_chamado.tch_descricao AS tipo_chamado, 
+                    colaboradores.col_id AS responsavel 
+                FROM 
+                    chamados 
+                    LEFT JOIN produtos ON chamados.cha_produto = produtos.pro_id 
+                    LEFT JOIN clientes ON chamados.cha_cliente = clientes.cli_id 
+                    LEFT JOIN tipos_chamado ON cha_tipo = tch_id 
+                    LEFT JOIN atendimentos_chamados ON atendimentos_chamados.atc_chamado = cha_id 
+                    LEFT JOIN colaboradores ON atendimentos_chamados.atc_colaborador = colaboradores.col_id
+                WHERE 
+                    chamados.cha_status = 3
+                ORDER BY 
+                    chamados.cha_data_hora_termino DESC;
+    `;
+    pool.query(query, (err, result) => {
+        if (err) {
+            console.error('Erro:', err);
+            return res.status(500).json({ message: 'Erro interno do servidor' });
+        }
+        console.log('result:', result);
+        return res.status(200), res.json(result);
+    });
+});
+
 // Rota para obter os indicadores diários de chamados
 app.get('/api/indicadoresdiarios', (req, res) => {
     const query1 = `
