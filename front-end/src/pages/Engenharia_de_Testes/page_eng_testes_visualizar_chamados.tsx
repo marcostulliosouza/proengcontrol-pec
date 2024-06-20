@@ -12,11 +12,10 @@ import { format, set } from 'date-fns';
 
 export function VisualizarChamados() {
     const [showSidebar, setShowSidebar] = useState(false);
-    const [page, setPage] = React.useState(0);
-    const [chamadosPerPage, setchamadosPerPage] = React.useState(10);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
     const [showModal, setShowModal] = useState(false);
     const [dados, setDados] = useState([]);
-    const [chamadosAtendidos, setChamadosAtendidos] = useState([] as any);
     const [chamado, setChamado] = useState({} as any);
 
     const isMobile = useMediaQuery({
@@ -27,7 +26,6 @@ export function VisualizarChamados() {
         const fetchData = async () => {
             try {
                 const response = await fetch('http://172.17.4.23:5000/api/chamados');
-                const responseAtendidos = await fetch('http://172.17.4.23:5000/api/chamadosatendidos');
                 if (response.ok) {
                     const data = await response.json();
                     const sortedData = data.sort((a: any) => {
@@ -38,12 +36,6 @@ export function VisualizarChamados() {
                     setDados(sortedData);
                 } else {
                     console.error('Erro ao buscar chamados: ', response.statusText);
-                }
-                if (responseAtendidos.ok) {
-                    const dataAtendidos = await responseAtendidos.json();
-                    setChamadosAtendidos(dataAtendidos);
-                } else {
-                    console.error('Erro ao buscar chamados atendidos: ', responseAtendidos.statusText);
                 }
             } catch (error) {
                 console.error("Erro fetching dados: ", error)
@@ -59,17 +51,6 @@ export function VisualizarChamados() {
         setShowModal(true);
         setChamado(chamado);
     }
-
-    const handleChangePage = (event: any, newPage: any) => {
-        setPage(newPage);
-        const aux = (event.target.value)
-        console.log(aux)
-    };
-
-    const handleChangechamadosPerPage = (event: any) => {
-        setchamadosPerPage(parseInt(event.target.value, 10));
-        setPage(0);
-    };
 
     return (
         <div className='w-screen h-screen'>
@@ -130,69 +111,101 @@ export function VisualizarChamados() {
                                 ))}
                         </ul>
                     </div>
-                    
                 </div>
                 <div className='bg-white rounded shadow-md mobile:max-h-[300px] max-h-[700px]'>
                     <h1 className='ml-6 mt-4 mobile:text-lg text-2xl text-pec font-bold'>CHAMADOS ATENDIDOS</h1>
-
+                    <div className='m-6 overflow-y-auto'>
+                        {/* <ul>
+                            {chamadosAtendidos
+                                .slice((currentPage) * itemsPerPage, currentPage * itemsPerPage)
+                                .map((chamado: any) => (
+                                    <li key={chamado.cha_id} className={`flex flex-col border-2 rounded mb-2 shadow-md p-1 mobile:text-xs
+                                        ${chamado.cha_plano == 1 ? 'border-no_plano' : chamado.cha_plano == 0 ? 'border-fora_plano' : 'border-engenharia'}`}>
+                                        <button onClick={() => openModal(chamado)}>
+                                            <div className='grid grid-cols-3 mobile:grid-cols-1'>
+                                                <div className='inline-flex gap-2'>
+                                                    <p className='font-bold'>Local:</p> {chamado.cha_local}
+                                                </div>
+                                                <div className='inline-flex gap-2'>
+                                                    <p className='font-bold'>Atendimento:</p> {chamado.cha_status == 1 ? 'Pendente' : 'Em andamento'}
+                                                </div>
+                                                <div className='inline-flex gap-2'>
+                                                    <p className='font-bold'>Aberto por:</p> {chamado.cha_operador}
+                                                </div>
+                                                <div className='inline-flex gap-2'>
+                                                    <p className='font-bold'>Produto:</p> {chamado.produto_nome}
+                                                </div>
+                                                <div className='inline-flex gap-2'>
+                                                    <p className='font-bold'>Cliente:</p> {chamado.cliente_nome}
+                                                </div>
+                                            </div>
+                                        </button>
+                                    </li>
+                                ))}
+                        </ul>
+                        <div>
+                            <button onClick={() => setCurrentPage(oldPage => Math.max(oldPage - 1, 1))}>Anterior</button>
+                            <button onClick={() => setCurrentPage(oldPage => Math.min(oldPage + 1, Math.ceil(chamadosAtendidos.length / itemsPerPage)))}>Próximo</button>
+                        </div> */}
+                    </div>
                 </div>
             </div>
             {showModal ? (
-                        <>
-                            <Draggable disabled={isMobile}>
-                                <div className={`mobile:fixed mobile:inset-0 mobile:overflow-hidden mobile:w-screen w-[80vw] max-w-[800px] rounded-lg shadow bg-cinza-300 border-5 mobile:border-none absolute top-20 left-40 z-50 p-3 ${chamado.cha_plano === 1 ? 'border-no_plano' : chamado.cha_plano === 0 ? 'border-fora_plano text-black' : 'border-engenharia'}`}>
-                                    <div className="rounded-lg mobile:cursor-auto cursor-move text-base flex flex-col gap-2">
-                                        <nav className='flex justify-between items-center'>
-                                            <span className="text-2xl font-semibold">Detalhes do chamado</span>
-                                            <button
-                                                onClick={() => setShowModal(false)}
-                                                type="button"
-                                                className="text-cinza-100 bg-no_plano rounded font-bold uppercase mobile:p-2 px-6 py-2 mobile:text-xs text-sm"
-                                            >
-                                                Fechar
-                                            </button>
-                                        </nav>
-                                        <div className='grid grid-cols-2 mobile:flex mobile:flex-col gap-2'>
-                                            <div className='flex items-start justify-start gap-2'>
-                                                <p className="font-semibold">Local:</p>
-                                                <p>{chamado.cha_local}</p>
-                                            </div>
-                                            <div className='flex items-start justify-start gap-2'>
-                                                <p className="font-semibold">Atendimento:</p>
-                                                <p>{chamado.cha_status == 1 ? 'PENDENTE' : 'EM ANDAMENTO'}</p>
-                                            </div>
-                                            <div className='flex items-start justify-start gap-2'>
-                                                <p className="font-semibold">Aberto por:</p>
-                                                <p>{chamado.cha_operador}</p>
-                                            </div>
-                                            <div className='flex items-start justify-start gap-2'>
-                                                <p className="font-semibold">Tipo de chamado:</p>
-                                                <p>{chamado.tipo_chamado}</p>
-                                            </div>
-                                            <div className='flex items-start justify-start gap-2'>
-                                                <p className="font-semibold">Produto:</p>
-                                                <p>{chamado.produto_nome}</p>
-                                            </div>
-                                            <div className='flex items-start justify-start gap-2'>
-                                                <p className="font-semibold">Cliente:</p>
-                                                <p>{chamado.cliente_nome}</p>
-                                            </div>
-                                            <div className='flex items-start justify-start gap-2'>
-                                                <p className="font-semibold">Abertura:</p>
-                                                <p>{format(new Date(chamado.cha_data_hora_abertura), 'dd/MM/yyyy HH:mm')}</p>
-                                            </div>
-                                            <div className='flex items-start justify-start gap-2'>
-                                                <p className="font-semibold">Fechamento:</p>
-                                                <p>{chamado.cha_data_hora_termino ? format(new Date(chamado.cha_data_hora_termino), 'dd/MM/yyyy HH:mm') : ''}</p>
-                                            </div>
-                                            <p className="font-semibold">Problema:</p>
-                                            <p className='col-span-2'>{chamado.cha_descricao}</p>
-                                        </div>
+                <>
+                    <Draggable disabled={isMobile}>
+                        <div className={`mobile:fixed mobile:inset-0 mobile:overflow-hidden mobile:w-screen w-[80vw] max-w-[800px] rounded-lg shadow bg-cinza-300 border-5 mobile:border-none absolute top-20 left-40 z-50 p-3 ${chamado.cha_plano === 1 ? 'border-no_plano' : chamado.cha_plano === 0 ? 'border-fora_plano text-black' : 'border-engenharia'}`}>
+                            <div className="rounded-lg mobile:cursor-auto cursor-move text-base flex flex-col gap-2">
+                                <nav className='flex justify-between items-center'>
+                                    <span className="text-2xl font-semibold">Detalhes do chamado</span>
+                                    <button
+                                        onClick={() => setShowModal(false)}
+                                        type="button"
+                                        className="text-cinza-100 bg-no_plano rounded font-bold uppercase mobile:p-2 px-6 py-2 mobile:text-xs text-sm"
+                                    >
+                                        Fechar
+                                    </button>
+                                </nav>
+                                <div className='grid grid-cols-2 mobile:flex mobile:flex-col gap-2'>
+                                    <div className='flex items-start justify-start gap-2'>
+                                        <p className="font-semibold">Local:</p>
+                                        <p>{chamado.cha_local}</p>
                                     </div>
+                                    <div className='flex items-start justify-start gap-2'>
+                                        <p className="font-semibold">Atendimento:</p>
+                                        <p>{chamado.cha_status == 1 ? 'PENDENTE' : 'EM ANDAMENTO'}</p>
+                                    </div>
+                                    <div className='flex items-start justify-start gap-2'>
+                                        <p className="font-semibold">Aberto por:</p>
+                                        <p>{chamado.cha_operador}</p>
+                                    </div>
+                                    <div className='flex items-start justify-start gap-2'>
+                                        <p className="font-semibold">Tipo de chamado:</p>
+                                        <p>{chamado.tipo_chamado}</p>
+                                    </div>
+                                    <div className='flex items-start justify-start gap-2'>
+                                        <p className="font-semibold">Produto:</p>
+                                        <p>{chamado.produto_nome}</p>
+                                    </div>
+                                    <div className='flex items-start justify-start gap-2'>
+                                        <p className="font-semibold">Cliente:</p>
+                                        <p>{chamado.cliente_nome}</p>
+                                    </div>
+                                    <div className='flex items-start justify-start gap-2'>
+                                        <p className="font-semibold">Abertura:</p>
+                                        <p>{format(new Date(chamado.cha_data_hora_abertura), 'dd/MM/yyyy HH:mm')}</p>
+                                    </div>
+                                    <div className='flex items-start justify-start gap-2'>
+                                        <p className="font-semibold">Fechamento:</p>
+                                        <p>{chamado.cha_data_hora_termino ? format(new Date(chamado.cha_data_hora_termino), 'dd/MM/yyyy HH:mm') : ''}</p>
+                                    </div>
+                                    <p className="font-semibold">Problema:</p>
+                                    <p className='col-span-2'>{chamado.cha_descricao}</p>
                                 </div>
-                            </Draggable>
-                        </>
-                    ) : null}
+                            </div>
+                        </div>
+                    </Draggable>
+                </>
+            ) : null}
 
             {showSidebar && (
                 <div className='backdrop-blur-xs fixed inset-y-0 w-screen z-50'>
