@@ -104,7 +104,7 @@ export function VisualizarChamados() {
                         <ul>
                             {dados
                                 .map((chamado: any) => (
-                                    <li key={chamado.cha_id} className={`flex flex-col border-2 rounded mb-2 shadow-md p-1 mobile:text-xs
+                                    <li key={chamado.cha_id} className={`flex flex-col border-2 rounded mb-2 shadow-md p-2 mobile:text-xs
                                         ${chamado.cha_plano == 1 ? 'border-no_plano' : chamado.cha_plano == 0 ? 'border-fora_plano' : 'border-engenharia'}`}>
                                         <button onClick={() => openModal(chamado)}>
                                             <div className='grid grid-cols-3 mobile:grid-cols-1'>
@@ -123,6 +123,10 @@ export function VisualizarChamados() {
                                                 <div className='inline-flex gap-2'>
                                                     <p className='font-bold'>Cliente:</p> {chamado.cliente_nome}
                                                 </div>
+                                                <div className='inline-flex gap-2'>
+                                                    <p className='font-bold'>Abertura:</p>
+                                                    <p>{format(new Date(chamado.cha_data_hora_abertura), 'dd/MM/yyyy HH:mm')}</p>
+                                                </div>
                                             </div>
                                         </button>
                                     </li>
@@ -133,7 +137,7 @@ export function VisualizarChamados() {
                 <div className='bg-white rounded shadow-md mobile:max-h-[300px] max-h-[700px]'>
                     <div className='inline-flex justify-between w-full px-6 pt-4'>
                         <h1 className='mobile:text-lg text-2xl text-pec font-bold'>CHAMADOS ATENDIDOS</h1>
-                        <div className='flex gap-2 items-center'>
+                        <div className='flex gap-2 items-center mobile:hidden'>
                             <p className='text-center font-bold text-pec'>De:</p>
                             <input
                                 name='dataInicial'
@@ -142,7 +146,7 @@ export function VisualizarChamados() {
                                 onChange={(e) => setDataInicial(new Date(e.target.value + 'T00:00:00.000Z'))}
                                 className='text-center border-2 border-pec rounded p-1 shadow-2xl'
                             />
-                            <p className='text-center font-bold text-pec'>A:</p>
+                            <p className='text-center font-bold text-pec'>Há:</p>
                             <input
                                 name='dataFinal'
                                 type="date"
@@ -152,11 +156,11 @@ export function VisualizarChamados() {
                             />
                         </div>
                     </div>
-                    <div className='m-6 overflow-y-auto'>
+                    <div className='m-6 overflow-y-auto h-[600px] mobile:h-[200px]'>
                         <ul>
                             {chamadosAtendidos
                                 .map((chamado: any) => (
-                                    <li key={chamado.cha_id} className={`flex flex-col border-2 rounded mb-2 shadow-md p-1 mobile:text-xs
+                                    <li key={chamado.cha_id} className={`flex flex-col border-2 rounded mb-2 shadow-md p-2 mobile:text-xs
                                         ${chamado.cha_plano == 1 ? 'border-no_plano' : chamado.cha_plano == 0 ? 'border-fora_plano' : 'border-engenharia'}`}>
                                         <button onClick={() => openModal(chamado)}>
                                             <div className='grid grid-cols-3 mobile:grid-cols-1'>
@@ -164,7 +168,7 @@ export function VisualizarChamados() {
                                                     <p className='font-bold'>Local:</p> {chamado.cha_local}
                                                 </div>
                                                 <div className='inline-flex gap-2'>
-                                                    <p className='font-bold'>Atendimento:</p> {chamado.cha_status == 1 ? 'Pendente' : 'Em andamento'}
+                                                    <p className='font-bold'>Atendimento:</p><p className='text-green-600 font-semibold'>{chamado.cha_status == 3 ? 'Concluído' : ''}</p>
                                                 </div>
                                                 <div className='inline-flex gap-2'>
                                                     <p className='font-bold'>Aberto por:</p> {chamado.cha_operador}
@@ -174,6 +178,10 @@ export function VisualizarChamados() {
                                                 </div>
                                                 <div className='inline-flex gap-2'>
                                                     <p className='font-bold'>Cliente:</p> {chamado.cliente_nome}
+                                                </div>
+                                                <div className='inline-flex gap-2'>
+                                                    <p className='font-bold'>Fechamento:</p>
+                                                    <p>{chamado.cha_data_hora_termino ? format(new Date(chamado.cha_data_hora_termino), 'dd/MM/yyyy HH:mm') : ''}</p>
                                                 </div>
                                             </div>
                                         </button>
@@ -205,7 +213,7 @@ export function VisualizarChamados() {
                                     </div>
                                     <div className='flex items-start justify-start gap-2'>
                                         <p className="font-semibold">Atendimento:</p>
-                                        <p className={`font-normal ${chamado.cha_status == 1 ? '' : 'text-green-600 font-semibold'}`}>{chamado.cha_status == 1 ? 'PENDENTE' : 'EM ANDAMENTO'}</p>
+                                        <p className={`font-normal ${chamado.cha_status == 1 ? '' : 'text-green-600 font-semibold'}`}>{chamado.cha_status == 1 ? 'PENDENTE' : chamado.cha_status == 2 ? 'EM ANDAMENTO' : 'CONCLUÍDO'}</p>
                                     </div>
                                     <div className='flex items-start justify-start gap-2'>
                                         <p className="font-semibold">Aberto por:</p>
