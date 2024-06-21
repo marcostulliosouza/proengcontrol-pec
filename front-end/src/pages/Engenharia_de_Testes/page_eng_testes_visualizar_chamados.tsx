@@ -16,18 +16,8 @@ export function VisualizarChamados() {
     const [dados, setDados] = useState([]);
     const [chamadosAtendidos, setChamadosAtendidos] = useState([] as any);
     const [chamado, setChamado] = useState({} as any);
-    const [filterData, setFilterData] = useState({
-        dataInicial: new Date(),
-        dataFinal: new Date()
-    });
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setFilterData({
-            ...filterData,
-            [name]: new Date(value)
-        });
-    }
+    const [dataInicial, setDataInicial] = useState(new Date(new Date().setDate(new Date().getDate() - 1)));
+    const [dataFinal, setDataFinal] = useState(new Date());
 
     const isMobile = useMediaQuery({
         query: '(max-width: 639px)'
@@ -36,26 +26,35 @@ export function VisualizarChamados() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch('http://172.17.4.23:5000/api/chamados');
+                const response = await fetch('http://172.17.4.23:5000/api/chamados', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
                 const responseAtendidos = await fetch('http://172.17.4.23:5000/api/chamadosatendidos', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify(filterData)
+                    body: JSON.stringify({ dataInicial, dataFinal }),
                 });
-                if (response.ok && responseAtendidos.ok) {
+                if (response.ok) {
                     const data = await response.json();
-                    const dataAtendidos = await responseAtendidos.json();
                     const sortedData = data.sort((a: any) => {
                         if (a.cha_plano === 1) return -1;
                         if (a.cha_plano === 0) return -1;
                         return 1;
                     });
                     setDados(sortedData);
-                    setChamadosAtendidos(dataAtendidos);
                 } else {
                     console.error('Erro ao buscar chamados: ', response.statusText);
+                }
+                if (responseAtendidos.ok) {
+                    const dataAtendidos = await responseAtendidos.json();
+                    setChamadosAtendidos(dataAtendidos);
+                } else {
+                    console.error('Erro ao buscar chamados atendidos: ', responseAtendidos.statusText);
                 }
             } catch (error) {
                 console.error("Erro fetching dados: ", error)
@@ -65,7 +64,7 @@ export function VisualizarChamados() {
 
         const intervalId = setInterval(fetchData, 1000);
         return () => clearInterval(intervalId);
-    }, []);
+    }, [dataInicial, dataFinal]);
 
     const openModal = (chamado: any) => {
         setShowModal(true);
@@ -140,16 +139,16 @@ export function VisualizarChamados() {
                             <input
                                 name='dataInicial'
                                 type="date"
-                                value={filterData.dataInicial.toISOString().split('T')[0]}
-                                onChange={handleChange}
+                                value={dataInicial.toISOString().split('T')[0]}
+                                onChange={(e) => setDataInicial(new Date(e.target.value + 'T00:00:00.000Z'))}
                                 className='text-center border-2 border-pec rounded p-1 shadow-2xl'
                             />
                             <p className='text-center font-bold text-pec'>A:</p>
                             <input
                                 name='dataFinal'
                                 type="date"
-                                value={filterData.dataFinal.toISOString().split('T')[0]}
-                                onChange={handleChange}
+                                value={dataFinal.toISOString().split('T')[0]}
+                                onChange={(e) => setDataFinal(new Date(e.target.value + 'T00:00:00.000Z'))}
                                 className='text-center border-2 border-pec rounded p-1 shadow-md'
                             />
                         </div>
