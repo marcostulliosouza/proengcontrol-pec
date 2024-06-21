@@ -293,6 +293,8 @@ app.get('/api/chamados', (req, res) => {
 
 // Rota para buscar chamados atendidos
 app.get('/api/chamadosatendidos', (req, res) => {
+    const { datas } = req.body;
+
     const query = `
                 SELECT 
                     chamados.*, 
@@ -308,7 +310,7 @@ app.get('/api/chamadosatendidos', (req, res) => {
                     LEFT JOIN atendimentos_chamados ON atendimentos_chamados.atc_chamado = cha_id 
                     LEFT JOIN colaboradores ON atendimentos_chamados.atc_colaborador = colaboradores.col_id
                 WHERE 
-                    chamados.cha_status = 3
+                    chamados.cha_status = 3 AND chamados.cha_data_hora_termino >= body.datas.dataInicial AND chamados.cha_data_hora_termino <= body.datas.dataFinal
                 ORDER BY 
                     chamados.cha_data_hora_termino DESC;
     `;

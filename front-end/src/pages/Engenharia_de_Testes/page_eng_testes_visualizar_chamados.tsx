@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { IoMenu } from "react-icons/io5";
 import { FaHome } from "react-icons/fa";
@@ -8,15 +8,26 @@ import { HelloUser } from '../../components/hello_user';
 import { Logo } from '../../components/logo';
 import Draggable from 'react-draggable';
 import { useMediaQuery } from 'react-responsive';
-import { format, set } from 'date-fns';
+import { format } from 'date-fns';
 
 export function VisualizarChamados() {
     const [showSidebar, setShowSidebar] = useState(false);
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 10;
     const [showModal, setShowModal] = useState(false);
     const [dados, setDados] = useState([]);
+    const [chamadosAtendidos, setChamadosAtendidos] = useState([] as any);
     const [chamado, setChamado] = useState({} as any);
+    const [filterData, setFilterData] = useState({
+        dataInicial: new Date(),
+        dataFinal: new Date()
+    });
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setFilterData({
+            ...filterData,
+            [name]: new Date(value)
+        });
+    }
 
     const isMobile = useMediaQuery({
         query: '(max-width: 639px)'
@@ -26,14 +37,23 @@ export function VisualizarChamados() {
         const fetchData = async () => {
             try {
                 const response = await fetch('http://172.17.4.23:5000/api/chamados');
-                if (response.ok) {
+                const responseAtendidos = await fetch('http://172.17.4.23:5000/api/chamadosatendidos', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(filterData)
+                });
+                if (response.ok && responseAtendidos.ok) {
                     const data = await response.json();
+                    const dataAtendidos = await responseAtendidos.json();
                     const sortedData = data.sort((a: any) => {
                         if (a.cha_plano === 1) return -1;
                         if (a.cha_plano === 0) return -1;
                         return 1;
                     });
                     setDados(sortedData);
+                    setChamadosAtendidos(dataAtendidos);
                 } else {
                     console.error('Erro ao buscar chamados: ', response.statusText);
                 }
@@ -94,7 +114,7 @@ export function VisualizarChamados() {
                                                     <p className='font-bold'>Local:</p> {chamado.cha_local}
                                                 </div>
                                                 <div className='inline-flex gap-2'>
-                                                    <p className='font-bold'>Atendimento:</p> {chamado.cha_status == 1 ? 'Pendente' : 'Em andamento'}
+                                                    <p className={'font-bold'}>Atendimento:</p> <p className={`font-normal ${chamado.cha_status == 1 ? '' : 'text-green-600 font-semibold'}`}>{chamado.cha_status == 1 ? 'Pendente' : 'Em andamento'}</p>
                                                 </div>
                                                 <div className='inline-flex gap-2'>
                                                     <p className='font-bold'>Aberto por:</p> {chamado.cha_operador}
@@ -113,7 +133,27 @@ export function VisualizarChamados() {
                     </div>
                 </div>
                 <div className='bg-white rounded shadow-md mobile:max-h-[300px] max-h-[700px]'>
-                    <h1 className='ml-6 mt-4 mobile:text-lg text-2xl text-pec font-bold'>CHAMADOS ATENDIDOS</h1>
+                    <div className='inline-flex justify-between w-full px-6 pt-4'>
+                        <h1 className='mobile:text-lg text-2xl text-pec font-bold'>CHAMADOS ATENDIDOS</h1>
+                        <div className='flex gap-2 items-center'>
+                            <p className='text-center font-bold text-pec'>De:</p>
+                            <input
+                                name='dataInicial'
+                                type="date"
+                                value={filterData.dataInicial.toISOString().split('T')[0]}
+                                onChange={handleChange}
+                                className='text-center border-2 border-pec rounded p-1 shadow-2xl'
+                            />
+                            <p className='text-center font-bold text-pec'>A:</p>
+                            <input
+                                name='dataFinal'
+                                type="date"
+                                value={filterData.dataFinal.toISOString().split('T')[0]}
+                                onChange={handleChange}
+                                className='text-center border-2 border-pec rounded p-1 shadow-md'
+                            />
+                        </div>
+                    </div>
                     <div className='m-6 overflow-y-auto'>
                         {/* <ul>
                             {chamadosAtendidos
@@ -172,7 +212,7 @@ export function VisualizarChamados() {
                                     </div>
                                     <div className='flex items-start justify-start gap-2'>
                                         <p className="font-semibold">Atendimento:</p>
-                                        <p>{chamado.cha_status == 1 ? 'PENDENTE' : 'EM ANDAMENTO'}</p>
+                                        <p className={`font-normal ${chamado.cha_status == 1 ? '' : 'text-green-600 font-semibold'}`}>{chamado.cha_status == 1 ? 'PENDENTE' : 'EM ANDAMENTO'}</p>
                                     </div>
                                     <div className='flex items-start justify-start gap-2'>
                                         <p className="font-semibold">Aberto por:</p>
