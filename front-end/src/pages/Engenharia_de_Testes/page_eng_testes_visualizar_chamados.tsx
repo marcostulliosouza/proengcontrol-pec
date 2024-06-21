@@ -33,11 +33,10 @@ export function VisualizarChamados() {
                     }
                 });
                 const responseAtendidos = await fetch('http://172.17.4.23:5000/api/chamadosatendidos', {
-                    method: 'POST',
+                    method: 'GET',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ dataInicial, dataFinal }),
                 });
                 if (response.ok) {
                     const data = await response.json();
@@ -64,7 +63,7 @@ export function VisualizarChamados() {
 
         const intervalId = setInterval(fetchData, 1000);
         return () => clearInterval(intervalId);
-    }, [dataInicial, dataFinal]);
+    }, []);
 
     const openModal = (chamado: any) => {
         setShowModal(true);
@@ -154,7 +153,7 @@ export function VisualizarChamados() {
                         </div>
                     </div>
                     <div className='m-6 overflow-y-auto'>
-                        {/* <ul>
+                        <ul>
                             {chamadosAtendidos
                                 .map((chamado: any) => (
                                     <li key={chamado.cha_id} className={`flex flex-col border-2 rounded mb-2 shadow-md p-1 mobile:text-xs
@@ -180,7 +179,7 @@ export function VisualizarChamados() {
                                         </button>
                                     </li>
                                 ))}
-                        </ul> */}
+                        </ul>
                     </div>
                 </div>
             </div>
