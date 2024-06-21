@@ -311,7 +311,7 @@ app.get('/api/chamadosatendidos', (req, res) => {
                 WHERE 
                     chamados.cha_status = 3
                 ORDER BY 
-                    chamados.cha_data_hora_termino DESC;
+                    chamados.cha_data_hora_termino DESC
                 LIMIT 100;
     `;
     pool.query(query, (err, result) => {
