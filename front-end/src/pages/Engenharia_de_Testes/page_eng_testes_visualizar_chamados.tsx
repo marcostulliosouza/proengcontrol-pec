@@ -156,7 +156,6 @@ export function VisualizarChamados() {
                     <div className='m-6 overflow-y-auto'>
                         {/* <ul>
                             {chamadosAtendidos
-                                .slice((currentPage) * itemsPerPage, currentPage * itemsPerPage)
                                 .map((chamado: any) => (
                                     <li key={chamado.cha_id} className={`flex flex-col border-2 rounded mb-2 shadow-md p-1 mobile:text-xs
                                         ${chamado.cha_plano == 1 ? 'border-no_plano' : chamado.cha_plano == 0 ? 'border-fora_plano' : 'border-engenharia'}`}>
@@ -181,11 +180,7 @@ export function VisualizarChamados() {
                                         </button>
                                     </li>
                                 ))}
-                        </ul>
-                        <div>
-                            <button onClick={() => setCurrentPage(oldPage => Math.max(oldPage - 1, 1))}>Anterior</button>
-                            <button onClick={() => setCurrentPage(oldPage => Math.min(oldPage + 1, Math.ceil(chamadosAtendidos.length / itemsPerPage)))}>Próximo</button>
-                        </div> */}
+                        </ul> */}
                     </div>
                 </div>
             </div>
