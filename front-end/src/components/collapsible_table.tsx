@@ -198,21 +198,21 @@ function Row(props: any) {
                 </main>
                 <footer className="flex items-center justify-between gap-2 mt-4">
                   <button
-                    onClick={() => setShowModal(false)}
+                    onClick={() => ''}
                     type="button"
                     className="text-pec bg-cinza-400 rounded font-bold uppercase p-3 mobile:text-xs text-sm outline-none focus:outline-none mr-1 mb-1"
                   >
                     Tranferir chamado
                   </button>
                   <button
-                    onClick={() => setShowModal(false)}
+                    onClick={() => ''}
                     type="button"
                     className="text-pec bg-cinza-400 rounded font-bold uppercase p-3 mobile:text-xs text-sm outline-none focus:outline-none mr-1 mb-1"
                   >
                     Adicionar ajudante
                   </button>
                   <button
-                    onClick={() => setShowModal(false)}
+                    onClick={() => ''}
                     type="button"
                     className="text-cinza-100 bg-pec font-bold uppercase mobile:text-xs text-sm p-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1"
                   >
