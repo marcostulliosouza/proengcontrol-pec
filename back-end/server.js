@@ -312,11 +312,10 @@ app.get('/api/chamadosatendidos', (req, res) => {
                     LEFT JOIN colaboradores ON atendimentos_chamados.atc_colaborador = colaboradores.col_id
                 WHERE 
                     chamados.cha_status = 3 AND
-                    chamados.cha_data_hora_abertura >= $1 AND
-                    chamados.cha_data_hora_abertura <= $2
+                    chamados.cha_data_hora_abertura >= ? AND
+                    chamados.cha_data_hora_abertura <= ?
                 ORDER BY 
                     chamados.cha_data_hora_termino DESC
-                LIMIT 100;
     `;
     // Passar dataInicial e dataFinal como parâmetros para a consulta
     pool.query(query, [dataInicial, dataFinal], (err, result) => {
