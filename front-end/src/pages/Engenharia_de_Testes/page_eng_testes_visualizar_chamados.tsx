@@ -67,7 +67,7 @@ export function VisualizarChamados() {
 
         const intervalId = setInterval(fetchData, 1000);
         return () => clearInterval(intervalId);
-    }, []);
+    }, [dataInicial, dataFinal]);
 
     const openModal = (chamado: any) => {
         setShowModal(true);
@@ -103,8 +103,8 @@ export function VisualizarChamados() {
             </div>
             <div className='h-5/6 bg-cinza-200 grid grid-cols-2 mobile:flex mobile:flex-col p-4 gap-4'>
                 <div className='bg-white rounded shadow-md flex flex-col mobile:max-h-[300px] max-h-[700px]'>
-                    <h1 className='ml-6 mt-4 mobile:text-lg text-2xl text-pec font-bold'>CHAMADOS EM ATENDIMENTO</h1>
-                    <div className='m-6 overflow-y-auto'>
+                    <h1 className='ml-6 mt-4 mobile:text-lg text-2xl text-pec font-bold mobile:m-2'>CHAMADOS EM ATENDIMENTO</h1>
+                    <div className='m-6 overflow-y-auto mobile:m-2'>
                         <ul>
                             {dados
                                 .map((chamado: any) => (
@@ -139,28 +139,32 @@ export function VisualizarChamados() {
                     </div>
                 </div>
                 <div className='bg-white rounded shadow-md mobile:max-h-[300px] max-h-[700px]'>
-                    <div className='inline-flex justify-between w-full px-6 pt-4'>
+                    <div className='inline-flex justify-between w-full px-6 pt-4 mobile:grid mobile:px-2 mobile:pt-2'>
                         <h1 className='mobile:text-lg text-2xl text-pec font-bold'>CHAMADOS ATENDIDOS</h1>
-                        <div className='flex gap-2 items-center mobile:hidden'>
-                            <p className='text-center font-bold text-pec'>De:</p>
-                            <input
-                                name='dataInicial'
-                                type="date"
-                                value={dataInicial.toISOString().split('T')[0]}
-                                onChange={(e) => setDataInicial(new Date(e.target.value + 'T00:00:00.000Z'))}
-                                className='text-center border-2 border-pec rounded p-1 shadow-2xl'
-                            />
-                            <p className='text-center font-bold text-pec'>Há:</p>
-                            <input
-                                name='dataFinal'
-                                type="date"
-                                value={dataFinal.toISOString().split('T')[0]}
-                                onChange={(e) => setDataFinal(new Date(e.target.value + 'T00:00:00.000Z'))}
-                                className='text-center border-2 border-pec rounded p-1 shadow-md'
-                            />
+                        <div className='flex gap-2 justify-between mobile:text-xs'>
+                            <div className='inline-flex items-center gap-2'>
+                                <p className='text-center font-bold text-pec'>De:</p>
+                                <input
+                                    name='dataInicial'
+                                    type="date"
+                                    value={dataInicial.toISOString().split('T')[0]}
+                                    onChange={(e) => setDataInicial(new Date(e.target.value + 'T00:00:00.000Z'))}
+                                    className='text-center border-2 border-pec rounded p-1 shadow-2xl'
+                                />
+                            </div>
+                            <div className='inline-flex items-center gap-2'>
+                                <p className='text-center font-bold text-pec'>Há:</p>
+                                <input
+                                    name='dataFinal'
+                                    type="date"
+                                    value={dataFinal.toISOString().split('T')[0]}
+                                    onChange={(e) => setDataFinal(new Date(e.target.value + 'T00:00:00.000Z'))}
+                                    className='text-center border-2 border-pec rounded p-1 shadow-md'
+                                />
+                            </div>
                         </div>
                     </div>
-                    <div className='m-6 overflow-y-auto h-[600px] mobile:h-[200px]'>
+                    <div className='m-6 overflow-y-auto h-[600px] mobile:h-[200px] mobile:m-2'>
                         <ul>
                             {chamadosAtendidos
                                 .map((chamado: any) => (
@@ -171,7 +175,7 @@ export function VisualizarChamados() {
                                                 <div className='inline-flex gap-2'>
                                                     <p className='font-bold'>Local:</p> {chamado.cha_local}
                                                 </div>
-                                                <div className='inline-flex gap-2'>
+                                                <div className='inline-flex gap-2 mobile:hidden'>
                                                     <p className='font-bold'>Atendimento:</p><p className='text-green-600 font-semibold'>{chamado.cha_status == 3 ? 'Concluído' : ''}</p>
                                                 </div>
                                                 <div className='inline-flex gap-2'>
