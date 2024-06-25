@@ -18,6 +18,10 @@ export function VisualizarChamados() {
     const [chamado, setChamado] = useState({} as any);
     const [dataInicial, setDataInicial] = useState(new Date(new Date().setDate(new Date().getDate() - 1)));
     const [dataFinal, setDataFinal] = useState(new Date());
+    const dataInicialString = dataInicial.toISOString();
+    const dataFinalString = dataFinal.toISOString();
+
+    console.log('dataInicial:', dataInicialString, 'dataFinal:', dataFinalString);
 
     const isMobile = useMediaQuery({
         query: '(max-width: 639px)'
@@ -32,7 +36,7 @@ export function VisualizarChamados() {
                         'Content-Type': 'application/json'
                     }
                 });
-                const responseAtendidos = await fetch('http://172.17.4.23:5000/api/chamadosatendidos', {
+                const responseAtendidos = await fetch(`http://172.17.4.23:5000/api/chamadosatendidos?dataInicial=${encodeURIComponent(dataInicialString)}&dataFinal=${encodeURIComponent(dataFinalString)}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json'
