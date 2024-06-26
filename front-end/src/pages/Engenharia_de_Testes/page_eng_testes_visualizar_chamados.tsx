@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { IoMenu } from "react-icons/io5";
 import { FaHome } from "react-icons/fa";
@@ -20,8 +20,6 @@ export function VisualizarChamados() {
     const [dataFinal, setDataFinal] = useState(new Date());
     const dataInicialString = dataInicial.toISOString();
     const dataFinalString = dataFinal.toISOString();
-
-    console.log('dataInicial:', dataInicialString, 'dataFinal:', dataFinalString);
 
     const isMobile = useMediaQuery({
         query: '(max-width: 639px)'
