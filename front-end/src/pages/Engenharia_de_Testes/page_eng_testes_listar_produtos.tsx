@@ -16,7 +16,7 @@ export function ListarProdutos() {
 
     return (
         <div className='w-screen h-screen'>
-            <header className="grid grid-rows-1 bg-cinza-200 h-1/6">
+            <div className="grid grid-rows-1 bg-cinza-200 h-1/6">
                 <div className='inline-flex p-5 gap-4'>
                     <button
                         onClick={() => setShowSidebar(true)}
@@ -35,19 +35,19 @@ export function ListarProdutos() {
                                 <p className='mobile:text-[0px]'>Engenharia de Testes</p>
                             </Link>
                             <IoIosArrowForward className='mobile:w-0' />
-                            <p>Consultar Computadores</p>
+                            <p>Listar Produtos</p>
                         </div>
                         <HelloUser />
                     </div>
                 </div>
-            </header>
-            <body className='bg-cinza-200 w-screen h-screen px-5'>
+            </div>
+            <div className='bg-cinza-200 w-screen h-screen px-5'>
                 <main>
                     <div>
                         ListarProdutos
                     </div>
                 </main>
-            </body>
+            </div>
 
             {showSidebar && (
                 <div className='backdrop-blur-xs fixed inset-y-0 w-screen z-50'>

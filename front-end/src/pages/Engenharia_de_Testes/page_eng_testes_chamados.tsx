@@ -16,7 +16,7 @@ export function Chamados() {
 
     return (
         <div className='w-screen h-screen'>
-            <header className="grid grid-rows-1 bg-cinza-200 h-1/6">
+            <div className="grid grid-rows-1 bg-cinza-200 h-1/6">
                 <div className='inline-flex p-5 gap-4'>
                     <button
                         onClick={() => setShowSidebar(true)}
@@ -40,10 +40,10 @@ export function Chamados() {
                         <HelloUser />
                     </div>
                 </div>
-            </header>
-            <body>
+            </div>
+            <div>
                 <CollapsibleTable />
-            </body>
+            </div>
 
             {showSidebar && (
                 <div className='backdrop-blur-xs fixed inset-y-0 w-screen z-50'>
