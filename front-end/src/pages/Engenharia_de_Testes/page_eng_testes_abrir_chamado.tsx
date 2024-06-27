@@ -12,18 +12,32 @@ import { IoMenu } from "react-icons/io5";
 import { IoIosArrowForward } from "react-icons/io";
 import { FaHome } from "react-icons/fa";
 
+interface Chamado {
+    cha_tipo: number;
+    cha_cliente: number;
+    cha_produto: number;
+    cha_DT: string;
+    cha_descricao: string;
+    cha_status: number;
+    cha_data_hora_abertura: Date;
+    cha_operador: string;
+    cha_plano: number;
+    cha_local: string;
+}
+
 export function AbrirChamado() {
-    const [chamado, setChamado] = useState({
+    const [chamado, setChamado] = useState<Chamado>({
         cha_tipo: 0,
-        cha_local: '',
         cha_cliente: 0,
         cha_produto: 0,
         cha_DT: '',
         cha_descricao: '',
-        cha_status: '',
-        cha_data_hora_abertura: '',
+        cha_status: 0,
+        cha_data_hora_abertura: new Date(),
         cha_operador: '',
         cha_plano: 0,
+        cha_local: ''
+    
     });
     const [showSidebar, setShowSidebar] = useState(false);
     const [locais, setLocais] = useState([]);
@@ -35,7 +49,7 @@ export function AbrirChamado() {
         const fetchData = async () => {
             try {
                 // Locais
-                const responseLocais = await fetch('http://172.17.4.23:5000/api/locais');
+                const responseLocais = await fetch('http://172.17.12.28:5000/api/locais');
                 if (responseLocais.ok) {
                     const data = await responseLocais.json();
                     setLocais(data);
@@ -78,7 +92,7 @@ export function AbrirChamado() {
 
     const abrirChamado = (event: any) => {
         event.preventDefault();
-
+        
         console.log(chamado);
     }
 
