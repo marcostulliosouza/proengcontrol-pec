@@ -32,12 +32,11 @@ export function AbrirChamado() {
         cha_produto: 0,
         cha_DT: '',
         cha_descricao: '',
-        cha_status: 0,
+        cha_status: 1,
         cha_data_hora_abertura: new Date(),
-        cha_operador: '',
-        cha_plano: 0,
+        cha_operador: localStorage.getItem('user') || '',
+        cha_plano: 2,
         cha_local: ''
-    
     });
     const [showSidebar, setShowSidebar] = useState(false);
     const [locais, setLocais] = useState([]);
@@ -58,7 +57,7 @@ export function AbrirChamado() {
                 }
 
                 // Tipos de chamados
-                const responseTipos = await fetch('http://172.17.4.23:5000/api/tiposChamados');
+                const responseTipos = await fetch('http://172.17.12.28:5000/api/tiposChamados');
                 if (responseTipos.ok) {
                     const data = await responseTipos.json();
                     setTiposChamados(data);
@@ -67,7 +66,7 @@ export function AbrirChamado() {
                 }
 
                 // Clientes
-                const responseClientes = await fetch('http://172.17.4.23:5000/api/clientes');
+                const responseClientes = await fetch('http://172.17.12.28:5000/api/clientes');
                 if (responseClientes.ok) {
                     const data = await responseClientes.json();
                     setClientes(data);
@@ -76,13 +75,14 @@ export function AbrirChamado() {
                 }
 
                 // Produtos
-                const responseProdutos = await fetch('http://172.17.4.23:5000/api/produtos');
+                const responseProdutos = await fetch('http://172.17.12.28:5000/api/produtos');
                 if (responseProdutos.ok) {
                     const data = await responseProdutos.json();
                     setProdutos(data);
                 } else {
                     console.error('Erro ao buscar produtos: ', responseProdutos.statusText);
                 }
+
             } catch (error) {
                 console.error("Erro fetching dados: ", error)
             }
@@ -90,11 +90,32 @@ export function AbrirChamado() {
         fetchData();
     }, []);
 
-    const abrirChamado = (event: any) => {
+    const abrirChamado = async (event: React.FormEvent) => {
         event.preventDefault();
-        
+
         console.log(chamado);
-    }
+
+        try {
+            const responseAbrirChamado = await fetch('http://172.17.12.28:5000/api/abrirchamado', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(chamado)
+            });
+
+            if (responseAbrirChamado.ok) {
+                console.log("Chamado aberto com sucesso!");
+            } else {
+                const errorBody = await responseAbrirChamado.text();
+                console.error("Erro ao abrir chamado: ", responseAbrirChamado.statusText, errorBody);
+            }
+
+
+        } catch (error) {
+            console.error("Erro ao abrir chamado: ", error);
+        }
+    };
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
         const validChars = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'Backspace'];
@@ -158,7 +179,7 @@ export function AbrirChamado() {
             </div>
             <div className='bg-cinza-200 w-screen h-5/6 mobile:p-5'>
                 <main className='flex justify-center'>
-                    <form className='grid grid-cols-2 content-center gap-4 w-4/12 text-lg mobile:text-sm mobile:w-screen'>
+                    <form className='grid grid-cols-2 content-center gap-4 w-4/12 text-lg mobile:text-sm mobile:w-screen' onSubmit={abrirChamado}>
                         {/* Tipo de chamado */}
                         <label className='mobile:text-sm text-lg font-bold text-pec'>Tipo de chamado: </label>
                         <div className='flex flex-row gap-2'>
@@ -177,7 +198,7 @@ export function AbrirChamado() {
                         <div className='flex flex-row gap-2'>
                             <Select
                                 options={locais.map((local: any) => ({ value: local.loc_id, label: local.loc_nome }))}
-                                onChange={(selectedOption) => setChamado({ ...chamado, cha_local: selectedOption?.value || '' })}
+                                onChange={(selectedOption) => setChamado({ ...chamado, cha_local: selectedOption?.value || 'Sem local' })}
                                 className='text-sm w-full'
                                 placeholder='Selecione o local'
                                 styles={customStyles}

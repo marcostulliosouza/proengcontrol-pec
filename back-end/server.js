@@ -22,6 +22,7 @@ const PORT = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(bodyParser.json());
+app.use(express.json());
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`Servidor backend rodando em http://0.0.0.0:${PORT}`);
 });
@@ -30,8 +31,8 @@ const pool = mysql.createPool({
     connectionLimit: 10, // Limite máximo de conexões no pool
     host: process.env.DB_HOST || '10.161.100.11',
     user: process.env.DB_USER || 'bct_write',
-    password: process.env.DB_PASSWORD || 'bcwriter22',
-    database: process.env.DB_DATABASE || 'better_call_test'
+    password: process.env.DB_PASSWORD || 'bct_write@',
+    database: process.env.DB_DATABASE || 'better_homolog'
 });
 
 // Rota de login
@@ -56,6 +57,29 @@ app.post('/login', (req, res) => {
         } else {
             return res.status(401).json({ message: 'Credenciais inválidas' });
         }
+    });
+});
+
+// Abrir chamado
+app.post('/api/abrirchamado', (req, res) => {
+    const chamado = req.body;
+    console.log('Chamado:', chamado);
+
+    if (!chamado || !chamado.cha_tipo) {
+        return res.status(400).json({ message: 'Dados do chamado incompletos ou ausentes' });
+    }
+
+    const query = `
+            INSERT INTO chamados (cha_tipo, cha_cliente, cha_produto, cha_DT, cha_descricao, cha_status, cha_data_hora_abertura, cha_operador, cha_plano, cha_local) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `;
+    pool.query(query, [chamado.cha_tipo, chamado.cha_cliente, chamado.cha_produto, chamado.cha_DT, chamado.cha_descricao, chamado.cha_status, chamado.cha_data_hora_abertura, chamado.cha_operador, chamado.cha_plano, chamado.cha_local], (err, result) => {
+        if (err) {
+            console.error('Erro:', err);
+            return res.status(500).json({ message: 'Erro interno do servidor' });
+        }
+
+        return res.status(200).json({ message: 'Chamado aberto com sucesso' });
     });
 });
 
