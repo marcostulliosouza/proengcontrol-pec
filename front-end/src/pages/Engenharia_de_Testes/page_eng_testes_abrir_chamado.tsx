@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Select from 'react-select';
 import { Button } from '@mui/material';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 // Componentes
 import { Sidebar } from '../../components/sidebar';
 import { HelloUser } from '../../components/hello_user';
@@ -35,7 +37,7 @@ export function AbrirChamado() {
         cha_status: 1,
         cha_data_hora_abertura: new Date(),
         cha_operador: localStorage.getItem('user') || '',
-        cha_plano: 2,
+        cha_plano: 1,
         cha_local: ''
     });
     const [showSidebar, setShowSidebar] = useState(false);
@@ -93,8 +95,6 @@ export function AbrirChamado() {
     const abrirChamado = async (event: React.FormEvent) => {
         event.preventDefault();
 
-        console.log(chamado);
-
         try {
             const responseAbrirChamado = await fetch('http://172.17.12.28:5000/api/abrirchamado', {
                 method: 'POST',
@@ -105,13 +105,14 @@ export function AbrirChamado() {
             });
 
             if (responseAbrirChamado.ok) {
-                console.log("Chamado aberto com sucesso!");
+                toast.success("Chamado aberto com sucesso!");
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2000);
             } else {
                 const errorBody = await responseAbrirChamado.text();
                 console.error("Erro ao abrir chamado: ", responseAbrirChamado.statusText, errorBody);
             }
-
-
         } catch (error) {
             console.error("Erro ao abrir chamado: ", error);
         }
@@ -284,6 +285,7 @@ export function AbrirChamado() {
                     </button>
                 </div>
             )}
+            <ToastContainer />
         </div>
     )
 }

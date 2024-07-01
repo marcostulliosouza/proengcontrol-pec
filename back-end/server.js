@@ -63,7 +63,6 @@ app.post('/login', (req, res) => {
 // Abrir chamado
 app.post('/api/abrirchamado', (req, res) => {
     const chamado = req.body;
-    console.log('Chamado:', chamado);
 
     if (!chamado || !chamado.cha_tipo) {
         return res.status(400).json({ message: 'Dados do chamado incompletos ou ausentes' });
@@ -80,6 +79,44 @@ app.post('/api/abrirchamado', (req, res) => {
         }
 
         return res.status(200).json({ message: 'Chamado aberto com sucesso' });
+    });
+});
+
+// Atender chamado (incompleto)
+app.post('/api/atenderchamado', (req, res) => {
+    const atendimento = req.body;
+
+    if (!atendimento || !atendimento.atc_chamado || !atendimento.atc_colaborador) {
+        return res.status(400).json({ message: 'Dados do atendimento incompletos ou ausentes' });
+    }
+
+    const query = 'UPDATE INTO atendimentos_chamados (atc_chamado, atc_colaborador) VALUES (?, ?)';
+    pool.query(query, [atendimento.atc_chamado, atendimento.atc_colaborador], (err, result) => {
+        if (err) {
+            console.error('Erro:', err);
+            return res.status(500).json({ message: 'Erro interno do servidor' });
+        }
+
+        return res.status(200).json({ message: 'Chamado atendido com sucesso' });
+    });
+});
+
+// Deletar chamado
+app.delete('/api/deletarchamado', (req, res) => {
+    const row = req.body;
+
+    if (!row || !row.cha_id) {
+        return res.status(400).json({ message: 'Dados do chamado incompletos ou ausentes' });
+    }
+
+    const query = 'DELETE FROM chamados WHERE cha_id = ?';
+    pool.query(query, [row.cha_id], (err, result) => {
+        if (err) {
+            console.error('Erro:', err);
+            return res.status(500).json({ message: 'Erro interno do servidor' });
+        }
+
+        return res.status(200).json({ message: 'Chamado deletado com sucesso' });
     });
 });
 

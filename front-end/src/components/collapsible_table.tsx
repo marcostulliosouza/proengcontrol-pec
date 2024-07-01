@@ -1,5 +1,4 @@
-import * as React from 'react';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
@@ -15,11 +14,16 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import Draggable from 'react-draggable';
 import { useMediaQuery } from 'react-responsive';
+import { Modal, Button } from 'react-bootstrap';
+import { IoMdClose } from "react-icons/io";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function Row(props: any) {
   const { row } = props;
   const [open, setOpen] = React.useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [showModalDesistir, setShowModalDesistir] = useState(false);
   const [tempoInicioAtendimento, setTempoInicioAtendimento] = React.useState<Date | null>(null);
 
   const isMobile = useMediaQuery({
@@ -71,6 +75,8 @@ function Row(props: any) {
       setTempoInicioAtendimento(new Date());
     }
   }, [row.cha_status]);
+
+  
 
   return (
     <React.Fragment>
@@ -163,12 +169,37 @@ function Row(props: any) {
                 <nav className='flex justify-between items-center'>
                   <span className="text-2xl font-semibold">Atendendo chamado</span>
                   <button
-                    onClick={() => setShowModal(false)}
+                    onClick={() => setShowModalDesistir(true)}
                     type="button"
-                    className="text-cinza-100 bg-no_plano rounded font-bold uppercase mobile:p-2 px-6 py-2 mobile:text-xs text-sm"
+                    className="text-cinza-100 bg-no_plano rounded font-bold uppercase mobile:p-0 px-6 py-2 mobile:text-xs text-sm"
                   >
-                    Cancelar chamado
+                    Desistir do chamado
                   </button>
+                  {showModalDesistir ? (
+                    <Modal show={showModalDesistir}>
+                      <Modal.Header className='flex justify-between'>
+                        <Modal.Title>Desistir do Chamado</Modal.Title>
+                        <button type="button" aria-label="Close" onClick={() => setShowModalDesistir(false)}><IoMdClose /></button>
+                      </Modal.Header>
+                      <Modal.Body>Tem certeza que deseja desistir do atendimento do chamado?</Modal.Body>
+                      <Modal.Footer>
+                        <Button
+                          className='bg-pec border-none'
+                          variant="secondary"
+                          onClick={() => setShowModalDesistir(false)}
+                        >
+                          Cancelar
+                        </Button>
+                        <Button
+                          className='bg-no_plano border-none'
+                          variant="primary"
+                          onClick={() => {setShowModalDesistir(false), setShowModal(false)}}
+                        >
+                          Desistir
+                        </Button>
+                      </Modal.Footer>
+                    </Modal>
+                  ) : null}
                 </nav>
                 <div className='flex items-start justify-start gap-2'>
                   <p className="font-semibold">Produto:</p><p>{row.produto_nome}</p>
@@ -212,7 +243,7 @@ function Row(props: any) {
                     Adicionar ajudante
                   </button>
                   <button
-                    onClick={() => ''}
+                    onClick={() => setShowModal(false)}
                     type="button"
                     className="text-cinza-100 bg-pec font-bold uppercase mobile:text-xs text-sm p-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1"
                   >
@@ -322,6 +353,7 @@ export function CollapsibleTable() {
           labelDisplayedRows={({ from, to, count }) => `${from}-${to} de ${count}`}
         />
       </Box>
+      <ToastContainer />
     </div >
   );
 }
