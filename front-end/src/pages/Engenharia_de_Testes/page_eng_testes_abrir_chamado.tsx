@@ -4,6 +4,8 @@ import Select from 'react-select';
 import { Button } from '@mui/material';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import axios from 'axios';
+
 // Componentes
 import { Sidebar } from '../../components/sidebar';
 import { HelloUser } from '../../components/hello_user';
@@ -49,6 +51,9 @@ export function AbrirChamado() {
     useEffect(() => {
         const fetchData = async () => {
             try {
+                const response = await axios.get('http://worldtimeapi.org/api/timezone/America/Sao_Paulo');
+                chamado.cha_data_hora_abertura = response.data.datetime;
+
                 // Locais
                 const responseLocais = await fetch('http://127.0.0.1:5000/api/locais');
                 if (responseLocais.ok) {
@@ -200,7 +205,7 @@ export function AbrirChamado() {
                         <div className='flex flex-row gap-2'>
                             <Select
                                 options={locais.map((local: any) => ({ value: local.loc_id, label: local.loc_nome }))}
-                                onChange={(selectedOption) => setChamado({ ...chamado, cha_local: selectedOption?.value || 'Sem local' })}
+                                onChange={(selectedOption) => setChamado({ ...chamado, cha_local: selectedOption?.label || 'Sem local' })}
                                 className='text-sm w-full'
                                 placeholder='Selecione o local'
                                 styles={customStyles}
