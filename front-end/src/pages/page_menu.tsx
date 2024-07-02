@@ -14,9 +14,9 @@ export function Menu() {
     const [showSidebar, setShowSidebar] = useState(false);
 
     return (
-        <div className='w-screen h-screen'>
-            <div className="grid grid-rows-1 bg-cinza-200 h-1/6">
-                <div className='inline-flex p-5 gap-4'>
+        <div className='w-screen h-screen flex flex-col'>
+            <div className="grid grid-rows-1 bg-cinza-200 p-4">
+                <div className='inline-flex gap-4'>
                     <button
                         onClick={() => setShowSidebar(true)}
                         className='text-pec text-4xl hover:scale-110 transition duration-200 flex justify-start items-start'>
@@ -32,7 +32,7 @@ export function Menu() {
                     </div>
                 </div>
             </div>
-            <div className='bg-cinza-200 w-screen h-5/6 px-5'>
+            <div className='bg-cinza-200 w-screen px-4 h-5/6'>
                 <div className="bg-cinza-100 rounded-md drop-shadow grid mobile:grid-cols-2 sm:grid-cols-5 grid-cols-6 justify-items-center p-10 gap-10">
                     <MenuButton name={"Engenharia de Testes"} link={"/engenharia_testes"} icon={FaGears} />
                 </div>
@@ -43,7 +43,7 @@ export function Menu() {
                     <Sidebar />
                     <button
                         onClick={() => setShowSidebar(false)}
-                        className='absolute top-12 left-12 text-cinza-200 text-4xl hover:scale-110 transition duration-200'
+                        className='absolute top-6 left-6 text-cinza-200 text-4xl hover:scale-110 transition duration-200'
                     >
                         <IoMenu />
                     </button>

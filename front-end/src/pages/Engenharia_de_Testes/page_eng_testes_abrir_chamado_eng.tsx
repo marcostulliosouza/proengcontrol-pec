@@ -32,7 +32,7 @@ export function AbrirChamadoEng() {
         const fetchData = async () => {
             try {
                 // Clientes
-                const responseClientes = await fetch('http://172.17.12.28:5000/api/clientes');
+                const responseClientes = await fetch('http://127.0.0.1:5000/api/clientes');
                 if (responseClientes.ok) {
                     const data = await responseClientes.json();
                     setClientes(data);
@@ -41,7 +41,7 @@ export function AbrirChamadoEng() {
                 }
 
                 // Produtos
-                const responseProdutos = await fetch('http://172.17.12.28:5000/api/produtos');
+                const responseProdutos = await fetch('http://127.0.0.1:5000/api/produtos');
                 if (responseProdutos.ok) {
                     const data = await responseProdutos.json();
                     setProdutos(data);
@@ -76,9 +76,9 @@ export function AbrirChamadoEng() {
     };
 
     return (
-        <div className='w-screen h-screen'>
-            <div className="grid grid-rows-1 bg-cinza-200 h-1/6">
-                <div className='inline-flex p-5 gap-4'>
+        <div className='w-screen h-screen flex flex-col'>
+            <div className="grid grid-rows-1 bg-cinza-200">
+                <div className='inline-flex p-4 gap-4'>
                     <button
                         onClick={() => setShowSidebar(true)}
                         className='text-pec text-4xl hover:scale-110 transition duration-200 flex justify-start items-start h-9'>
@@ -108,9 +108,9 @@ export function AbrirChamadoEng() {
                     </div>
                 </div>
             </div>
-            <div className='bg-cinza-200 w-screen h-5/6 mobile:p-5'>
+            <div className='bg-cinza-200 w-screen h-full mobile:p-5'>
                 <main className='flex justify-center'>
-                    <form onSubmit={abrirChamado} className='grid grid-cols-2 content-center gap-4 w-4/12 text-lg mobile:text-sm mobile:w-screen'>
+                    <form onSubmit={abrirChamado} className='grid grid-cols-4 content-center gap-4 w-8/12 text-lg mobile:text-sm mobile:w-screen mobile:flex mobile:flex-col'>
                         {/* Cliente */}
                         <label className='mobile:text-sm text-lg font-bold text-pec'>Cliente: </label>
                         <div className='flex flex-row gap-2'>
@@ -156,7 +156,7 @@ export function AbrirChamadoEng() {
                         </div>
 
                         {/* Descrição do chamado */}
-                        <div className='flex flex-row col-span-2 gap-2'>
+                        <div className='flex flex-row col-span-4 gap-2'>
                             <label className='mobile:text-sm text-lg font-bold text-pec'>Breve descrição sobre o Chamado: </label>
                             <p className='text-red-600 text-lg font-bold'>*</p>
                         </div>
@@ -166,14 +166,16 @@ export function AbrirChamadoEng() {
                             onChange={(event) => setChamado({ ...chamado, cha_descricao: event.target.value })}
                             className="col-span-2 bg-gray-100 shadow appearance-none border border-1 border-cinza-500 rounded h-32 indent-1 text-black resize-none"
                         />
-                        <p className='text-red-600 text-sm font-bold col-span-2'>Verifique as informações preenchidas antes de abrir o chamado</p>
+                        <div className='col-span-2 text-red-600 text-sm font-bold'>
+                            <p>Verifique as informações preenchidas antes de abrir o chamado</p>
+                            <p>* Campo obrigatório</p>
+                        </div>
                         <button
                             type='submit'
                             className='h-10 bg-pec text-cinza-200 font-bold rounded col-span-2'
                         >
                             ABRIR CHAMADO
                         </button>
-                        <p className='text-red-600 text-lg font-bold col-span-2'>* Campo obrigatório</p>
                     </form>
                 </main>
             </div>
@@ -183,7 +185,7 @@ export function AbrirChamadoEng() {
                     <Sidebar />
                     <button
                         onClick={() => setShowSidebar(false)}
-                        className='absolute top-12 left-12 text-cinza-200 text-4xl hover:scale-110 transition duration-200'
+                        className='absolute top-6 left-6 text-cinza-200 text-4xl hover:scale-110 transition duration-200'
                     >
                         <IoMenu />
                     </button>

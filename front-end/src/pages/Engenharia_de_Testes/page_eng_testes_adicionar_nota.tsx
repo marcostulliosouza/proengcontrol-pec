@@ -30,7 +30,7 @@ export function AdicionarNota() {
         const fetchData = async () => {
             try {
                 // Clientes
-                const responseClientes = await fetch('http://172.17.12.28:5000/api/clientes');
+                const responseClientes = await fetch('http://127.0.0.1:5000/api/clientes');
                 if (responseClientes.ok) {
                     const data = await responseClientes.json();
                     setClientes(data);
@@ -79,15 +79,13 @@ export function AdicionarNota() {
         control: (provided: any) => ({
             ...provided,
             border: '1px solid black',
-            width: '300px',
-            height: '40px',
         })
     };
 
     return (
-        <div className='w-screen h-screen'>
-            <div className="grid grid-rows-1 h-1/6 bg-cinza-200">
-                <div className='inline-flex p-5 gap-4'>
+        <div className='w-screen h-screen flex flex-col'>
+            <div className="grid grid-rows-1 bg-cinza-200 p-4">
+                <div className='inline-flex gap-4'>
                     <button
                         onClick={() => setShowSidebar(true)}
                         className='text-pec text-4xl hover:scale-110 transition duration-200 flex justify-start items-start'>
@@ -109,13 +107,13 @@ export function AdicionarNota() {
                                 <p className='mobile:text-[0px]'>Listar Notas Fiscais</p>
                             </Link>
                             <IoIosArrowForward className='mobile:w-0' />
-                            <p>Adicionar Nota Fiscal</p>
+                            <p className='mobile:text-sm mobile:absolute mobile:right-0 mobile:mr-4 mobile:w-24 mobile:text-center mobile:mb-5'>Adicionar Nota Fiscal</p>
                         </div>
                         <HelloUser />
                     </div>
                 </div>
             </div>
-            <div className='bg-cinza-200 w-screen h-5/6 p-5'>
+            <div className='bg-cinza-200 w-screen h-full p-4'>
                 <main className='flex justify-center'>
                     <form className='grid grid-cols-2 content-center gap-4 w-4/12 text-lg mobile:text-sm mobile:w-screen'>
                         <label className='text-pec font-bold'>Número da Nota Fiscal:</label>
@@ -125,7 +123,7 @@ export function AdicionarNota() {
                             placeholder='Ex: 123456'
                             value={notaFiscal.numero}
                             onChange={handleChange}
-                            className='indent-1 border border-1 border-black rounded p-2 shadow-sm h-10 w-[300px] mobile:w-full'
+                            className='indent-1 border border-1 border-black rounded p-2 shadow-sm h-10 w-full'
                         />
                         <label className='text-pec font-bold'>Número Doc. SAP:</label>
                         <input
@@ -134,13 +132,13 @@ export function AdicionarNota() {
                             placeholder='Ex: 123456'
                             value={notaFiscal.numeroDocSAP}
                             onChange={handleChange}
-                            className='indent-1 border border-1 border-black rounded p-2 shadow-sm h-10 w-[300px] mobile:w-full'
+                            className='indent-1 border border-1 border-black rounded p-2 shadow-sm h-10 w-full'
                         />
                         <label className='text-pec font-bold'>Cliente:</label>
                         <Select
                             options={clientes.map((cliente: any) => ({ value: cliente.cli_id, label: cliente.cli_nome }))}
                             onChange={(selectedOption) => setNotaFiscal({ ...notaFiscal, cliente: selectedOption?.value || 0 })}
-                            className='mobile:text-sm'
+                            className='mobile:text-sm w-full'
                             placeholder='Selecione o cliente'
                             styles={customStyles}
                         />
@@ -199,7 +197,7 @@ export function AdicionarNota() {
                     <Sidebar />
                     <button
                         onClick={() => setShowSidebar(false)}
-                        className='absolute top-5 left-5 text-cinza-200 text-4xl hover:scale-110 transition duration-200'
+                        className='absolute top-6 left-6 text-cinza-200 text-4xl hover:scale-110 transition duration-200'
                     >
                         <IoMenu />
                     </button>

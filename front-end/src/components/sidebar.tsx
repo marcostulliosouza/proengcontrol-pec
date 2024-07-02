@@ -16,19 +16,19 @@ export const Sidebar = () => {
 
     return (
         <div className="bg-pec fixed inset-y-0 left-0 w-[200px] flex flex-col gap-8 items-center">
-            <header className="grid justify-items-center items-center text-cinza-200 font-semibold mt-10 ml-20">
+            <div className="grid justify-items-center items-center text-cinza-200 font-semibold mt-4 ml-16">
                 <div className="flex items-center gap-2">
                     <img src={logo} alt="PEC" />
                     <h1 className='text-xl'>PEC</h1>
                 </div>
                 <p className='text-sm'>ProEngControl</p>
-            </header>
-            <main>
-                <body className="grid text-center gap-4 bg-pec">
+            </div>
+            <div>
+                <div className="grid text-center gap-4 bg-pec">
                     <SidebarButton name={"Menu Principal"} link={"/menu"} icon={FaHome} />
                     <SidebarButton name={"Engenharia de Testes"} link={"/engenharia_testes"} icon={FaGears} />
-                </body>
-                <footer>
+                </div>
+                <div>
                     <Link to={"/"}>
                         <button
                             onClick={() => handleLogout()}
@@ -41,8 +41,8 @@ export const Sidebar = () => {
                     {/* <p className="fixed bottom-2 left-2 text-cinza-200 font-semibold text-[10px]">
                         Desenvolvido por <br></br> Marcos Souza & Samuel Grontoski
                     </p> */}
-                </footer>
-            </main>
+                </div>
+            </div>
         </div>
     )
 }

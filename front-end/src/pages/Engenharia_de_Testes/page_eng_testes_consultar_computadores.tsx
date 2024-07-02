@@ -58,12 +58,12 @@ export function ConsultarComputadores() {
         const fetchComputadores = async () => {
             try {
                 // Computadores
-                const responseComputadores = await fetch('http://172.17.12.28:5000/api/computadores');
+                const responseComputadores = await fetch('http://127.0.0.1:5000/api/computadores');
                 if (responseComputadores.ok) {
                     const dataComputadores = await responseComputadores.json();
 
                     // Clientes
-                    const responseClientes = await fetch('http://172.17.12.28:5000/api/clientes');
+                    const responseClientes = await fetch('http://127.0.0.1:5000/api/clientes');
                     if (responseClientes.ok) {
                         const dataClientes = await responseClientes.json();
 
@@ -87,8 +87,8 @@ export function ConsultarComputadores() {
                     }
 
                     // Produtos e Vinculo de Produtos
-                    const responseProdutos = await fetch('http://172.17.12.28:5000/api/produtos');
-                    const responseVinculoProdutos = await fetch('http://172.17.12.28:5000/api/vinculoComputadores');
+                    const responseProdutos = await fetch('http://127.0.0.1:5000/api/produtos');
+                    const responseVinculoProdutos = await fetch('http://127.0.0.1:5000/api/vinculoComputadores');
                     if (responseProdutos.ok && responseVinculoProdutos.ok) {
                         const dataProdutos = await responseProdutos.json();
                         const dataVinculoProdutos = await responseVinculoProdutos.json();
@@ -100,10 +100,10 @@ export function ConsultarComputadores() {
                                 .map((vinculo: any) => {
                                     // Encontra o nome do produto correspondente
                                     const produto = dataProdutos.find((produto: any) => produto.pro_id === vinculo.vcp_produtos_pro_id);
-                                    computador.cmp_etapa_teste = computador.cmp_etapa_teste === "GRAVAÇÃO/FUNCIONAL" || computador.cmp_etapa_teste === "GRAVAÇÃO/TESTE" ? computador.cmp_etapa_teste : 
-                                                                    vinculo.vcp_etapa_teste === "" || vinculo.vcp_etapa_teste === null && computador.cmp_etapa_teste === "" ? 'NÃO INFORMADO' :
-                                                                    vinculo.vcp_etapa_teste === "" || vinculo.vcp_etapa_teste === null && computador.cmp_etapa_teste !== "" ? computador.cmp_etapa_teste :
-                                                                    vinculo.vcp_etapa_teste;
+                                    computador.cmp_etapa_teste = computador.cmp_etapa_teste === "GRAVAÇÃO/FUNCIONAL" || computador.cmp_etapa_teste === "GRAVAÇÃO/TESTE" ? computador.cmp_etapa_teste :
+                                        vinculo.vcp_etapa_teste === "" || vinculo.vcp_etapa_teste === null && computador.cmp_etapa_teste === "" ? 'NÃO INFORMADO' :
+                                            vinculo.vcp_etapa_teste === "" || vinculo.vcp_etapa_teste === null && computador.cmp_etapa_teste !== "" ? computador.cmp_etapa_teste :
+                                                vinculo.vcp_etapa_teste;
                                     return produto ? produto.pro_nome : '';
                                 });
                             // Cria uma string com os nomes dos produtos vinculados
@@ -148,9 +148,9 @@ export function ConsultarComputadores() {
     );
 
     return (
-        <div className='w-screen h-screen'>
-            <div className="grid grid-rows-1 bg-cinza-200 h-1/6">
-                <div className='inline-flex p-5 gap-4'>
+        <div className='w-screen h-screen flex flex-col'>
+            <div className="grid grid-rows-1 bg-cinza-200 p-4">
+                <div className='inline-flex gap-4'>
                     <button
                         onClick={() => setShowSidebar(true)}
                         className='text-pec text-4xl hover:scale-110 transition duration-200 flex justify-start items-start h-9'>
@@ -175,7 +175,7 @@ export function ConsultarComputadores() {
                 </div>
             </div>
             <div className='bg-cinza-200 mobile:px-3 h-5/6'>
-                <div className='mb-4 mx-10'>
+                <div className='mb-4 mx-4'>
                     <input
                         type="text"
                         value={pesqComputador}
@@ -184,51 +184,53 @@ export function ConsultarComputadores() {
                         className="p-2 border border-black rounded"
                     />
                 </div>
-                <div className='bg-cinza-200 mx-10 mobile:mx-0'>
-                    <TableContainer component={Paper}>
-                        <Table aria-label="simple table">
-                            <TableHead sx={{ backgroundColor: '#d9d9d9' }}>
-                                <TableRow>
-                                    <TableCell className='w-[120px]'>
-                                        <p className='font-bold text-base text-start text-pec'>Identificação</p>
-                                    </TableCell>
-                                    <TableCell>
-                                        <p className='font-bold text-base text-start text-pec'>Localização</p>
-                                    </TableCell>
-                                    <TableCell>
-                                        <p className='font-bold text-base text-start text-pec'>Proprietário</p>
-                                    </TableCell>
-                                    <TableCell>
-                                        <p className='font-bold text-base text-start text-pec'>Etapa de Teste</p>
-                                    </TableCell>
-                                    <TableCell>
-                                        <p className='font-bold text-base text-start text-pec'>Produtos Relacionados</p>
-                                    </TableCell>
-                                    <TableCell>
-                                        <p className='font-bold text-base text-start text-pec'>Observação</p>
-                                    </TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {filteredComputadores
-                                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                    .map((row: any) => (
-                                        <Row key={row.cmp_id} row={row} />
-                                    ))}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
-                    <TablePagination
-                        rowsPerPageOptions={[5, 10, 20]}
-                        component="div"
-                        count={filteredComputadores.length}
-                        rowsPerPage={rowsPerPage}
-                        page={page}
-                        onPageChange={handleChangePage}
-                        onRowsPerPageChange={handleChangeRowsPerPage}
-                        labelRowsPerPage="Linhas por página"
-                        labelDisplayedRows={({ from, to, count }) => `${from}-${to} de ${count}`}
-                    />
+                <div className='bg-cinza-200'>
+                    <div className='bg-cinza-200 w-screen px-4'>
+                        <TableContainer component={Paper}>
+                            <Table aria-label="simple table">
+                                <TableHead sx={{ backgroundColor: '#d9d9d9' }}>
+                                    <TableRow>
+                                        <TableCell className='w-[120px]'>
+                                            <p className='font-bold text-base text-start text-pec'>Identificação</p>
+                                        </TableCell>
+                                        <TableCell>
+                                            <p className='font-bold text-base text-start text-pec'>Localização</p>
+                                        </TableCell>
+                                        <TableCell>
+                                            <p className='font-bold text-base text-start text-pec'>Proprietário</p>
+                                        </TableCell>
+                                        <TableCell>
+                                            <p className='font-bold text-base text-start text-pec'>Etapa de Teste</p>
+                                        </TableCell>
+                                        <TableCell>
+                                            <p className='font-bold text-base text-start text-pec'>Produtos Relacionados</p>
+                                        </TableCell>
+                                        <TableCell>
+                                            <p className='font-bold text-base text-start text-pec'>Observação</p>
+                                        </TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {filteredComputadores
+                                        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                        .map((row: any) => (
+                                            <Row key={row.cmp_id} row={row} />
+                                        ))}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                        <TablePagination
+                            rowsPerPageOptions={[5, 10, 20]}
+                            component="div"
+                            count={filteredComputadores.length}
+                            rowsPerPage={rowsPerPage}
+                            page={page}
+                            onPageChange={handleChangePage}
+                            onRowsPerPageChange={handleChangeRowsPerPage}
+                            labelRowsPerPage="Linhas por página"
+                            labelDisplayedRows={({ from, to, count }) => `${from}-${to} de ${count}`}
+                        />
+                    </div>
                 </div>
             </div>
 
@@ -237,7 +239,7 @@ export function ConsultarComputadores() {
                     <Sidebar />
                     <button
                         onClick={() => setShowSidebar(false)}
-                        className='absolute top-12 left-12 text-cinza-200 text-4xl hover:scale-110 transition duration-200'
+                        className='absolute top-6 left-6 text-cinza-200 text-4xl hover:scale-110 transition duration-200'
                     >
                         <IoMenu />
                     </button>

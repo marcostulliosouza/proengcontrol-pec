@@ -21,9 +21,9 @@ export function MenuEngTestes() {
     const [showSidebar, setShowSidebar] = useState(false);
 
     return (
-        <div className='w-screen h-screen'>
-            <header className="grid grid-rows-1 bg-cinza-200 h-1/6">
-                <div className='inline-flex p-5 gap-4'>
+        <div className='w-screen h-screen flex flex-col'>
+            <div className="grid grid-rows-1 bg-cinza-200">
+                <div className='inline-flex p-4 gap-4'>
                     <button
                         onClick={() => setShowSidebar(true)}
                         className='text-pec text-4xl hover:scale-110 transition duration-200 flex justify-start items-start'>
@@ -42,8 +42,8 @@ export function MenuEngTestes() {
                         <HelloUser />
                     </div>
                 </div>
-            </header>
-            <body className='bg-cinza-200 w-screen h-5/6 px-5'>
+            </div>
+            <div className='bg-cinza-200 w-screen h-5/6 px-4'>
                 <div className="bg-cinza-100 rounded-md drop-shadow grid mobile:grid-cols-2 sm:grid-cols-5 grid-cols-6 justify-items-center p-10 gap-10">
                     <MenuButton name={"Abrir chamado"} link={"/engenharia_testes/abrir_chamado"} icon={LuUsers2} />
                     <MenuButton name={"Visualizar chamados"} link={"/engenharia_testes/visualizar_chamados"} icon={FaRegListAlt} />
@@ -65,14 +65,14 @@ export function MenuEngTestes() {
                     <MenuButton name={"Listar Notas Fiscais"} link={"/engenharia_testes/listar_notas_fiscais"} icon={CgNotes} />
                     {/* <MenuButton name={"Adicionar Nota"} link={"/engenharia_testes/adicionar_nota"} icon={AiOutlineFileAdd} /> */}
                 </div>
-            </body>
+            </div>
 
             {showSidebar && (
                 <div className='backdrop-blur-xs fixed inset-y-0 w-screen z-50'>
                     <Sidebar />
                     <button
                         onClick={() => setShowSidebar(false)}
-                        className='absolute top-12 left-12 text-cinza-200 text-4xl hover:scale-110 transition duration-200'
+                        className='absolute top-6 left-6 text-cinza-200 text-4xl hover:scale-110 transition duration-200'
                     >
                         <IoMenu />
                     </button>

@@ -28,13 +28,13 @@ export function VisualizarChamados() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch('http://172.17.12.28:5000/api/chamados', {
+                const response = await fetch('http://127.0.0.1:5000/api/chamados', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json'
                     }
                 });
-                const responseAtendidos = await fetch(`http://172.17.12.28:5000/api/chamadosatendidos?dataInicial=${encodeURIComponent(dataInicialString)}&dataFinal=${encodeURIComponent(dataFinalString)}`, {
+                const responseAtendidos = await fetch(`http://127.0.0.1:5000/api/chamadosatendidos?dataInicial=${encodeURIComponent(dataInicialString)}&dataFinal=${encodeURIComponent(dataFinalString)}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json'
@@ -73,9 +73,9 @@ export function VisualizarChamados() {
     }
 
     return (
-        <div className='w-screen h-screen'>
-            <div className="grid grid-chamados-1 bg-cinza-200 h-1/6">
-                <div className='inline-flex p-5 gap-4'>
+        <div className='w-screen h-screen flex flex-col'>
+            <div className="bg-cinza-200 p-4">
+                <div className='inline-flex gap-4'>
                     <button
                         onClick={() => setShowSidebar(true)}
                         className='text-pec text-4xl hover:scale-110 transition duration-200 flex justify-start items-start h-9'>
@@ -99,9 +99,9 @@ export function VisualizarChamados() {
                     </div>
                 </div>
             </div>
-            <div className='h-5/6 bg-cinza-200 grid grid-cols-2 mobile:flex mobile:flex-col p-4 gap-4'>
+            <div className='h-full bg-cinza-200 grid grid-cols-2 mobile:flex mobile:flex-col px-4 gap-4'>
                 <div className='bg-white rounded shadow-md flex flex-col mobile:max-h-[300px] max-h-[700px]'>
-                    <h1 className='ml-6 mt-4 mobile:text-lg text-2xl text-pec font-bold mobile:m-2'>CHAMADOS EM ATENDIMENTO</h1>
+                    <h1 className='ml-6 mt-4 mobile:text-lg text-xl text-pec font-bold mobile:m-2'>CHAMADOS EM ATENDIMENTO</h1>
                     <div className='m-6 overflow-y-auto mobile:m-2'>
                         <ul>
                             {dados
@@ -138,8 +138,8 @@ export function VisualizarChamados() {
                 </div>
                 <div className='bg-white rounded shadow-md mobile:max-h-[300px] max-h-[700px]'>
                     <div className='inline-flex justify-between w-full px-6 pt-4 mobile:grid mobile:px-2 mobile:pt-2'>
-                        <h1 className='mobile:text-lg text-2xl text-pec font-bold'>CHAMADOS ATENDIDOS</h1>
-                        <div className='flex gap-2 justify-between mobile:text-xs'>
+                        <h1 className='mobile:text-lg text-xl text-pec font-bold'>CHAMADOS ATENDIDOS</h1>
+                        <div className='flex gap-2 justify-between text-sm mobile:text-xs'>
                             <div className='inline-flex items-center gap-2'>
                                 <p className='text-center font-bold text-pec'>De:</p>
                                 <input
@@ -259,7 +259,7 @@ export function VisualizarChamados() {
                     <Sidebar />
                     <button
                         onClick={() => setShowSidebar(false)}
-                        className='absolute top-12 left-12 text-cinza-200 text-4xl hover:scale-110 transition duration-200'
+                        className='absolute top-6 left-6 text-cinza-200 text-4xl hover:scale-110 transition duration-200'
                     >
                         <IoMenu />
                     </button>

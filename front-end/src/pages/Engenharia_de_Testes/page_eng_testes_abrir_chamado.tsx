@@ -50,7 +50,7 @@ export function AbrirChamado() {
         const fetchData = async () => {
             try {
                 // Locais
-                const responseLocais = await fetch('http://172.17.12.28:5000/api/locais');
+                const responseLocais = await fetch('http://127.0.0.1:5000/api/locais');
                 if (responseLocais.ok) {
                     const data = await responseLocais.json();
                     setLocais(data);
@@ -59,7 +59,7 @@ export function AbrirChamado() {
                 }
 
                 // Tipos de chamados
-                const responseTipos = await fetch('http://172.17.12.28:5000/api/tiposChamados');
+                const responseTipos = await fetch('http://127.0.0.1:5000/api/tiposChamados');
                 if (responseTipos.ok) {
                     const data = await responseTipos.json();
                     setTiposChamados(data);
@@ -68,7 +68,7 @@ export function AbrirChamado() {
                 }
 
                 // Clientes
-                const responseClientes = await fetch('http://172.17.12.28:5000/api/clientes');
+                const responseClientes = await fetch('http://127.0.0.1:5000/api/clientes');
                 if (responseClientes.ok) {
                     const data = await responseClientes.json();
                     setClientes(data);
@@ -77,7 +77,7 @@ export function AbrirChamado() {
                 }
 
                 // Produtos
-                const responseProdutos = await fetch('http://172.17.12.28:5000/api/produtos');
+                const responseProdutos = await fetch('http://127.0.0.1:5000/api/produtos');
                 if (responseProdutos.ok) {
                     const data = await responseProdutos.json();
                     setProdutos(data);
@@ -96,7 +96,7 @@ export function AbrirChamado() {
         event.preventDefault();
 
         try {
-            const responseAbrirChamado = await fetch('http://172.17.12.28:5000/api/abrirchamado', {
+            const responseAbrirChamado = await fetch('http://127.0.0.1:5000/api/abrirchamado', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -133,9 +133,9 @@ export function AbrirChamado() {
     };
 
     return (
-        <div className='w-screen h-screen'>
-            <div className="grid grid-rows-1 bg-cinza-200 h-1/6">
-                <div className='inline-flex p-5 gap-4'>
+        <div className='w-screen h-screen flex flex-col'>
+            <div className="grid grid-rows-1 bg-cinza-200 p-4">
+                <div className='inline-flex gap-4'>
                     <button
                         onClick={() => setShowSidebar(true)}
                         className='text-pec text-4xl hover:scale-110 transition duration-200 flex justify-start items-start h-9'>
@@ -171,6 +171,7 @@ export function AbrirChamado() {
                                 boxShadow: "2px 4px 2px 0 rgba(2, 12, 62, 0.1)",
                                 height: "40px",
                                 gap: "10px",
+                                marginTop: "20px",
                             }}>
                                 Abrir Chamado de Engenharia
                             </Button>
@@ -178,9 +179,9 @@ export function AbrirChamado() {
                     </div>
                 </div>
             </div>
-            <div className='bg-cinza-200 w-screen h-5/6 mobile:p-5'>
+            <div className='bg-cinza-200 w-screen h-full mobile:p-5'>
                 <main className='flex justify-center'>
-                    <form className='grid grid-cols-2 content-center gap-4 w-4/12 text-lg mobile:text-sm mobile:w-screen' onSubmit={abrirChamado}>
+                    <form className='grid grid-cols-4 content-center gap-4 w-8/12 text-lg mobile:text-sm mobile:w-screen mobile:flex mobile:flex-col' onSubmit={abrirChamado}>
                         {/* Tipo de chamado */}
                         <label className='mobile:text-sm text-lg font-bold text-pec'>Tipo de chamado: </label>
                         <div className='flex flex-row gap-2'>
@@ -252,7 +253,7 @@ export function AbrirChamado() {
                         </div>
 
                         {/* Descrição do chamado */}
-                        <div className='flex flex-row col-span-2 gap-2'>
+                        <div className='flex flex-row col-span-4 gap-2'>
                             <label className='mobile:text-sm text-lg font-bold text-pec'>Breve descrição sobre o Chamado: </label>
                             <p className='text-red-600 text-lg font-bold'>*</p>
                         </div>
@@ -262,14 +263,17 @@ export function AbrirChamado() {
                             onChange={(event) => setChamado({ ...chamado, cha_descricao: event.target.value })}
                             className="col-span-2 bg-gray-100 shadow appearance-none border border-1 border-cinza-500 rounded h-32 indent-1 text-black resize-none"
                         />
-                        <p className='text-red-600 text-sm font-bold col-span-2'>Verifique as informações preenchidas antes de abrir o chamado</p>
+                        <div className='col-span-2 text-red-600 text-sm font-bold'>
+                            <p>Verifique as informações preenchidas antes de abrir o chamado</p>
+                            <p>* Campo obrigatório</p>
+                        </div>
                         <button
                             type='submit'
                             className='h-10 bg-pec text-cinza-200 font-bold rounded col-span-2'
                         >
                             ABRIR CHAMADO
                         </button>
-                        <p className='text-red-600 text-lg font-bold col-span-2 mobile:mb-10'>* Campo obrigatório</p>
+                        
                     </form>
                 </main>
             </div>
@@ -279,7 +283,7 @@ export function AbrirChamado() {
                     <Sidebar />
                     <button
                         onClick={() => setShowSidebar(false)}
-                        className='absolute top-12 left-12 text-cinza-200 text-4xl hover:scale-110 transition duration-200'
+                        className='absolute top-6 left-6 text-cinza-200 text-4xl hover:scale-110 transition duration-200'
                     >
                         <IoMenu />
                     </button>

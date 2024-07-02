@@ -71,7 +71,7 @@ export function GestaoVisualChamados() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const responseCall = await fetch('http://172.17.12.28:5000/api/visualizarchamados');
+                const responseCall = await fetch('http://127.0.0.1:5000/api/visualizarchamados');
                 if (responseCall.ok) {
                     const dataCall = await responseCall.json();
                     setDadosChamado(dataCall);
@@ -79,7 +79,7 @@ export function GestaoVisualChamados() {
                     console.error('Erro ao buscar dados: ', responseCall.statusText);
                 }
 
-                const responseDailyIndex = await fetch('http://172.17.12.28:5000/api/indicadoresdiarios');
+                const responseDailyIndex = await fetch('http://127.0.0.1:5000/api/indicadoresdiarios');
                 if (responseDailyIndex.ok) {
                     const dataDailyIndex = await responseDailyIndex.json();
                     setDadosIndicesDiario(dataDailyIndex);
@@ -87,7 +87,7 @@ export function GestaoVisualChamados() {
                     console.error('Erro ao buscar dados: ', responseDailyIndex.statusText);
                 }
 
-                const responseWeekIndex = await fetch('http://172.17.12.28:5000/api/indicadoressemanais');
+                const responseWeekIndex = await fetch('http://127.0.0.1:5000/api/indicadoressemanais');
                 if (responseWeekIndex.ok) {
                     const dataWeekIndex = await responseWeekIndex.json();
                     setDadosIndicesSemanal(dataWeekIndex);
@@ -95,14 +95,14 @@ export function GestaoVisualChamados() {
                     console.error('Erro ao buscar dados: ', responseWeekIndex.statusText);
                 }
 
-                const responseMonthIndex = await fetch('http://172.17.12.28:5000/api/indicadoresmensais');
+                const responseMonthIndex = await fetch('http://127.0.0.1:5000/api/indicadoresmensais');
                 if (responseMonthIndex.ok) {
                     const dataMonthIndex = await responseMonthIndex.json();
                     setDadosIndicesMensal(dataMonthIndex);
                 } else {
                     console.error('Erro ao buscar dados: ', responseMonthIndex.statusText);
                 }
-                const responseNotificacaoChamados = await fetch('http://172.17.12.28:5000/api/notificacaochamadosatrasados');
+                const responseNotificacaoChamados = await fetch('http://127.0.0.1:5000/api/notificacaochamadosatrasados');
                 if (responseNotificacaoChamados.ok) {
                     const dataNotificacaoChamados = await responseNotificacaoChamados.json();
                     const novosChamadosAtrasados: NotificacaoAtrasoChamado[] = dataNotificacaoChamados.chamadosAtrasados;
@@ -187,9 +187,9 @@ export function GestaoVisualChamados() {
     };
 
     return (
-        <div className='w-screen h-screen'>
-            <div className="grid grid-rows-1 bg-cinza-200 h-1/6">
-                <div className='inline-flex p-5 gap-4'>
+        <div className='w-screen h-screen flex flex-col'>
+            <div className="bg-cinza-200 p-4">
+                <div className='inline-flex gap-4'>
                     <button
                         onClick={() => setShowSidebar(true)}
                         className='text-pec text-4xl hover:scale-110 transition duration-200 flex justify-start items-start h-9'>
@@ -214,7 +214,7 @@ export function GestaoVisualChamados() {
                 </div>
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-1 gap-4 bg-cinza-200 p-4">
+            <div className="grid grid-cols-2 md:grid-cols-1 gap-4 bg-cinza-200 px-4 pb-4">
                 <div className='bg-white 0 p-4 rounded shadow-md'>
                     <div className='text-2xl text-pec font-bold pb-4'>
                         CHAMADOS EM ATENDIMENTO
@@ -314,7 +314,7 @@ export function GestaoVisualChamados() {
                     <Sidebar />
                     <button
                         onClick={() => setShowSidebar(false)}
-                        className='absolute top-12 left-12 text-cinza-200 text-4xl hover:scale-110 transition duration-200'
+                        className='absolute top-6 left-6 text-cinza-200 text-4xl hover:scale-110 transition duration-200'
                     >
                         <IoMenu />
                     </button>

@@ -68,12 +68,12 @@ export function ConsultarDispositivos() {
         const fetchDispositivos = async () => {
             try {
                 // Dispositivos
-                const responseDispositivos = await fetch('http://172.17.12.28:5000/api/dispositivos');
+                const responseDispositivos = await fetch('http://127.0.0.1:5000/api/dispositivos');
                 if (responseDispositivos.ok) {
                     const dataDispositivos = await responseDispositivos.json();
 
                     // Clientes
-                    const responseClientes = await fetch('http://172.17.12.28:5000/api/clientes');
+                    const responseClientes = await fetch('http://127.0.0.1:5000/api/clientes');
                     if (responseClientes.ok) {
                         const dataClientes = await responseClientes.json();
 
@@ -99,8 +99,8 @@ export function ConsultarDispositivos() {
                     }
 
                     // Notas Fiscais
-                    const responseEntradaSaidaEquipamento = await fetch('http://172.17.12.28:5000/api/entradaSaidaEquipamento');
-                    const responseNotasFiscais = await fetch('http://172.17.12.28:5000/api/notasFiscais');
+                    const responseEntradaSaidaEquipamento = await fetch('http://127.0.0.1:5000/api/entradaSaidaEquipamento');
+                    const responseNotasFiscais = await fetch('http://127.0.0.1:5000/api/notasFiscais');
                     if (responseEntradaSaidaEquipamento.ok && responseNotasFiscais.ok) {
                         const dataEntradaSaidaEquipamento = await responseEntradaSaidaEquipamento.json();
                         const dataNotasFiscais = await responseNotasFiscais.json();
@@ -200,9 +200,9 @@ export function ConsultarDispositivos() {
     );
 
     return (
-        <div className='w-screen h-screen'>
-            <div className="grid grid-rows-1 bg-cinza-200 h-1/6">
-                <div className='inline-flex p-5 gap-4'>
+        <div className='w-screen h-screen flex flex-col'>
+            <div className="grid grid-rows-1 bg-cinza-200 p-4">
+                <div className='inline-flex gap-4'>
                     <button
                         onClick={() => setShowSidebar(true)}
                         className='text-pec text-4xl hover:scale-110 transition duration-200 flex justify-start items-start h-9'>
@@ -227,7 +227,7 @@ export function ConsultarDispositivos() {
                 </div>
             </div>
             <div className='bg-cinza-200 mobile:px-0'>
-                <div className='bg-cinza-200 mx-10 mobile:mx-3 h-5/6'>
+                <div className='bg-cinza-200 mx-4 mobile:mx-3 h-full'>
                     <TableContainer component={Paper}>
                         <Table aria-label="simple table">
                             <TableHead sx={{ backgroundColor: '#d9d9d9' }}>
@@ -317,7 +317,7 @@ export function ConsultarDispositivos() {
                     <Sidebar />
                     <button
                         onClick={() => setShowSidebar(false)}
-                        className='absolute top-12 left-12 text-cinza-200 text-4xl hover:scale-110 transition duration-200'
+                        className='absolute top-6 left-6 text-cinza-200 text-4xl hover:scale-110 transition duration-200'
                     >
                         <IoMenu />
                     </button>

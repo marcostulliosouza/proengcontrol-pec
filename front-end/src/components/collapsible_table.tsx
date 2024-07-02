@@ -76,7 +76,7 @@ function Row(props: any) {
     }
   }, [row.cha_status]);
 
-  
+
 
   return (
     <React.Fragment>
@@ -193,7 +193,7 @@ function Row(props: any) {
                         <Button
                           className='bg-no_plano border-none'
                           variant="primary"
-                          onClick={() => {setShowModalDesistir(false), setShowModal(false)}}
+                          onClick={() => { setShowModalDesistir(false), setShowModal(false) }}
                         >
                           Desistir
                         </Button>
@@ -215,7 +215,7 @@ function Row(props: any) {
                 </div>
                 <p className="font-semibold">Problema:</p>
                 <p>{row.cha_descricao}</p>
-                <p className={`flex justify-center items-center rounded p-2 text-gray-100 mobile:text-5xl text-9xl ${row.cha_plano === 1 ? 'bg-no_plano' : row.cha_plano === 0 ? 'bg-fora_plano text-black' : 'bg-engenharia'
+                <p className={`flex justify-center items-center rounded p-2 text-gray-100 mobile:text-5xl text-8xl ${row.cha_plano === 1 ? 'bg-no_plano' : row.cha_plano === 0 ? 'bg-fora_plano text-black' : 'bg-engenharia'
                   }`} style={{ textShadow: '2px 2px 2px black' }}>{calculateDurationAtendimento(row.cha_data_hora_atendimento)}</p>
               </header>
               <body className='bg-cinza-300'>
@@ -224,7 +224,7 @@ function Row(props: any) {
                     <label className="block text-black text-sm font-bold mt-4 mb-1">
                       Descrição da solução:
                     </label>
-                    <textarea className="bg-gray-100 shadow appearance-none border rounded w-full h-60 py-2 px-1 text-black resize-none"></textarea>
+                    <textarea className="bg-gray-100 shadow appearance-none border rounded w-full h-20 py-2 px-1 text-black resize-none"></textarea>
                   </form>
                 </main>
                 <footer className="flex items-center justify-between gap-2 mt-4">
@@ -268,7 +268,7 @@ export function CollapsibleTable() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://172.17.12.28:5000/api/chamados');
+        const response = await fetch('http://127.0.0.1:5000/api/chamados');
         if (response.ok) {
           const data = await response.json();
           const sortedData = data.sort((a: any) => {
@@ -302,7 +302,7 @@ export function CollapsibleTable() {
   };
 
   return (
-    <div className="h-5/6 bg-cinza-200 px-2">
+    <div className="h-full bg-cinza-200 px-4">
       <TableContainer component={Paper}>
         <Table aria-label="collapsible table">
           <TableHead sx={{ backgroundColor: '#d9d9d9' }}>
@@ -340,8 +340,7 @@ export function CollapsibleTable() {
           </TableBody>
         </Table>
       </TableContainer>
-      <Box className='flex justify-end mobile:text-xs mobile:justify-center'>
-        <TablePagination
+      <TablePagination
           rowsPerPageOptions={[5, 10, 20]}
           component="div"
           count={dados.length}
@@ -352,8 +351,6 @@ export function CollapsibleTable() {
           labelRowsPerPage="Linhas por página"
           labelDisplayedRows={({ from, to, count }) => `${from}-${to} de ${count}`}
         />
-      </Box>
-      <ToastContainer />
     </div >
   );
 }

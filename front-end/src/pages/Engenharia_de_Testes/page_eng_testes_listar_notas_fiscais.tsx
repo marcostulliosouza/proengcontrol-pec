@@ -67,12 +67,12 @@ export function ListarNotasFiscais() {
         const fetchDispositivos = async () => {
             try {
                 // Notas fiscais
-                const responseNotasFiscais = await fetch('http://172.17.12.28:5000/api/notasFiscais');
+                const responseNotasFiscais = await fetch('http://127.0.0.1:5000/api/notasFiscais');
                 if (responseNotasFiscais.ok) {
                     const dataNotasFiscais = await responseNotasFiscais.json();
 
                     // Clientes
-                    const responseClientes = await fetch('http://172.17.12.28:5000/api/clientes');
+                    const responseClientes = await fetch('http://127.0.0.1:5000/api/clientes');
                     if (responseClientes.ok) {
                         const dataClientes = await responseClientes.json();
 
@@ -171,9 +171,9 @@ export function ListarNotasFiscais() {
     );
 
     return (
-        <div className='w-screen h-screen'>
-            <div className="grid grid-rows-1 bg-cinza-200 h-1/6">
-                <div className='inline-flex p-5 gap-4'>
+        <div className='w-screen h-screen flex flex-col'>
+            <div className="grid grid-rows-1 bg-cinza-200 p-4">
+                <div className='inline-flex gap-4'>
                     <button
                         onClick={() => setShowSidebar(true)}
                         className='text-pec text-4xl hover:scale-110 transition duration-200 flex justify-start items-start h-9'>
@@ -209,6 +209,7 @@ export function ListarNotasFiscais() {
                                 boxShadow: "2px 4px 2px 0 rgba(2, 12, 62, 0.1)",
                                 height: "40px",
                                 gap: "10px",
+                                marginTop: "20px",
                             }}>
                                 <MdUploadFile />
                                 Adicionar Nota Fiscal
@@ -217,8 +218,8 @@ export function ListarNotasFiscais() {
                     </div>
                 </div>
             </div>
-            <div className='bg-cinza-200 mobile:px-3 h-5/6 px-10'>
-                <div>
+            <div className='bg-cinza-200'>
+                <div className='bg-cinza-200 w-screen px-4'>
                     <TableContainer component={Paper}>
                         <Table aria-label="simple table">
                             <TableHead sx={{ backgroundColor: '#d9d9d9' }}>
@@ -321,7 +322,7 @@ export function ListarNotasFiscais() {
                     <Sidebar />
                     <button
                         onClick={() => setShowSidebar(false)}
-                        className='absolute top-12 left-12 text-cinza-200 text-4xl hover:scale-110 transition duration-200'
+                        className='absolute top-6 left-6 text-cinza-200 text-4xl hover:scale-110 transition duration-200'
                     >
                         <IoMenu />
                     </button>
