@@ -12,10 +12,10 @@ import { FaHome, FaRegListAlt } from "react-icons/fa";
 import { IoIosArrowForward } from "react-icons/io";
 import { LuUsers2 } from "react-icons/lu";
 import { BsWindowDesktop } from "react-icons/bs";
-import { GiCircuitry } from "react-icons/gi";
-import { TbDeviceDesktopCog } from "react-icons/tb";
-import { FaComputer, FaEarListen } from "react-icons/fa6";
-import { CgNotes } from "react-icons/cg";
+// import { GiCircuitry } from "react-icons/gi";
+// import { TbDeviceDesktopCog } from "react-icons/tb";
+// import { FaComputer, FaEarListen } from "react-icons/fa6";
+// import { CgNotes } from "react-icons/cg";
 
 export function MenuEngTestes() {
     const [showSidebar, setShowSidebar] = useState(false);
@@ -47,12 +47,15 @@ export function MenuEngTestes() {
                 <div className="bg-cinza-100 rounded-md drop-shadow grid mobile:grid-cols-2 sm:grid-cols-5 grid-cols-6 justify-items-center p-10 gap-10">
                     <MenuButton name={"Abrir chamado"} link={"/engenharia_testes/abrir_chamado"} icon={LuUsers2} />
                     <MenuButton name={"Visualizar chamados"} link={"/engenharia_testes/visualizar_chamados"} icon={FaRegListAlt} />
-                    <MenuButton name={"Gestão Visual de chamados"} link={"/engenharia_testes/gestao_visual_chamados"} icon={BsWindowDesktop} />
+                    {localStorage.getItem('user') === 'samuel.grontoski' || localStorage.getItem('user') === 'marcos.souza' || localStorage.getItem('user') === 'leandro.ferreira' ?
+                        <MenuButton name={"Gestão Visual de chamados"} link={"/engenharia_testes/gestao_visual_chamados"} icon={BsWindowDesktop} /> : ''
+                    }
+                    {/*
                     <MenuButton name={"Atendimento de chamado"} link={"/engenharia_testes/chamados"} icon={FaEarListen} />
                     <MenuButton name={"Gerenciamento de Insumos"} link={"/engenharia_testes/gerenciamento_insumos"} icon={GiCircuitry} />
                     <MenuButton name={"Consultar Computadores"} link={"/engenharia_testes/consultar_computadores"} icon={FaComputer} />
                     <MenuButton name={"Consultar Dispositivos"} link={"/engenharia_testes/consultar_dispositivos"} icon={TbDeviceDesktopCog} />
-                    {/* <MenuButton name={"Chamado de Engenharia"} link={"/engenharia_testes/chamados_engenharia"} icon={PiCircuitry} />
+                    <MenuButton name={"Chamado de Engenharia"} link={"/engenharia_testes/chamados_engenharia"} icon={PiCircuitry} />
                     <MenuButton name={"Relatório de chamados"} link={"/engenharia_testes/relatorio_chamados"} icon={BsGraphUpArrow} />
                     <MenuButton name={"Enviar Plano de Produção"} link={"/engenharia_testes/enviar_plano_de_producao"} icon={TbTableImport} />
                     <MenuButton name={"Pesquisa de Indicadores"} link={"/engenharia_testes/pesquisa_de_indicadores"} icon={MdOutlineContentPasteSearch} />
@@ -61,9 +64,10 @@ export function MenuEngTestes() {
                     <MenuButton name={"Receber Equipamento"} link={"/engenharia_testes/receber_equipamento"} icon={BsBoxArrowInRight} />
                     <MenuButton name={"Devolver Equipamento"} link={"/engenharia_testes/devolver_equipamento"} icon={BsBoxArrowRight} />
                     <MenuButton name={"Manutenção Preventiva"} link={"/engenharia_testes/manutencao_preventiva"} icon={GrHostMaintenance} />
-                    <MenuButton name={"Formulários de Manutenção"} link={"/engenharia_testes/formularios_de_manutencao"} icon={FaWpforms} /> */}
+                    <MenuButton name={"Formulários de Manutenção"} link={"/engenharia_testes/formularios_de_manutencao"} icon={FaWpforms} />
                     <MenuButton name={"Listar Notas Fiscais"} link={"/engenharia_testes/listar_notas_fiscais"} icon={CgNotes} />
-                    {/* <MenuButton name={"Adicionar Nota"} link={"/engenharia_testes/adicionar_nota"} icon={AiOutlineFileAdd} /> */}
+                    <MenuButton name={"Adicionar Nota"} link={"/engenharia_testes/adicionar_nota"} icon={AiOutlineFileAdd} />
+                    */}
                 </div>
             </div>
 

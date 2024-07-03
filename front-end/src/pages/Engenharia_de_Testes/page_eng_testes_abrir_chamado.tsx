@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Select from 'react-select';
-import { Button } from '@mui/material';
+// import { Button } from '@mui/material';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
@@ -29,6 +29,16 @@ interface Chamado {
     cha_local: string;
 }
 
+interface PlanoProducao {
+    pdp_id: number;
+}
+
+interface ProdutosPlano {
+    odp_id: number;
+    odp_cliente: number;
+    odp_produto: number;
+}
+
 export function AbrirChamado() {
     const [chamado, setChamado] = useState<Chamado>({
         cha_tipo: 0,
@@ -39,7 +49,7 @@ export function AbrirChamado() {
         cha_status: 1,
         cha_data_hora_abertura: new Date(),
         cha_operador: localStorage.getItem('user') || '',
-        cha_plano: 1,
+        cha_plano: 0,
         cha_local: ''
     });
     const [showSidebar, setShowSidebar] = useState(false);
@@ -47,13 +57,12 @@ export function AbrirChamado() {
     const [tiposChamados, setTiposChamados] = useState([]);
     const [clientes, setClientes] = useState([]);
     const [produtos, setProdutos] = useState([]);
+    const [planoProducao, setPlanoProducao] = useState<PlanoProducao | null>(null);
+    const [produtosPlano, setProdutosPlano] = useState<ProdutosPlano | null>(null);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://worldtimeapi.org/api/timezone/America/Sao_Paulo');
-                chamado.cha_data_hora_abertura = response.data.datetime;
-
                 // Locais
                 const responseLocais = await fetch('http://127.0.0.1:5000/api/locais');
                 if (responseLocais.ok) {
@@ -68,6 +77,7 @@ export function AbrirChamado() {
                 if (responseTipos.ok) {
                     const data = await responseTipos.json();
                     setTiposChamados(data);
+                    console.log('Tipos de chamados: ', tiposChamados);
                 } else {
                     console.error('Erro ao buscar tipos de chamados: ', responseTipos.statusText);
                 }
@@ -90,6 +100,33 @@ export function AbrirChamado() {
                     console.error('Erro ao buscar produtos: ', responseProdutos.statusText);
                 }
 
+                // Plano de produção do dia
+                const responsePlano = await fetch('http://127.0.0.1:5000/api/planododia');
+                if (responsePlano.ok) {
+                    const data = await responsePlano.json();
+                    setPlanoProducao(data);
+                    console.log('Plano de produção: ', planoProducao);
+                    
+                    if (planoProducao !== null) {
+                        // Produtos do plano de produção atual
+                        const responseProdutos = await fetch(`http://127.0.0.1:5000/api/produtosnoplano?planoProducao=${encodeURIComponent(planoProducao.pdp_id)}`, {
+                            method: 'GET',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                        });
+                        if (responseProdutos.ok) {
+                            const data = await responseProdutos.json();
+                            setProdutosPlano(data);
+                            console.log('Produtos do plano de produção: ', produtosPlano);
+                        } else {
+                            console.error('Erro ao buscar produtos do plano de produção: ', responseProdutos.statusText);
+                        }
+                    }
+                } else {
+                    console.error('Erro ao buscar plano de produção: ', responsePlano.statusText);
+                }
+
             } catch (error) {
                 console.error("Erro fetching dados: ", error)
             }
@@ -99,6 +136,23 @@ export function AbrirChamado() {
 
     const abrirChamado = async (event: React.FormEvent) => {
         event.preventDefault();
+
+        const response = await axios.get('http://worldtimeapi.org/api/timezone/America/Sao_Paulo');
+                chamado.cha_data_hora_abertura = response.data.datetime;
+
+        chamado.cha_plano = produtosPlano?.odp_produto.toString().includes(chamado.cha_produto.toString()) ? 1 : 0;
+        if (chamado.cha_tipo === 5) {
+            chamado.cha_plano = -1;
+        }
+
+        for (const [key, value] of Object.entries(chamado)) {
+            if (key !== 'cha_plano') {
+                if (value === null || value === '' || value === 0) {
+                    toast.error(`Erro: Preencha todos os campos obrigatórios.`);
+                    return;
+                }
+            }
+        }
 
         try {
             const responseAbrirChamado = await fetch('http://127.0.0.1:5000/api/abrirchamado', {
@@ -163,7 +217,7 @@ export function AbrirChamado() {
                             </div>
                             <HelloUser />
                         </div>
-                        <Link to={"/engenharia_testes/abrir_chamado/chamado_engenharia"} className='mobile:hidden'>
+                        {/* <Link to={"/engenharia_testes/abrir_chamado/chamado_engenharia"} className='mobile:hidden'>
                             <Button style={{
                                 backgroundColor: "#d9d9d9",
                                 color: "#020c3e",
@@ -180,7 +234,7 @@ export function AbrirChamado() {
                             }}>
                                 Abrir Chamado de Engenharia
                             </Button>
-                        </Link>
+                        </Link> */}
                     </div>
                 </div>
             </div>
@@ -278,7 +332,7 @@ export function AbrirChamado() {
                         >
                             ABRIR CHAMADO
                         </button>
-                        
+
                     </form>
                 </main>
             </div>

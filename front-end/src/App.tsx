@@ -6,24 +6,24 @@ import { NotFound } from './pages/page_notfound';
 // Rotas Engenharia de Testes
 import { MenuEngTestes } from './pages/Engenharia_de_Testes/page_eng_testes_menu';
 import { AbrirChamado } from './pages/Engenharia_de_Testes/page_eng_testes_abrir_chamado';
-import { AbrirChamadoEng } from './pages/Engenharia_de_Testes/page_eng_testes_abrir_chamado_eng';
+// import { AbrirChamadoEng } from './pages/Engenharia_de_Testes/page_eng_testes_abrir_chamado_eng';
 import { VisualizarChamados } from './pages/Engenharia_de_Testes/page_eng_testes_visualizar_chamados';
 import { GestaoVisualChamados } from './pages/Engenharia_de_Testes/page_eng_testes_gestao_visual_chamados';
-import { Chamados } from './pages/Engenharia_de_Testes/page_eng_testes_chamados';
-import { RelatorioChamados } from './pages/Engenharia_de_Testes/page_eng_testes_relatorio_chamadas';
-import { GerenciamentoInsumos } from './pages/Engenharia_de_Testes/page_eng_testes_gerenciamento_insumos';
-import { ConsultarComputadores } from './pages/Engenharia_de_Testes/page_eng_testes_consultar_computadores';
-import { ConsultarDispositivos } from './pages/Engenharia_de_Testes/page_eng_testes_consultar_dispositivos';
-import { EnviarPlano } from './pages/Engenharia_de_Testes/page_eng_testes_enviar_plano';
-import { PesquisaIndicadores } from './pages/Engenharia_de_Testes/page_eng_testes_pesquisa_indicadores';
-import { VincularEquipamentoProduto } from './pages/Engenharia_de_Testes/page_eng_testes_vincular_equipamento_produto';
-import { ListarProdutos } from './pages/Engenharia_de_Testes/page_eng_testes_listar_produtos';
-import { ReceberEquipamento } from './pages/Engenharia_de_Testes/page_eng_testes_receber_equipamento';
-import { DevolverEquipamento } from './pages/Engenharia_de_Testes/page_eng_testes_devolver_equipamento';
-import { ManutencaoPreventiva } from './pages/Engenharia_de_Testes/page_eng_testes_manutencao_preventiva';
-import { FormulariosManutencao } from './pages/Engenharia_de_Testes/page_eng_testes_formularios_matuncao';
-import { ListarNotasFiscais } from './pages/Engenharia_de_Testes/page_eng_testes_listar_notas_fiscais';
-import { AdicionarNota } from './pages/Engenharia_de_Testes/page_eng_testes_adicionar_nota';
+// import { Chamados } from './pages/Engenharia_de_Testes/page_eng_testes_chamados';
+// import { RelatorioChamados } from './pages/Engenharia_de_Testes/page_eng_testes_relatorio_chamadas';
+// import { GerenciamentoInsumos } from './pages/Engenharia_de_Testes/page_eng_testes_gerenciamento_insumos';
+// import { ConsultarComputadores } from './pages/Engenharia_de_Testes/page_eng_testes_consultar_computadores';
+// import { ConsultarDispositivos } from './pages/Engenharia_de_Testes/page_eng_testes_consultar_dispositivos';
+// import { EnviarPlano } from './pages/Engenharia_de_Testes/page_eng_testes_enviar_plano';
+// import { PesquisaIndicadores } from './pages/Engenharia_de_Testes/page_eng_testes_pesquisa_indicadores';
+// import { VincularEquipamentoProduto } from './pages/Engenharia_de_Testes/page_eng_testes_vincular_equipamento_produto';
+// import { ListarProdutos } from './pages/Engenharia_de_Testes/page_eng_testes_listar_produtos';
+// import { ReceberEquipamento } from './pages/Engenharia_de_Testes/page_eng_testes_receber_equipamento';
+// import { DevolverEquipamento } from './pages/Engenharia_de_Testes/page_eng_testes_devolver_equipamento';
+// import { ManutencaoPreventiva } from './pages/Engenharia_de_Testes/page_eng_testes_manutencao_preventiva';
+// import { FormulariosManutencao } from './pages/Engenharia_de_Testes/page_eng_testes_formularios_matuncao';
+// import { ListarNotasFiscais } from './pages/Engenharia_de_Testes/page_eng_testes_listar_notas_fiscais';
+// import { AdicionarNota } from './pages/Engenharia_de_Testes/page_eng_testes_adicionar_nota';
 
 const PrivateRoute = ({ children, redirectTo }: { children: React.ReactNode, redirectTo: string }) => {
   const isAuthenticated = sessionStorage.getItem("token") !== null;
@@ -43,16 +43,16 @@ export function App() {
         <Route path="/engenharia_testes" element={<PrivateRoute redirectTo="/">
           <MenuEngTestes />
         </PrivateRoute>} />
+        <Route path="/engenharia_testes/abrir_chamado" element={<PrivateRoute redirectTo="/">
+          <AbrirChamado />
+        </PrivateRoute>} />
         <Route path="/engenharia_testes/visualizar_chamados" element={<PrivateRoute redirectTo="/">
           <VisualizarChamados />
         </PrivateRoute>} />
         <Route path="/engenharia_testes/gestao_visual_chamados" element={<PrivateRoute redirectTo="/">
           <GestaoVisualChamados />
         </PrivateRoute>} />
-        <Route path="/engenharia_testes/abrir_chamado" element={<PrivateRoute redirectTo="/">
-          <AbrirChamado />
-        </PrivateRoute>} />
-        <Route path="/engenharia_testes/abrir_chamado/chamado_engenharia" element={<PrivateRoute redirectTo="/">
+        {/* <Route path="/engenharia_testes/abrir_chamado/chamado_engenharia" element={<PrivateRoute redirectTo="/">
           <AbrirChamadoEng />
         </PrivateRoute>} />
         <Route path="/engenharia_testes/chamados" element={<PrivateRoute redirectTo="/">
@@ -99,7 +99,7 @@ export function App() {
         </PrivateRoute>} />
         <Route path="/engenharia_testes/listar_notas_fiscais/adicionar_nota" element={<PrivateRoute redirectTo="/">
           <AdicionarNota />
-        </PrivateRoute>} />
+        </PrivateRoute>} /> */}
         <Route path='*' element={<NotFound />} />
       </Routes>
     </BrowserRouter>
