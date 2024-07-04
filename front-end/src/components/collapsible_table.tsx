@@ -16,7 +16,6 @@ import Draggable from 'react-draggable';
 import { useMediaQuery } from 'react-responsive';
 import { Modal, Button } from 'react-bootstrap';
 import { IoMdClose } from "react-icons/io";
-import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function Row(props: any) {
@@ -268,7 +267,7 @@ export function CollapsibleTable() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:5000/api/chamados');
+        const response = await fetch('http://172.17.13.12:5000/api/chamados');
         if (response.ok) {
           const data = await response.json();
           const sortedData = data.sort((a: any) => {
