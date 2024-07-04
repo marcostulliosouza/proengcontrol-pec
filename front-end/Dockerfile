@@ -6,9 +6,9 @@ WORKDIR $HOME
 COPY package.json ./
 RUN npm install --only=prod --silent
 
-RUN rm -rf node_modules package-lock.json && npm install
+RUN npm cache clean --force && rm -rf node_modules package-lock.json && npm install
 
-COPY . /home/app
+COPY . .
 RUN npm run build
 
 EXPOSE 80
