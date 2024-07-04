@@ -6,7 +6,7 @@ WORKDIR $HOME
 COPY package.json ./
 RUN npm install --only=prod --silent
 
-RUN npm install esbuild@0.21.5 --force
+RUN npm install esbuild@0.20.2 --force
 
 RUN npm cache clean --force && rm -rf node_modules package-lock.json && npm install
 
