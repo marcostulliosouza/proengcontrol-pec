@@ -1,11 +1,11 @@
 version: "3.8"
 services:
   production:
-    container_name: docker-react-app
+    container_name: docker-react-app-backend
     build:
       context: .
       dockerfile: Dockerfile
     ports:
-      - '5173:5173'
+      - '5000:5000'
     env_file:
       - .env

@@ -58,12 +58,12 @@ export function ConsultarComputadores() {
         const fetchComputadores = async () => {
             try {
                 // Computadores
-                const responseComputadores = await fetch('http://172.17.13.12:5000/api/computadores');
+                const responseComputadores = await fetch('http://localhost:5000/api/computadores');
                 if (responseComputadores.ok) {
                     const dataComputadores = await responseComputadores.json();
 
                     // Clientes
-                    const responseClientes = await fetch('http://172.17.13.12:5000/api/clientes');
+                    const responseClientes = await fetch('http://localhost:5000/api/clientes');
                     if (responseClientes.ok) {
                         const dataClientes = await responseClientes.json();
 
@@ -87,8 +87,8 @@ export function ConsultarComputadores() {
                     }
 
                     // Produtos e Vinculo de Produtos
-                    const responseProdutos = await fetch('http://172.17.13.12:5000/api/produtos');
-                    const responseVinculoProdutos = await fetch('http://172.17.13.12:5000/api/vinculoComputadores');
+                    const responseProdutos = await fetch('http://localhost:5000/api/produtos');
+                    const responseVinculoProdutos = await fetch('http://localhost:5000/api/vinculoComputadores');
                     if (responseProdutos.ok && responseVinculoProdutos.ok) {
                         const dataProdutos = await responseProdutos.json();
                         const dataVinculoProdutos = await responseVinculoProdutos.json();

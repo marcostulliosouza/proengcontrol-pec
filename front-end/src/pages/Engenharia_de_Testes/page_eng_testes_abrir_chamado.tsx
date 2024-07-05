@@ -64,7 +64,7 @@ export function AbrirChamado() {
         const fetchData = async () => {
             try {
                 // Locais
-                const responseLocais = await fetch('http://172.17.13.12:5000/api/locais');
+                const responseLocais = await fetch('http://localhost:5000/api/locais');
                 if (responseLocais.ok) {
                     const data = await responseLocais.json();
                     setLocais(data);
@@ -73,7 +73,7 @@ export function AbrirChamado() {
                 }
 
                 // Tipos de chamados
-                const responseTipos = await fetch('http://172.17.13.12:5000/api/tiposChamados');
+                const responseTipos = await fetch('http://localhost:5000/api/tiposChamados');
                 if (responseTipos.ok) {
                     const data = await responseTipos.json();
                     setTiposChamados(data);
@@ -83,7 +83,7 @@ export function AbrirChamado() {
                 }
 
                 // Clientes
-                const responseClientes = await fetch('http://172.17.13.12:5000/api/clientes');
+                const responseClientes = await fetch('http://localhost:5000/api/clientes');
                 if (responseClientes.ok) {
                     const data = await responseClientes.json();
                     setClientes(data);
@@ -92,7 +92,7 @@ export function AbrirChamado() {
                 }
 
                 // Produtos
-                const responseProdutos = await fetch('http://172.17.13.12:5000/api/produtos');
+                const responseProdutos = await fetch('http://localhost:5000/api/produtos');
                 if (responseProdutos.ok) {
                     const data = await responseProdutos.json();
                     setProdutos(data);
@@ -101,7 +101,7 @@ export function AbrirChamado() {
                 }
 
                 // Plano de produção do dia
-                const responsePlano = await fetch('http://172.17.13.12:5000/api/planododia');
+                const responsePlano = await fetch('http://localhost:5000/api/planododia');
                 if (responsePlano.ok) {
                     const data = await responsePlano.json();
                     setPlanoProducao(data);
@@ -109,7 +109,7 @@ export function AbrirChamado() {
                     
                     if (planoProducao !== null) {
                         // Produtos do plano de produção atual
-                        const responseProdutos = await fetch(`http://172.17.13.12:5000/api/produtosnoplano?planoProducao=${encodeURIComponent(planoProducao.pdp_id)}`, {
+                        const responseProdutos = await fetch(`http://localhost:5000/api/produtosnoplano?planoProducao=${encodeURIComponent(planoProducao.pdp_id)}`, {
                             method: 'GET',
                             headers: {
                                 'Content-Type': 'application/json'
@@ -155,7 +155,7 @@ export function AbrirChamado() {
         }
 
         try {
-            const responseAbrirChamado = await fetch('http://172.17.13.12:5000/api/abrirchamado', {
+            const responseAbrirChamado = await fetch('http://localhost:5000/api/abrirchamado', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

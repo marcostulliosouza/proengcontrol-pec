@@ -32,7 +32,7 @@ export function Login() {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch('http://172.17.13.12:5000/login', {
+      const response = await fetch('http://localhost:5000/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

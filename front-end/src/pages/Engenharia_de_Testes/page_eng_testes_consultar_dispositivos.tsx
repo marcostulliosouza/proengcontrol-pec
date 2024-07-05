@@ -68,12 +68,12 @@ export function ConsultarDispositivos() {
         const fetchDispositivos = async () => {
             try {
                 // Dispositivos
-                const responseDispositivos = await fetch('http://172.17.13.12:5000/api/dispositivos');
+                const responseDispositivos = await fetch('http://localhost:5000/api/dispositivos');
                 if (responseDispositivos.ok) {
                     const dataDispositivos = await responseDispositivos.json();
 
                     // Clientes
-                    const responseClientes = await fetch('http://172.17.13.12:5000/api/clientes');
+                    const responseClientes = await fetch('http://localhost:5000/api/clientes');
                     if (responseClientes.ok) {
                         const dataClientes = await responseClientes.json();
 
@@ -99,8 +99,8 @@ export function ConsultarDispositivos() {
                     }
 
                     // Notas Fiscais
-                    const responseEntradaSaidaEquipamento = await fetch('http://172.17.13.12:5000/api/entradaSaidaEquipamento');
-                    const responseNotasFiscais = await fetch('http://172.17.13.12:5000/api/notasFiscais');
+                    const responseEntradaSaidaEquipamento = await fetch('http://localhost:5000/api/entradaSaidaEquipamento');
+                    const responseNotasFiscais = await fetch('http://localhost:5000/api/notasFiscais');
                     if (responseEntradaSaidaEquipamento.ok && responseNotasFiscais.ok) {
                         const dataEntradaSaidaEquipamento = await responseEntradaSaidaEquipamento.json();
                         const dataNotasFiscais = await responseNotasFiscais.json();

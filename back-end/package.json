@@ -2,8 +2,9 @@
   "name": "back-end",
   "version": "1.0.0",
   "description": "Samuel Grontoski & Marcos Tullio",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
+    "build": "node server.js",
     "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
