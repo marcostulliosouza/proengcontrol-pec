@@ -23,9 +23,7 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.json());
-app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Servidor backend rodando em http://0.0.0.0:${PORT}`);
-});
+
 // Configurações do banco de dados
 const pool = mysql.createPool({
     connectionLimit: 10, // Limite máximo de conexões no pool
@@ -757,4 +755,7 @@ app.get('/api/atendimentosPorColaborador', (req, res) => {
 //     });
 // });
 
-server.listen(PORT, () => console.log('Servidor rodando na porta ', PORT));
+server.listen(PORT, () => {
+    console.log(`Servidor rodando na porta ${PORT}`);
+    console.log('Conexão bem-sucedida com o banco de dados MySQL');
+});
