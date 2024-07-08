@@ -1,17 +1,8 @@
-FROM node:20 as build
-
+FROM node:20-alpine AS build
 WORKDIR /app
-
-COPY package.json package-lock.json ./
-
-RUN npm install --only=prod --silent
-
-COPY . .
-
-RUN npm install -g serve
-
+COPY package.json ./
+COPY package-lock.json ./
+RUN npm install
+COPY . ./
 EXPOSE 5000
-
-CMD npm start
-
-CMD ["serve", "-s", "dist", "-l", "tcp://0.0.0.0:5000"]
+CMD ["node", "server.js"]

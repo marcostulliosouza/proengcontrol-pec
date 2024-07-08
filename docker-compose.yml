@@ -1,0 +1,17 @@
+version: '3.9'
+services:
+  frontend:
+    build:
+      context: ./front-end
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: ./back-end
+    ports:
+      - "5000:5000"
+    environment:
+      - NODE_ENV=production
