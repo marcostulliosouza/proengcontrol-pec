@@ -67,12 +67,12 @@ export function ListarNotasFiscais() {
         const fetchDispositivos = async () => {
             try {
                 // Notas fiscais
-                const responseNotasFiscais = await fetch('http://172.17.13.12:5000/api/notasFiscais');
+                const responseNotasFiscais = await fetch('http://localhost:5000/api/notasFiscais');
                 if (responseNotasFiscais.ok) {
                     const dataNotasFiscais = await responseNotasFiscais.json();
 
                     // Clientes
-                    const responseClientes = await fetch('http://172.17.13.12:5000/api/clientes');
+                    const responseClientes = await fetch('http://localhost:5000/api/clientes');
                     if (responseClientes.ok) {
                         const dataClientes = await responseClientes.json();
 
