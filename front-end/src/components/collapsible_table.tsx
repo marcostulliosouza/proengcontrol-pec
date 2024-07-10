@@ -81,14 +81,18 @@ function Row(props: any) {
     <React.Fragment>
       <TableRow>
         <TableCell className='border-2 border-gray-300 w-10'>
-          <IconButton
-            aria-label="expand row"
-            size="small"
-            onClick={() => setOpen(!open)}
-            className='mobile:w-4'
-          >
-            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-          </IconButton>
+          <div className={`rounded-3xl 
+              ${row.cha_plano === 1 ? 'bg-no_plano text-gray-100' :
+              row.cha_plano === 0 ? 'bg-fora_plano text-black' : 'bg-engenharia text-gray-100'}`}>
+            <IconButton
+              aria-label="expand row"
+              size="small"
+              onClick={() => setOpen(!open)}
+              className='mobile:w-4 text-black'
+            >
+              {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+            </IconButton>
+          </div>
         </TableCell>
         <TableCell align="center" className="border-2 border-gray-300 w-[100px]">
           <p className={`mobile:text-xs flex justify-center items-center rounded p-2 font-semibold mobile:w-17 w-[80px] 
@@ -340,16 +344,16 @@ export function CollapsibleTable() {
         </Table>
       </TableContainer>
       <TablePagination
-          rowsPerPageOptions={[5, 10, 20]}
-          component="div"
-          count={dados.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-          labelRowsPerPage="Linhas por página"
-          labelDisplayedRows={({ from, to, count }) => `${from}-${to} de ${count}`}
-        />
+        rowsPerPageOptions={[5, 10, 20]}
+        component="div"
+        count={dados.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+        labelRowsPerPage="Linhas por página"
+        labelDisplayedRows={({ from, to, count }) => `${from}-${to} de ${count}`}
+      />
     </div >
   );
 }
