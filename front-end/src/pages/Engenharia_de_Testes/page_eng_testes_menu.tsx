@@ -15,7 +15,7 @@ import { BsWindowDesktop } from "react-icons/bs";
 // import { GiCircuitry } from "react-icons/gi";
 import { TbDeviceDesktopCog } from "react-icons/tb";
 import { FaComputer, FaEarListen } from "react-icons/fa6";
-// import { CgNotes } from "react-icons/cg";
+import { CgNotes } from "react-icons/cg";
 
 export function MenuEngTestes() {
     const [showSidebar, setShowSidebar] = useState(false);
@@ -65,9 +65,8 @@ export function MenuEngTestes() {
                     <MenuButton name={"Devolver Equipamento"} link={"/engenharia_testes/devolver_equipamento"} icon={BsBoxArrowRight} />
                     <MenuButton name={"Manutenção Preventiva"} link={"/engenharia_testes/manutencao_preventiva"} icon={GrHostMaintenance} />
                     <MenuButton name={"Formulários de Manutenção"} link={"/engenharia_testes/formularios_de_manutencao"} icon={FaWpforms} />
-                    <MenuButton name={"Listar Notas Fiscais"} link={"/engenharia_testes/listar_notas_fiscais"} icon={CgNotes} />
-                    <MenuButton name={"Adicionar Nota"} link={"/engenharia_testes/adicionar_nota"} icon={AiOutlineFileAdd} />
                     */}
+                    <MenuButton name={"Listar Notas Fiscais"} link={"/engenharia_testes/listar_notas_fiscais"} icon={CgNotes} />
                 </div>
             </div>
 

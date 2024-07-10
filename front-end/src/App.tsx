@@ -22,8 +22,8 @@ import { ConsultarDispositivos } from './pages/Engenharia_de_Testes/page_eng_tes
 // import { DevolverEquipamento } from './pages/Engenharia_de_Testes/page_eng_testes_devolver_equipamento';
 // import { ManutencaoPreventiva } from './pages/Engenharia_de_Testes/page_eng_testes_manutencao_preventiva';
 // import { FormulariosManutencao } from './pages/Engenharia_de_Testes/page_eng_testes_formularios_matuncao';
-// import { ListarNotasFiscais } from './pages/Engenharia_de_Testes/page_eng_testes_listar_notas_fiscais';
-// import { AdicionarNota } from './pages/Engenharia_de_Testes/page_eng_testes_adicionar_nota';
+import { ListarNotasFiscais } from './pages/Engenharia_de_Testes/page_eng_testes_listar_notas_fiscais';
+import { AdicionarNota } from './pages/Engenharia_de_Testes/page_eng_testes_adicionar_nota';
 
 const PrivateRoute = ({ children, redirectTo }: { children: React.ReactNode, redirectTo: string }) => {
   const isAuthenticated = sessionStorage.getItem("token") !== null;
@@ -94,12 +94,13 @@ export function App() {
         <Route path="/engenharia_testes/formularios_de_manutencao" element={<PrivateRoute redirectTo="/">
           <FormulariosManutencao />
         </PrivateRoute>} />
+        */}
         <Route path="/engenharia_testes/listar_notas_fiscais" element={<PrivateRoute redirectTo="/">
           <ListarNotasFiscais />
         </PrivateRoute>} />
         <Route path="/engenharia_testes/listar_notas_fiscais/adicionar_nota" element={<PrivateRoute redirectTo="/">
           <AdicionarNota />
-        </PrivateRoute>} /> */}
+        </PrivateRoute>} /> 
         <Route path='*' element={<NotFound />} />
       </Routes>
     </BrowserRouter>
