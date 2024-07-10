@@ -13,8 +13,8 @@ import { IoIosArrowForward } from "react-icons/io";
 import { LuUsers2 } from "react-icons/lu";
 import { BsWindowDesktop } from "react-icons/bs";
 // import { GiCircuitry } from "react-icons/gi";
-// import { TbDeviceDesktopCog } from "react-icons/tb";
-// import { FaComputer, FaEarListen } from "react-icons/fa6";
+import { TbDeviceDesktopCog } from "react-icons/tb";
+import { FaComputer, FaEarListen } from "react-icons/fa6";
 // import { CgNotes } from "react-icons/cg";
 
 export function MenuEngTestes() {
@@ -50,11 +50,11 @@ export function MenuEngTestes() {
                     {localStorage.getItem('user') === 'samuel.grontoski' || localStorage.getItem('user') === 'marcos.souza' || localStorage.getItem('user') === 'leandro.ferreira' ?
                         <MenuButton name={"Gestão Visual de chamados"} link={"/engenharia_testes/gestao_visual_chamados"} icon={BsWindowDesktop} /> : ''
                     }
-                    {/*
                     <MenuButton name={"Atendimento de chamado"} link={"/engenharia_testes/chamados"} icon={FaEarListen} />
-                    <MenuButton name={"Gerenciamento de Insumos"} link={"/engenharia_testes/gerenciamento_insumos"} icon={GiCircuitry} />
                     <MenuButton name={"Consultar Computadores"} link={"/engenharia_testes/consultar_computadores"} icon={FaComputer} />
                     <MenuButton name={"Consultar Dispositivos"} link={"/engenharia_testes/consultar_dispositivos"} icon={TbDeviceDesktopCog} />
+                    {/*
+                    <MenuButton name={"Gerenciamento de Insumos"} link={"/engenharia_testes/gerenciamento_insumos"} icon={GiCircuitry} />
                     <MenuButton name={"Chamado de Engenharia"} link={"/engenharia_testes/chamados_engenharia"} icon={PiCircuitry} />
                     <MenuButton name={"Relatório de chamados"} link={"/engenharia_testes/relatorio_chamados"} icon={BsGraphUpArrow} />
                     <MenuButton name={"Enviar Plano de Produção"} link={"/engenharia_testes/enviar_plano_de_producao"} icon={TbTableImport} />

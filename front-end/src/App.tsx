@@ -9,11 +9,11 @@ import { AbrirChamado } from './pages/Engenharia_de_Testes/page_eng_testes_abrir
 // import { AbrirChamadoEng } from './pages/Engenharia_de_Testes/page_eng_testes_abrir_chamado_eng';
 import { VisualizarChamados } from './pages/Engenharia_de_Testes/page_eng_testes_visualizar_chamados';
 import { GestaoVisualChamados } from './pages/Engenharia_de_Testes/page_eng_testes_gestao_visual_chamados';
-// import { Chamados } from './pages/Engenharia_de_Testes/page_eng_testes_chamados';
+import { Chamados } from './pages/Engenharia_de_Testes/page_eng_testes_chamados';
 // import { RelatorioChamados } from './pages/Engenharia_de_Testes/page_eng_testes_relatorio_chamadas';
 // import { GerenciamentoInsumos } from './pages/Engenharia_de_Testes/page_eng_testes_gerenciamento_insumos';
-// import { ConsultarComputadores } from './pages/Engenharia_de_Testes/page_eng_testes_consultar_computadores';
-// import { ConsultarDispositivos } from './pages/Engenharia_de_Testes/page_eng_testes_consultar_dispositivos';
+import { ConsultarComputadores } from './pages/Engenharia_de_Testes/page_eng_testes_consultar_computadores';
+import { ConsultarDispositivos } from './pages/Engenharia_de_Testes/page_eng_testes_consultar_dispositivos';
 // import { EnviarPlano } from './pages/Engenharia_de_Testes/page_eng_testes_enviar_plano';
 // import { PesquisaIndicadores } from './pages/Engenharia_de_Testes/page_eng_testes_pesquisa_indicadores';
 // import { VincularEquipamentoProduto } from './pages/Engenharia_de_Testes/page_eng_testes_vincular_equipamento_produto';
@@ -52,23 +52,23 @@ export function App() {
         <Route path="/engenharia_testes/gestao_visual_chamados" element={<PrivateRoute redirectTo="/">
           <GestaoVisualChamados />
         </PrivateRoute>} />
-        {/* <Route path="/engenharia_testes/abrir_chamado/chamado_engenharia" element={<PrivateRoute redirectTo="/">
-          <AbrirChamadoEng />
-        </PrivateRoute>} />
         <Route path="/engenharia_testes/chamados" element={<PrivateRoute redirectTo="/">
           <Chamados />
-        </PrivateRoute>} />
-        <Route path="/engenharia_testes/relatorio_chamados" element={<PrivateRoute redirectTo="/">
-          <RelatorioChamados />
-        </PrivateRoute>} />
-        <Route path="/engenharia_testes/gerenciamento_insumos" element={<PrivateRoute redirectTo="/">
-          <GerenciamentoInsumos />
         </PrivateRoute>} />
         <Route path="/engenharia_testes/consultar_computadores" element={<PrivateRoute redirectTo="/">
           <ConsultarComputadores />
         </PrivateRoute>} />
         <Route path="/engenharia_testes/consultar_dispositivos" element={<PrivateRoute redirectTo="/">
           <ConsultarDispositivos />
+        </PrivateRoute>} />
+        {/* <Route path="/engenharia_testes/abrir_chamado/chamado_engenharia" element={<PrivateRoute redirectTo="/">
+          <AbrirChamadoEng />
+        </PrivateRoute>} />
+        <Route path="/engenharia_testes/relatorio_chamados" element={<PrivateRoute redirectTo="/">
+          <RelatorioChamados />
+        </PrivateRoute>} />
+        <Route path="/engenharia_testes/gerenciamento_insumos" element={<PrivateRoute redirectTo="/">
+          <GerenciamentoInsumos />
         </PrivateRoute>} />
         <Route path="/engenharia_testes/enviar_plano_de_producao" element={<PrivateRoute redirectTo="/">
           <EnviarPlano />
