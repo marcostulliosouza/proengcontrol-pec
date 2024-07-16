@@ -158,7 +158,7 @@ export function GestaoVisualChamados() {
         };
 
         fetchData();
-        const intervalId = setInterval(fetchData, 10000); // Update interval to 10 seconds for better performance
+        const intervalId = setInterval(fetchData, 100); // Update interval to 10ms for better performance
         return () => clearInterval(intervalId);
     }, []);
 
