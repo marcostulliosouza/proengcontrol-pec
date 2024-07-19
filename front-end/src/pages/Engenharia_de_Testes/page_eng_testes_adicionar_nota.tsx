@@ -30,7 +30,7 @@ export function AdicionarNota() {
         const fetchData = async () => {
             try {
                 // Clientes
-                const responseClientes = await fetch('http://localhost:5000/api/clientes');
+                const responseClientes = await fetch('http://10.161.100.176:5000/api/clientes');
                 if (responseClientes.ok) {
                     const data = await responseClientes.json();
                     setClientes(data);
