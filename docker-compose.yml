@@ -1,17 +1,46 @@
+# version: '3.9'
+# services:
+#   frontend:
+#     build:
+#       context: ./front-end
+#     ports:
+#       - "8080:80"
+#     depends_on:
+#       - backend
+
+#   backend:
+#     build:
+#       context: ./back-end
+#     ports:
+#       - "5000:5000"
+#     environment:
+#       - NODE_ENV=production
 version: '3.9'
+
 services:
-  frontend:
-    build:
-      context: ./front-end
+  backend:
+    build: ./backend
+    container_name: backend
+    environment:
+      - DB_HOST=10.161.100.11
+      - DB_USER=bct_write
+      - DB_PASSWORD=bct_write@
+      - DB_DATABASE=better_call_test
     ports:
-      - "8080:80"
+      - "5000:5000"
+    networks:
+      - app-network
+
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    ports:
+      - "80:3000"
+    networks:
+      - app-network
     depends_on:
       - backend
 
-  backend:
-    build:
-      context: ./back-end
-    ports:
-      - "5000:5000"
-    environment:
-      - NODE_ENV=production
+networks:
+  app-network:
+    driver: bridge

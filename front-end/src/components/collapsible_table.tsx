@@ -267,7 +267,7 @@ export function CollapsibleTable() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://172.21.96.1:5173/api/chamados');
+        const response = await fetch('http://backend:5000/api/chamados');
         if (response.ok) {
           const data = await response.json();
           const sortedData = data.sort((a: any) => {

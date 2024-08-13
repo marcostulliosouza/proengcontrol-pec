@@ -32,7 +32,7 @@ export function AbrirChamadoEng() {
         const fetchData = async () => {
             try {
                 // Clientes
-                const responseClientes = await fetch('http://172.21.96.1:5173/api/clientes');
+                const responseClientes = await fetch('http://backend:5000/api/clientes');
                 if (responseClientes.ok) {
                     const data = await responseClientes.json();
                     setClientes(data);
@@ -41,7 +41,7 @@ export function AbrirChamadoEng() {
                 }
 
                 // Produtos
-                const responseProdutos = await fetch('http://172.21.96.1:5173/api/produtos');
+                const responseProdutos = await fetch('http://backend:5000/api/produtos');
                 if (responseProdutos.ok) {
                     const data = await responseProdutos.json();
                     setProdutos(data);
