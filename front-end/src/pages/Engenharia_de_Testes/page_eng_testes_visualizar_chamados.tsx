@@ -28,13 +28,13 @@ export function VisualizarChamados() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch('http://172.17.12.33:5000/api/chamados', {
+                const response = await fetch('http://172.21.96.1:5173/api/chamados', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json'
                     }
                 });
-                const responseAtendidos = await fetch(`http://172.17.12.33:5000/api/chamadosatendidos?dataInicial=${encodeURIComponent(dataInicialString)}&dataFinal=${encodeURIComponent(dataFinalString)}`, {
+                const responseAtendidos = await fetch(`http://172.21.96.1:5173/api/chamadosatendidos?dataInicial=${encodeURIComponent(dataInicialString)}&dataFinal=${encodeURIComponent(dataFinalString)}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json'

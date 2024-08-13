@@ -267,7 +267,7 @@ export function CollapsibleTable() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://172.17.12.33:5000/api/chamados');
+        const response = await fetch('http://172.21.96.1:5173/api/chamados');
         if (response.ok) {
           const data = await response.json();
           const sortedData = data.sort((a: any) => {
@@ -340,16 +340,16 @@ export function CollapsibleTable() {
         </Table>
       </TableContainer>
       <TablePagination
-          rowsPerPageOptions={[5, 10, 20]}
-          component="div"
-          count={dados.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-          labelRowsPerPage="Linhas por página"
-          labelDisplayedRows={({ from, to, count }) => `${from}-${to} de ${count}`}
-        />
+        rowsPerPageOptions={[5, 10, 20]}
+        component="div"
+        count={dados.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+        labelRowsPerPage="Linhas por página"
+        labelDisplayedRows={({ from, to, count }) => `${from}-${to} de ${count}`}
+      />
     </div >
   );
 }

@@ -32,7 +32,7 @@ export function Login() {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch('http://172.17.12.33:5000/login', {
+      const response = await fetch('http://172.21.96.1:5173/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -131,11 +131,11 @@ export function Login() {
                 ) : (
                   'Entrar'
                 )}
-            </button>
-          </footer>
-        </form>
-      </main>
-    </div>
+              </button>
+            </footer>
+          </form>
+        </main>
+      </div>
     </div >
   );
 }
