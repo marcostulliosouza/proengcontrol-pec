@@ -1,0 +1,54 @@
+CREATE TABLE insumos (
+    ins_id INT PRIMARY KEY AUTO_INCREMENT,
+    ins_cod_SAP VARCHAR(50) NOT NULL,
+    ins_posicao_id INT,
+    ins_descricao_SAP VARCHAR(255) NOT NULL,
+    ins_descricao_especifica TEXT,
+    ins_familia VARCHAR(50),
+    ins_exclusivo BOOLEAN DEFAULT FALSE,
+    ins_cliente_id INT,
+    ins_status BOOLEAN DEFAULT TRUE,
+    ins_qtd_minima INT,
+    ins_periodo_inventario VARCHAR(50),
+    ins_nessidade_compra VARCHAR(50), -- Suficiente, Comprar, Inativo
+    FOREIGN KEY (ins_familia) REFERENCES familia_insumos(fam_ins_nome),
+    FOREIGN KEY (ins_cliente_id) REFERENCES clientes (cli_id),
+    FOREIGN KEY (ins_posicao_id) REFERENCES posicoes_estoque(pos_id)
+);
+
+CREATE TABLE posicoes_estoque (
+    pos_id INT PRIMARY KEY AUTO_INCREMENT,
+    pos_nome VARCHAR(50) NOT NULL,
+    pos_descricao TEXT
+);
+
+CREATE TABLE familia_insumos (
+    fam_ins_id INT PRIMARY KEY AUTO_INCREMENT,
+    fam_ins_nome VARCHAR(50)
+);
+
+CREATE TABLE controle_inventario (
+    inv_id INT PRIMARY KEY AUTO_INCREMENT,
+    inv_insumo_id INT,
+    inv_periodo VARCHAR(50), -- Defina o tipo de dado apropriado
+    inv_data DATE,
+    inv_observacao TEXT,
+    inv_status VARCHAR(50), -- OK, N/A, Atrasado
+    FOREIGN KEY (inv_insumo_id) REFERENCES insumos(ins_id)
+);
+
+CREATE TABLE movimentacao_estoque (
+    mov_id INT PRIMARY KEY AUTO_INCREMENT,
+    mov_insumo_id INT,
+    mov_colaborador_id INT,
+    mov_tipo VARCHAR(50), -- entrada, saída, ajuste, etc.
+    mov_valor_unit DECIMAL(10,2),
+    mov_qtd INT,
+    mov_data DATE,
+    mov_utilizacao TEXT,
+    mov_pedido_RC VARCHAR(50),
+    mov_posicao_estoque_id INT,
+    FOREIGN KEY (mov_insumo_id) REFERENCES insumos(ins_id),
+    FOREIGN KEY (mov_colaborador_id) REFERENCES colaboradores(col_id),
+    FOREIGN KEY (mov_posicao_estoque_id) REFERENCES insumos(ins_posicao_id)
+);
