@@ -755,6 +755,112 @@ app.get('/api/atendimentosPorColaborador', (req, res) => {
 //     });
 // });
 
+// Cadastro de Insumo
+app.post('/api/insumos', (req, res) => {
+    const insumo = req.body;
+
+    if (!insumo.codigo || !insumo.descricao || !insumo.familia || !insumo.preco || !insumo.quantidade) {
+        return res.status(400).json({ message: 'Dados do insumo incompletos ou ausentes' });
+    }
+
+    const query = `
+        INSERT INTO insumos (codigo, descricao, familia, cliente, exclusivo, posicao, preco, quantidade, periodo_inventario)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `;
+    pool.query(query, [insumo.codigo, insumo.descricao, insumo.familia, insumo.cliente, insumo.exclusivo, insumo.posicao, insumo.preco, insumo.quantidade, insumo.periodo_inventario], (err, result) => {
+        if (err) {
+            console.error('Erro:', err);
+            return res.status(500).json({ message: 'Erro interno do servidor' });
+        }
+
+        return res.status(200).json({ message: 'Insumo cadastrado com sucesso' });
+    });
+});
+
+// Listagem de Insumos
+app.get('/api/insumos', (req, res) => {
+    const query = 'SELECT * FROM insumos';
+    pool.query(query, (err, results) => {
+        if (err) {
+            console.error('Erro:', err);
+            return res.status(500).json({ message: 'Erro interno do servidor' });
+        }
+
+        return res.status(200).json(results);
+    });
+});
+
+// Cadastro de Posição do Estoque
+app.post('/api/posicoes', (req, res) => {
+    const posicao = req.body;
+
+    if (!posicao.nome || !posicao.descricao) {
+        return res.status(400).json({ message: 'Dados da posição incompletos ou ausentes' });
+    }
+
+    const query = `
+        INSERT INTO posicoes_estoque (nome, descricao)
+        VALUES (?, ?)
+    `;
+    pool.query(query, [posicao.nome, posicao.descricao], (err, result) => {
+        if (err) {
+            console.error('Erro:', err);
+            return res.status(500).json({ message: 'Erro interno do servidor' });
+        }
+
+        return res.status(200).json({ message: 'Posição cadastrada com sucesso' });
+    });
+});
+
+// Listagem de Posições do Estoque
+app.get('/api/posicoes', (req, res) => {
+    const query = 'SELECT * FROM posicoes_estoque';
+    pool.query(query, (err, results) => {
+        if (err) {
+            console.error('Erro:', err);
+            return res.status(500).json({ message: 'Erro interno do servidor' });
+        }
+
+        return res.status(200).json(results);
+    });
+});
+
+// Cadastro de Família de Insumos
+app.post('/api/familias', (req, res) => {
+    const familia = req.body;
+
+    if (!familia.nome) {
+        return res.status(400).json({ message: 'Dados da família incompletos ou ausentes' });
+    }
+
+    const query = `
+        INSERT INTO familia_insumos (nome)
+        VALUES (?)
+    `;
+    pool.query(query, [familia.nome], (err, result) => {
+        if (err) {
+            console.error('Erro:', err);
+            return res.status(500).json({ message: 'Erro interno do servidor' });
+        }
+
+        return res.status(200).json({ message: 'Família cadastrada com sucesso' });
+    });
+});
+
+// Listagem de Famílias de Insumos
+app.get('/api/familias', (req, res) => {
+    const query = 'SELECT * FROM familia_insumos';
+    pool.query(query, (err, results) => {
+        if (err) {
+            console.error('Erro:', err);
+            return res.status(500).json({ message: 'Erro interno do servidor' });
+        }
+
+        return res.status(200).json(results);
+    });
+});
+
+
 server.listen(PORT, () => {
     console.log(`Servidor rodando na porta ${PORT}`);
     console.log('Conexão bem-sucedida com o banco de dados MySQL');
