@@ -756,18 +756,30 @@ app.get('/api/atendimentosPorColaborador', (req, res) => {
 // });
 
 // Cadastro de Insumo
-app.post('/api/insumos', (req, res) => {
+// Cadastro de Insumo
+app.post('/api/cadastroinsumos', (req, res) => {
     const insumo = req.body;
 
-    if (!insumo.codigo || !insumo.descricao || !insumo.familia || !insumo.preco || !insumo.quantidade) {
+    if (!insumo.ins_cod_SAP || !insumo.ins_descricao_SAP || !insumo.ins_familia || !insumo.ins_qtd_minima || !insumo.ins_periodo_inventario) {
         return res.status(400).json({ message: 'Dados do insumo incompletos ou ausentes' });
     }
 
     const query = `
-        INSERT INTO insumos (codigo, descricao, familia, cliente, exclusivo, posicao, preco, quantidade, periodo_inventario)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO insumos (ins_cod_SAP, ins_descricao_SAP, ins_descricao_especifica, ins_familia, ins_cliente_id, ins_exclusivo, ins_posicao_id, ins_status, ins_qtd_minima, ins_periodo_inventario)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
-    pool.query(query, [insumo.codigo, insumo.descricao, insumo.familia, insumo.cliente, insumo.exclusivo, insumo.posicao, insumo.preco, insumo.quantidade, insumo.periodo_inventario], (err, result) => {
+    pool.query(query, [
+        insumo.ins_cod_SAP,
+        insumo.ins_descricao_SAP,
+        insumo.ins_descricao_especifica,
+        insumo.ins_familia,
+        insumo.ins_cliente_id,
+        insumo.ins_exclusivo,
+        insumo.ins_posicao_id,
+        insumo.ins_status,
+        insumo.ins_qtd_minima,
+        insumo.ins_periodo_inventario
+    ], (err, result) => {
         if (err) {
             console.error('Erro:', err);
             return res.status(500).json({ message: 'Erro interno do servidor' });
@@ -777,8 +789,9 @@ app.post('/api/insumos', (req, res) => {
     });
 });
 
+
 // Listagem de Insumos
-app.get('/api/insumos', (req, res) => {
+app.get('/api/listarinsumos', (req, res) => {
     const query = 'SELECT * FROM insumos';
     pool.query(query, (err, results) => {
         if (err) {
@@ -791,7 +804,7 @@ app.get('/api/insumos', (req, res) => {
 });
 
 // Cadastro de Posição do Estoque
-app.post('/api/posicoes', (req, res) => {
+app.post('/api/cadastroposicoes', (req, res) => {
     const posicao = req.body;
 
     if (!posicao.nome || !posicao.descricao) {
@@ -799,7 +812,7 @@ app.post('/api/posicoes', (req, res) => {
     }
 
     const query = `
-        INSERT INTO posicoes_estoque (nome, descricao)
+        INSERT INTO posicoes_estoque (pos_nome, pos_descricao)
         VALUES (?, ?)
     `;
     pool.query(query, [posicao.nome, posicao.descricao], (err, result) => {
@@ -813,8 +826,8 @@ app.post('/api/posicoes', (req, res) => {
 });
 
 // Listagem de Posições do Estoque
-app.get('/api/posicoes', (req, res) => {
-    const query = 'SELECT * FROM posicoes_estoque';
+app.get('/api/listarposicoes', (req, res) => {
+    const query = 'SELECT * FROM posicoes_estoque ORDER BY pos_id';
     pool.query(query, (err, results) => {
         if (err) {
             console.error('Erro:', err);
@@ -826,7 +839,7 @@ app.get('/api/posicoes', (req, res) => {
 });
 
 // Cadastro de Família de Insumos
-app.post('/api/familias', (req, res) => {
+app.post('/api/cadastrofamilias', (req, res) => {
     const familia = req.body;
 
     if (!familia.nome) {
@@ -834,7 +847,7 @@ app.post('/api/familias', (req, res) => {
     }
 
     const query = `
-        INSERT INTO familia_insumos (nome)
+        INSERT INTO familia_insumos (fam_ins_nome)
         VALUES (?)
     `;
     pool.query(query, [familia.nome], (err, result) => {
@@ -848,8 +861,8 @@ app.post('/api/familias', (req, res) => {
 });
 
 // Listagem de Famílias de Insumos
-app.get('/api/familias', (req, res) => {
-    const query = 'SELECT * FROM familia_insumos';
+app.get('/api/listarfamilias', (req, res) => {
+    const query = 'SELECT * FROM familia_insumos ORDER BY fam_ins_id';
     pool.query(query, (err, results) => {
         if (err) {
             console.error('Erro:', err);
@@ -859,6 +872,22 @@ app.get('/api/familias', (req, res) => {
         return res.status(200).json(results);
     });
 });
+
+// Listagem de clientes
+app.get('/api/listagemclientes', (req, res) => {
+    const query = 'SELECT cli_id, cli_nome FROM clientes WHERE cli_ativo = 1';
+    pool.query(query, (err, results) => {
+        if (err) {
+            console.error('Erro:', err);
+            return res.status(500).json({ message: 'Erro interno do servidor' });
+        }
+
+        return res.status(200).json(results);
+    });
+});
+
+
+
 
 
 server.listen(PORT, () => {

@@ -21,75 +21,52 @@ import { RiStickyNoteAddLine, RiMapPinAddLine, RiGroupLine, RiListCheck } from '
 import axios from 'axios';
 
 interface Insumo {
-    ins_id: string;
-    ins_cod_SAP: string;
-    ins_posicao_id: string;
-    ins_descricao_SAP: string;
-    ins_descricao_especifica: string,
-    ins_familia: string;
-    ins_exclusivo: boolean;
-    ins_cliente_id: string;
-    ins_status: boolean;
-    ins_qtd_minima: string;
-    ins_periodo_inventario: string;
-    ins_nessidade_compra: string;
+    codigo: string;
+    descricaoSAP: string;
+    descricaoEspecifica: string;
+    familia: string;
+    cliente: number | null;
+    exclusivo: boolean;
+    posicao: string;
+    qtdMinima: string;
+    periodoInventario: string;
 }
 
 interface PosicaoEstoque {
-    pos_id: string;
-    pos_nome: string;
-    pos_descricao: string;
+    id: string;
+    nome: string;
+    descricao: string;
 }
 
 interface FamiliaInsumo {
-    fam_ins_id: string;
-    fam_ins_nome: string;
+    id: number;
+    nome: string;
 }
 
-interface Cliente {
-    cli_id: string;
+interface Clientes {
+    cli_id: number;
     cli_nome: string;
 }
 
 export function GerenciamentoEstoque() {
-    const [openInsumoDialog, setOpenIsumoDialog] = useState(false);
-    const [openPosicaoDialog, setOpenPosicaoDialog] = useState(false);
-    const [openFamiliaDialog, setOpenFamiliaDialog] = useState(false);
-
-    const [insumo, setInsumo] = useState<Insumo>({
-        ins_id: '',
-        ins_cod_SAP: '',
-        ins_posicao_id: '',
-        ins_descricao_SAP: '',
-        ins_descricao_especifica: '',
-        ins_familia: '',
-        ins_exclusivo: false,
-        ins_cliente_id: '',
-        ins_status: true,
-        ins_qtd_minima: '',
-        ins_periodo_inventario: '',
-        ins_nessidade_compra: ''
-    });
-    const [posicao, setPosicao] = useState<PosicaoEstoque>({
-        pos_id: '',
-        pos_nome: '',
-        pos_descricao: ''
-    });
-    const [familia, setFamilia] = useState<FamiliaInsumo>({
-        fam_ins_id: '',
-        fam_ins_nome: ''
-    });
-
-    const [insumos, setInsumos] = useState<Insumo[]>([]);
-    const [posicoes, setPosicoes] = useState<PosicaoEstoque[]>([]);
-    const [familias, setFamilias] = useState<FamiliaInsumo[]>([]);
-    const [clientes, setClientes] = useState<Cliente[]>([]);
-
     const [showSidebar, setShowSidebar] = useState(false);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [openDialog, setOpenDialog] = useState(false);
+    const [openPositionDialog, setOpenPositionDialog] = useState(false);
+    const [openFamilyDialog, setOpenFamilyDialog] = useState(false);
+    const [insumo, setInsumo] = useState<Insumo>({ codigo: '', descricaoSAP: '', descricaoEspecifica: '', familia: '', cliente: '', exclusivo: false, posicao: '', qtdMinima: '', periodoInventario: '' });
+    const [posicao, setPosicao] = useState<PosicaoEstoque>({ id: '', nome: '', descricao: '' });
+    const [familia, setFamilia] = useState<FamiliaInsumo>({ id: 0, nome: '' });
+    const [familias, setFamilias] = useState<FamiliaInsumo[]>([]);
+    const [posicoes, setPosicoes] = useState<PosicaoEstoque[]>([]);
+    const [clientes, setClientes] = useState([]);
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [searchTerm, setSearchTerm] = useState('');
+    const [insumos, setInsumos] = useState<Insumo[]>([]);
+    const [selectedPosicao, setSelectedPosicao] = useState<PosicaoEstoque | null>(null);
+    const [selectedFamilia, setSelectedFamilia] = useState<FamiliaInsumo | null>(null);
+
 
     useEffect(() => {
         fetchData();
@@ -97,40 +74,51 @@ export function GerenciamentoEstoque() {
 
     const fetchData = async () => {
         try {
-            const [listaInsumos, listaPosicoes, listaFamilias, listaClientes] = await Promise.all([
+            const [insumosRes, posicoesRes, familiasRes, clientesRes] = await Promise.all([
                 axios.get('http://localhost:5000/api/listarinsumos'),
                 axios.get('http://localhost:5000/api/listarposicoes'),
                 axios.get('http://localhost:5000/api/listarfamilias'),
                 axios.get('http://localhost:5000/api/listagemclientes')
             ]);
-            setInsumos(listaInsumos.data);
-            setPosicoes(listaPosicoes.data);
-            setFamilias(listaFamilias.data);
-            setClientes(listaClientes.data);
+            setInsumos(insumosRes.data);
+            setPosicoes(posicoesRes.data);
+            setFamilias(familiasRes.data);
+            setClientes(clientesRes.data);
+            console.log(clientesRes.data);
         } catch (error) {
             console.error('Erro ao carregar dados:', error);
         }
     };
 
     const handleDialogToggle = (dialog: string, state: boolean) => {
-        if (dialog === 'cadastrar_insumo') setOpenIsumoDialog(state);
-        if (dialog === 'cadastrar_posicao') setOpenPosicaoDialog(state);
-        if (dialog === 'cadastrar_familia') setOpenFamiliaDialog(state);
+        if (dialog === 'insumo') setOpenDialog(state);
+        if (dialog === 'position') setOpenPositionDialog(state);
+        if (dialog === 'family') setOpenFamilyDialog(state);
     };
 
     const handleSave = async (type: string) => {
         try {
-            if (type === 'cadastrar_insumo') {
+            if (type === 'insumo') {
                 await axios.post('http://localhost:5000/api/cadastroinsumos', insumo);
-            } else if (type === 'cadastrar_posicao') {
+            } else if (type === 'posicao') {
                 await axios.post('http://localhost:5000/api/cadastroposicoes', posicao);
-            } else if (type === 'cadastrar_familia') {
+            } else if (type === 'familia') {
                 await axios.post('http://localhost:5000/api/cadastrofamilias', familia);
             }
             fetchData();
             handleDialogToggle(type, false);
         } catch (error) {
             console.error(`Erro ao salvar ${type}:`, error);
+        }
+    };
+
+    const handleRowDoubleClick = (type: string, item: PosicaoEstoque | FamiliaInsumo) => {
+        if (type === 'position') {
+            setSelectedPosicao(item as PosicaoEstoque);
+            handleDialogToggle('position', true); // Abrir o diálogo de edição para a posição
+        } else if (type === 'family') {
+            setSelectedFamilia(item as FamiliaInsumo);
+            handleDialogToggle('family', true); // Abrir o diálogo de edição para a família
         }
     };
 
@@ -146,11 +134,9 @@ export function GerenciamentoEstoque() {
         setSearchTerm(event.target.value);
     };
 
-    const filteredInsumos = insumos?.filter((insumo) =>
-        insumo.ins_cod_SAP.toLowerCase().includes(searchTerm.toLowerCase())
-    ) || [];
-
-
+    const filteredInsumos = insumos.filter(insumo =>
+        insumo.codigo.toLowerCase().includes(searchTerm.toLowerCase())
+    );
     return (
         <div className='w-screen h-screen flex flex-col'>
             <div className="grid grid-rows-1 bg-cinza-200 p-4">
@@ -193,7 +179,7 @@ export function GerenciamentoEstoque() {
                                 open={Boolean(anchorEl)}
                                 onClose={handleMenuClose}
                             >
-                                <MenuItem onClick={() => handleDialogToggle('cadastrar_insumo', true)}>
+                                <MenuItem onClick={() => handleDialogToggle('insumo', true)}>
                                     <ListItemIcon>
                                         <RiStickyNoteAddLine fontSize="small" />
                                     </ListItemIcon>
@@ -268,17 +254,17 @@ export function GerenciamentoEstoque() {
                                         .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                         .map((row, index) => (
                                             <TableRow key={index}>
-                                                <TableCell>{row.ins_cod_SAP}</TableCell>
-                                                <TableCell>{row.ins_descricao_SAP}</TableCell>
-                                                <TableCell>{row.ins_descricao_especifica}</TableCell>
-                                                <TableCell>{row.ins_familia}</TableCell>
-                                                <TableCell>{row.ins_cliente_id}</TableCell>
+                                                <TableCell>{row.codigo}</TableCell>
+                                                <TableCell>{row.descricaoSAP}</TableCell>
+                                                <TableCell>{row.descricaoEspecifica}</TableCell>
+                                                <TableCell>{row.familia}</TableCell>
+                                                <TableCell>{row.cliente}</TableCell>
                                                 <TableCell>
-                                                    <Checkbox checked={row.ins_exclusivo} />
+                                                    <Checkbox checked={row.exclusivo} />
                                                 </TableCell>
-                                                <TableCell>{row.ins_posicao_id}</TableCell>
-                                                <TableCell>{row.ins_qtd_minima}</TableCell>
-                                                <TableCell>{row.ins_periodo_inventario}</TableCell>
+                                                <TableCell>{row.posicao}</TableCell>
+                                                <TableCell>{row.qtdMinima}</TableCell>
+                                                <TableCell>{row.periodoInventario}</TableCell>
                                             </TableRow>
                                         ))}
                                 </TableBody>
@@ -297,8 +283,8 @@ export function GerenciamentoEstoque() {
                 </div>
             </div>
 
-            {/* Dialog Cadastrar Insumos */}
-            <Dialog open={openInsumoDialog} onClose={() => handleDialogToggle('cadastrar_insumo', false)}>
+            {/* Dialogs */}
+            <Dialog open={openDialog} onClose={() => handleDialogToggle('insumo', false)}>
                 <DialogTitle>Cadastro de Insumo</DialogTitle>
                 <DialogContent>
                     <Grid container spacing={2}>
@@ -306,32 +292,32 @@ export function GerenciamentoEstoque() {
                             <TextField
                                 label="Código SAP"
                                 fullWidth
-                                value={insumo.ins_cod_SAP}
-                                onChange={(e) => setInsumo({ ...insumo, ins_cod_SAP: e.target.value })}
+                                value={insumo.codigo}
+                                onChange={(e) => setInsumo({ ...insumo, codigo: e.target.value })}
                             />
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
                                 label="Descrição SAP"
                                 fullWidth
-                                value={insumo.ins_descricao_SAP}
-                                onChange={(e) => setInsumo({ ...insumo, ins_descricao_SAP: e.target.value })}
+                                value={insumo.descricaoSAP}
+                                onChange={(e) => setInsumo({ ...insumo, descricaoSAP: e.target.value })}
                             />
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
                                 label="Descrição Específica"
                                 fullWidth
-                                value={insumo.ins_descricao_especifica}
-                                onChange={(e) => setInsumo({ ...insumo, ins_descricao_especifica: e.target.value })}
+                                value={insumo.descricaoEspecifica}
+                                onChange={(e) => setInsumo({ ...insumo, descricaoEspecifica: e.target.value })}
                             />
                         </Grid>
                         <Grid item xs={12}>
                             <FormControl fullWidth>
                                 <Autocomplete
-                                    options={familias.map(familia => familia.fam_ins_nome)}
-                                    value={insumo.ins_familia}
-                                    onChange={(e, value) => setInsumo({ ...insumo, ins_familia: value || '' })}
+                                    options={familias.map(familia => familia.nome)}
+                                    value={insumo.familia}
+                                    onChange={(e, value) => setInsumo({ ...insumo, familia: value || '' })}
                                     renderInput={(params) => <TextField {...params} label="Família" />}
                                 />
                             </FormControl>
@@ -340,8 +326,8 @@ export function GerenciamentoEstoque() {
                             <FormControlLabel
                                 control={
                                     <Checkbox
-                                        checked={insumo.ins_exclusivo}
-                                        onChange={(e) => setInsumo({ ...insumo, ins_exclusivo: e.target.checked })}
+                                        checked={insumo.exclusivo}
+                                        onChange={(e) => setInsumo({ ...insumo, exclusivo: e.target.checked })}
                                     />
                                 }
                                 label="Uso Exclusivo"
@@ -351,13 +337,12 @@ export function GerenciamentoEstoque() {
                             <FormControl fullWidth>
                                 <Autocomplete
                                     options={clientes}
-                                    getOptionLabel={(option) => option.cli_nome || ""}
-                                    disabled={!insumo.ins_exclusivo}
-                                    value={clientes.find(cliente => cliente.cli_id === insumo.ins_cliente_id) || null}
+                                    getOptionLabel={(option) => option.cli_nome}  // Use `option.cli_nome` para acessar o nome do cliente
+                                    value={clientes.find(cliente => cliente.cli_id === insumo.cliente) || null}
                                     onChange={(event, newValue) => {
                                         setInsumo((prevInsumo) => ({
                                             ...prevInsumo,
-                                            ins_cliente_id: newValue ? newValue.cli_id : '' // Atualiza o ins_cliente_id no estado
+                                            cliente: newValue ? newValue.cli_id : null
                                         }));
                                     }}
                                     renderInput={(params) => <TextField {...params} label="Cliente" />}
@@ -367,9 +352,9 @@ export function GerenciamentoEstoque() {
                         <Grid item xs={12}>
                             <FormControl fullWidth>
                                 <Autocomplete
-                                    options={posicoes.map(posicao => posicao.pos_nome)}
-                                    value={insumo.ins_posicao_id}
-                                    onChange={(e, value) => setInsumo({ ...insumo, ins_posicao_id: value || '' })}
+                                    options={posicoes.map(posicao => posicao.nome)}
+                                    value={insumo.posicao}
+                                    onChange={(e, value) => setInsumo({ ...insumo, posicao: value || '' })}
                                     renderInput={(params) => <TextField {...params} label="Posição do Estoque" />}
                                 />
                             </FormControl>
@@ -378,25 +363,171 @@ export function GerenciamentoEstoque() {
                             <TextField
                                 label="Qtd Mínima"
                                 fullWidth
-                                value={insumo.ins_qtd_minima}
-                                onChange={(e) => setInsumo({ ...insumo, ins_qtd_minima: e.target.value })}
+                                value={insumo.qtdMinima}
+                                onChange={(e) => setInsumo({ ...insumo, qtdMinima: e.target.value })}
                             />
                         </Grid>
                         <Grid item xs={6}>
                             <TextField
                                 label="Período de Inventário (meses)"
                                 fullWidth
-                                value={insumo.ins_periodo_inventario}
-                                onChange={(e) => setInsumo({ ...insumo, ins_periodo_inventario: e.target.value })}
+                                value={insumo.periodoInventario}
+                                onChange={(e) => setInsumo({ ...insumo, periodoInventario: e.target.value })}
                             />
                         </Grid>
                     </Grid>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => handleDialogToggle('cadastrar_insumo', false)}>Cancelar</Button>
-                    <Button onClick={() => handleSave('cadastrar_insumo')} color="primary">Salvar</Button>
+                    <Button onClick={() => handleDialogToggle('insumo', false)}>Cancelar</Button>
+                    <Button onClick={() => handleSave('insumo')} color="primary">Salvar</Button>
                 </DialogActions>
             </Dialog>
+
+            {/* Dialogs para Posições e Famílias */}
+            <Dialog open={openPositionDialog} onClose={() => handleDialogToggle('position', false)}>
+                <DialogTitle>Adicionar Posição</DialogTitle>
+                <DialogContent>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12}>
+                            <TextField
+                                label="Nome da Posição"
+                                fullWidth
+                                value={posicao.nome}
+                                onChange={(e) => setPosicao({ ...posicao, nome: e.target.value })}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                label="Descrição da Posição"
+                                fullWidth
+                                value={posicao.descricao}
+                                onChange={(e) => setPosicao({ ...posicao, descricao: e.target.value })}
+                            />
+                        </Grid>
+                    </Grid>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => handleDialogToggle('position', false)}>Cancelar</Button>
+                    <Button onClick={() => handleSave('posicao')} color="primary">Salvar</Button>
+                </DialogActions>
+            </Dialog>
+
+            <Dialog open={openFamilyDialog} onClose={() => handleDialogToggle('family', false)}>
+                <DialogTitle>Adicionar Família</DialogTitle>
+                <DialogContent>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12}>
+                            <TextField
+                                label="Nome da Família"
+                                fullWidth
+                                value={familia.nome}
+                                onChange={(e) => setFamilia({ ...familia, nome: e.target.value })}
+                            />
+                        </Grid>
+                    </Grid>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => handleDialogToggle('family', false)}>Cancelar</Button>
+                    <Button onClick={() => handleSave('familia')} color="primary">Salvar</Button>
+                </DialogActions>
+            </Dialog>
+            {/* Dialog para listar posições */}
+            {/* <Dialog open={openPositionDialog} onClose={() => handleDialogToggle('positionList', false)}>
+                <DialogTitle>Listar Posições</DialogTitle>
+                <DialogContent>
+                    <TableContainer component={Paper}>
+                        <Table size="small">
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>Nome</TableCell>
+                                    <TableCell>Descrição</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {posicoes.map((posicao) => (
+                                    <TableRow
+                                        key={posicao.id}
+                                        onDoubleClick={() => handleRowDoubleClick('position', posicao)}
+                                    >
+                                        <TableCell>{posicao.nome}</TableCell>
+                                        <TableCell>{posicao.descricao}</TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => handleDialogToggle('positionList', false)}>Fechar</Button>
+                </DialogActions>
+            </Dialog> */}
+
+            {/* Dialog para listar famílias */}
+            {/* <Dialog open={openFamilyDialog} onClose={() => handleDialogToggle('familyList', false)}>
+                <DialogTitle>Listar Famílias</DialogTitle>
+                <DialogContent>
+                    <TableContainer component={Paper}>
+                        <Table size="small">
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>Nome</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {familias.map((familia) => (
+                                    <TableRow
+                                        key={familia.id}
+                                        onDoubleClick={() => handleRowDoubleClick('family', familia)}
+                                    >
+                                        <TableCell>{familia.nome}</TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => handleDialogToggle('familyList', false)}>Fechar</Button>
+                </DialogActions>
+            </Dialog> */}
+
+            {/* Dialog de edição para posição */}
+            <Dialog open={!!selectedPosicao} onClose={() => setSelectedPosicao(null)}>
+                <DialogTitle>Editar Posição</DialogTitle>
+                <DialogContent>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12}>
+                            <TextField
+                                label="Nome da Posição"
+                                fullWidth
+                                value={selectedPosicao?.nome || ''}
+                                onChange={(e) =>
+                                    setSelectedPosicao({ ...selectedPosicao!, nome: e.target.value })
+                                }
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                label="Descrição da Posição"
+                                fullWidth
+                                value={selectedPosicao?.descricao || ''}
+                                onChange={(e) =>
+                                    setSelectedPosicao({ ...selectedPosicao!, descricao: e.target.value })
+                                }
+                            />
+                        </Grid>
+                    </Grid>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setSelectedPosicao(null)}>Cancelar</Button>
+                    <Button onClick={() => {
+                        // Salvar mudanças
+                        setSelectedPosicao(null);
+                    }} color="primary">Salvar</Button>
+                </DialogActions>
+            </Dialog>
+
+            {/* <Sidebar showSidebar={showSidebar} setShowSidebar={setShowSidebar} /> */}
         </div>
     );
 }
