@@ -792,7 +792,13 @@ app.post('/api/cadastroinsumos', (req, res) => {
 
 // Listagem de Insumos
 app.get('/api/listarinsumos', (req, res) => {
-    const query = 'SELECT * FROM insumos';
+    const query = `
+        SELECT * 
+        FROM insumos 
+        LEFT JOIN clientes ON insumos.ins_cliente_id = clientes.cli_id 
+        LEFT JOIN posicoes_estoque ON insumos.ins_posicao_id = posicoes_estoque.pos_id
+    `;
+
     pool.query(query, (err, results) => {
         if (err) {
             console.error('Erro:', err);

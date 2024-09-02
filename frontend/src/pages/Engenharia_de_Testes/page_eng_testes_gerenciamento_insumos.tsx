@@ -21,6 +21,8 @@ import { RiStickyNoteAddLine, RiMapPinAddLine, RiGroupLine, RiListCheck } from '
 import axios from 'axios';
 
 interface Insumo {
+    pos_descricao: string;
+    cli_nome: string;
     ins_id: string;
     ins_cod_SAP: string;
     ins_posicao_id: string;
@@ -57,6 +59,8 @@ export function GerenciamentoEstoque() {
     const [openFamiliaDialog, setOpenFamiliaDialog] = useState(false);
 
     const [insumo, setInsumo] = useState<Insumo>({
+        pos_descricao: '',
+        cli_nome: '',
         ins_id: '',
         ins_cod_SAP: '',
         ins_posicao_id: '',
@@ -252,7 +256,7 @@ export function GerenciamentoEstoque() {
                             <Table>
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell>Código</TableCell>
+                                        <TableCell>Código SAP</TableCell>
                                         <TableCell>Descrição SAP</TableCell>
                                         <TableCell>Descrição Específica</TableCell>
                                         <TableCell>Família</TableCell>
@@ -272,11 +276,11 @@ export function GerenciamentoEstoque() {
                                                 <TableCell>{row.ins_descricao_SAP}</TableCell>
                                                 <TableCell>{row.ins_descricao_especifica}</TableCell>
                                                 <TableCell>{row.ins_familia}</TableCell>
-                                                <TableCell>{row.ins_cliente_id}</TableCell>
+                                                <TableCell>{row.cli_nome}</TableCell> {/* Nome do cliente */}
                                                 <TableCell>
                                                     <Checkbox checked={row.ins_exclusivo} />
                                                 </TableCell>
-                                                <TableCell>{row.ins_posicao_id}</TableCell>
+                                                <TableCell>{row.pos_descricao}</TableCell> {/* Nome da posição */}
                                                 <TableCell>{row.ins_qtd_minima}</TableCell>
                                                 <TableCell>{row.ins_periodo_inventario}</TableCell>
                                             </TableRow>
