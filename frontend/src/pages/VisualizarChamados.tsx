@@ -41,10 +41,6 @@ const VisualizarChamados: React.FC = () => {
         }
     };
 
-    const handleRowClick = (chamadoId: number) => {
-        console.log(`Abrindo detalhes do chamado com ID: ${chamadoId}`);
-        // Implementar redirecionamento ou abrir modal com detalhes do chamado
-    };
 
     const handleSearch = (query: string) => {
         setSearchQuery(query);
@@ -62,7 +58,7 @@ const VisualizarChamados: React.FC = () => {
                 <div className="bg-white p-6 rounded-lg shadow overflow-hidden">
                     <h2 className="text-xl font-semibold mb-4">Lista de Chamados</h2>
                     <SearchBar onSearch={handleSearch} onFilterChange={handleFilterChange} />
-                    <Table chamados={filteredChamados} onRowClick={handleRowClick} />
+                    <Table chamados={filteredChamados} />
                     <Pagination page={page} totalPages={totalPages} onPageChange={handlePageChange} />
                 </div>
             </div>
