@@ -1,6 +1,6 @@
 // src/components/Sidebar.tsx
 import React from 'react';
-import { AiOutlineMenu, AiOutlineDashboard } from 'react-icons/ai';
+import { AiOutlineMenu, AiOutlineDashboard, AiOutlineEye } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
 
 interface SidebarProps {
@@ -42,7 +42,17 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
                                 <AiOutlineDashboard className="mr-2" /> Dashboard
                             </button>
                         </li>
-                        {/* Add more menu items as needed */}
+                        <li>
+                            <button
+                                onClick={() => {
+                                    console.log('Navegando para /visualizar-chamados');
+                                    navigate('/visualizar-chamados');
+                                }}
+                                className="w-full text-left px-4 py-2 hover:bg-cinza-200 flex items-center"
+                            >
+                                <AiOutlineEye className="mr-2" /> Visualizar Chamados
+                            </button>
+                        </li>
                     </ul>
                 </div>
             </div>
