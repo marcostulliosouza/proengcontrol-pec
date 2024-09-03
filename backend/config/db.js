@@ -6,7 +6,7 @@ const pool = mysql.createPool({
     host: process.env.DB_HOST || '10.161.100.11',
     user: process.env.DB_USER || 'bct_write',
     password: process.env.DB_PASSWORD || 'bct_write@',
-    database: process.env.DB_DATABASE || 'better_homolog'
+    database: process.env.DB_DATABASE || 'better_call_test'
 });
 
 module.exports = pool;
