@@ -8,33 +8,26 @@ export default {
     screens: {
       'mobile': { 'max': '639px' },
       'sm': { 'min': '640px', 'max': '767px' },
-      // Tablet
-
       'md': { 'min': '768px', 'max': '1023px' },
-      // Laptop
-
       'lg': { 'min': '1024px', 'max': '1279px' },
-      // Desktop
-
       'xl': { 'min': '1280px', 'max': '1535px' },
-      // TV
-
       '2xl': { 'min': '1536px' },
     },
     extend: {
       colors: {
-        'pec': '#020c3e',
-        'table_header': '#c5d1f5',
-        'cinza': {
-          100: '#f1f1f1',
-          200: '#e3e3e3',
-          300: '#d9d9d9',
-          400: '#b8b8b8',
-          500: '#444444',
-        },
-        'no_plano': '#DB2E2A',
-        'fora_plano': '#FFCC6D',
-        'engenharia': '#3366FF',
+        'pec': '#020c3e', // Primary color for branding
+        'highlight': '#3366FF', // Blue for highlights and interactive elements
+        'background': '#ffffff', // Main background color
+        'secondary-background': '#f4f4f4', // Secondary background for cards and panels
+        'text-primary': '#333333', // Dark gray for main text
+        'text-secondary': '#666666', // Medium gray for secondary text
+        'border': '#e0e0e0', // Light gray for borders and dividers
+        'success': '#28a745', // Green for success messages
+        'warning': '#ffc107', // Yellow for warnings
+        'error': '#dc3545', // Red for errors
+        'button-primary': '#3366FF', // Blue for primary buttons
+        'button-secondary': '#e3e3e3', // Light gray for secondary buttons
+        'action-success': '#28a745', // Green for success actions
       },
       fontFamily: {
         'jersey': ['Jersey 10', 'sans-serif'],
@@ -53,5 +46,7 @@ export default {
       }
     }
   },
-  plugins: ['@tailwindcss/typography'],
+  plugins: [
+    '@tailwindcss/typography'
+  ],
 }

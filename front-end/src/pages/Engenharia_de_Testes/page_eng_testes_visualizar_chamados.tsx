@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { IoMenu } from "react-icons/io5";
 import { FaHome } from "react-icons/fa";
 import { IoIosArrowForward } from "react-icons/io";
-import { Sidebar } from '../../components/sidebar';
+import { Sidebar } from '../../components/sidebar1';
 import { HelloUser } from '../../components/hello_user';
 import { Logo } from '../../components/logo';
 import Draggable from 'react-draggable';

@@ -6,7 +6,7 @@ import { Logo } from '../../components/logo';
 import { IoMenu } from "react-icons/io5";
 import { IoIosArrowForward } from "react-icons/io";
 import { FaHome } from "react-icons/fa";
-import { Sidebar } from '../../components/sidebar';
+import { Sidebar } from '../../components/sidebar1';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import 'bootstrap/dist/css/bootstrap.min.css';

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 // Componentes
-import { Sidebar } from '../../components/sidebar';
+import { Sidebar } from '../../components/sidebar1';
 import { HelloUser } from '../../components/hello_user';
 import { Logo } from '../../components/logo';
 import { Checkbox } from '@mui/material';

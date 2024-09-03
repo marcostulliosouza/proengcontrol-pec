@@ -7,7 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 
 // Componentes
-import { Sidebar } from '../../components/sidebar';
+import { Sidebar } from '../../components/sidebar1';
 import { HelloUser } from '../../components/hello_user';
 import { Logo } from '../../components/logo';
 
@@ -278,7 +278,7 @@ export function AbrirChamado() {
                         >
                             ABRIR CHAMADO
                         </button>
-                        
+
                     </form>
                 </main>
             </div>

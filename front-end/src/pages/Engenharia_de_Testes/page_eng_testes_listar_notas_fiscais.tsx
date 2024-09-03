@@ -12,7 +12,7 @@ import { format, parseISO } from 'date-fns';
 import { Button, Checkbox } from '@mui/material';
 
 // Componentes
-import { Sidebar } from '../../components/sidebar';
+import { Sidebar } from '../../components/sidebar1';
 import { HelloUser } from '../../components/hello_user';
 import { Logo } from '../../components/logo';
 

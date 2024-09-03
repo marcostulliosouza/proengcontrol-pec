@@ -1,48 +1,53 @@
-import { Link } from 'react-router-dom';
+// src/components/Sidebar.tsx
+import React from 'react';
+import { AiOutlineMenu, AiOutlineDashboard } from 'react-icons/ai';
+import { useNavigate } from 'react-router-dom';
 
-import logo from "../assets/icon_pec_cinza.svg"
-import { SidebarButton } from "./button_sidebar"
+interface SidebarProps {
+    isOpen: boolean;
+    toggleSidebar: () => void;
+}
 
-//Icons
-import { FaGears } from "react-icons/fa6";
-import { LuLogOut } from "react-icons/lu";
-import { FaHome } from "react-icons/fa";
-
-export const Sidebar = () => {
-    const handleLogout = () => {
-        localStorage.clear();
-        sessionStorage.clear();
-    };
+const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
+    const navigate = useNavigate();
 
     return (
-        <div className="bg-pec fixed inset-y-0 left-0 w-[200px] flex flex-col gap-8 items-center">
-            <div className="grid justify-items-center items-center text-cinza-200 font-semibold mt-4 ml-16">
-                <div className="flex items-center gap-2">
-                    <img src={logo} alt="PEC" />
-                    <h1 className='text-xl'>PEC</h1>
+        <>
+            <button
+                onClick={toggleSidebar}
+                className="fixed top-4 left-4 z-50 p-2 bg-pec text-white rounded-full shadow-lg"
+            >
+                <AiOutlineMenu size={24} />
+            </button>
+
+            {isOpen && (
+                <div
+                    className="fixed inset-0 bg-black opacity-50 z-40"
+                    onClick={toggleSidebar}
+                />
+            )}
+
+            <div
+                className={`fixed top-0 left-0 h-full w-64 bg-white text-cinza-700 shadow-lg transform ${isOpen ? 'translate-x-0' : '-translate-x-full'
+                    } transition-transform duration-300 ease-in-out z-50`}
+            >
+                <div className="p-4">
+                    <h2 className="text-xl font-bold mb-4">Menu</h2>
+                    <ul>
+                        <li>
+                            <button
+                                onClick={() => navigate('/dashboard')}
+                                className="w-full text-left px-4 py-2 hover:bg-cinza-200 flex items-center"
+                            >
+                                <AiOutlineDashboard className="mr-2" /> Dashboard
+                            </button>
+                        </li>
+                        {/* Add more menu items as needed */}
+                    </ul>
                 </div>
-                <p className='text-sm'>ProEngControl</p>
             </div>
-            <div>
-                <div className="grid text-center gap-4 bg-pec">
-                    <SidebarButton name={"Menu Principal"} link={"/menu"} icon={FaHome} />
-                    <SidebarButton name={"Engenharia de Testes"} link={"/engenharia_testes"} icon={FaGears} />
-                </div>
-                <div>
-                    <Link to={"/"}>
-                        <button
-                            onClick={() => handleLogout()}
-                            className='absolute bottom-10 left-10 text-cinza-200 text-2xl hover:scale-110 transition duration-200 flex gap-2'
-                        >
-                            <LuLogOut />
-                            <p>Sair</p>
-                        </button>
-                    </Link>
-                    {/* <p className="fixed bottom-2 left-2 text-cinza-200 font-semibold text-[10px]">
-                        Desenvolvido por <br></br> Marcos Souza & Samuel Grontoski
-                    </p> */}
-                </div>
-            </div>
-        </div>
-    )
-}
+        </>
+    );
+};
+
+export default Sidebar;
