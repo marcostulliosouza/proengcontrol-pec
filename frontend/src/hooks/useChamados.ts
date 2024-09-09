@@ -15,10 +15,12 @@ interface Chamado {
     cha_plano: boolean;
     cha_produto: string;
     cha_status: number;
-    cha_tipo: string;
+    cha_tipo: number;
     cha_visualizado: boolean;
     duracao_total: number | null;
     duracao_atendimento: number | null;
+    cha_DT: string | null;
+    atc_colaborador: string | null;
 }
 
 interface UseChamadosResponse {
@@ -44,8 +46,7 @@ export function useChamados(page: number = 1, pageSize: number = 10): UseChamado
                 });
 
                 const { data, total } = response.data;
-                // Verifica se total é um objeto e extrai a propriedade total
-                const totalRecords = total.total || 0;
+                const totalRecords = typeof total === 'object' ? total.total : total; // Trate o total como número ou objeto
 
                 // Calcula totalPages baseado no total de registros e pageSize
                 const calculatedTotalPages = Math.ceil(totalRecords / pageSize);
@@ -57,6 +58,11 @@ export function useChamados(page: number = 1, pageSize: number = 10): UseChamado
                 })));
                 setTotalPages(calculatedTotalPages);
             } catch (error) {
+                if (axios.isAxiosError(error) && error.response) {
+                    console.error("Erro na resposta do servidor:", error.response.data); // Log detalhado
+                } else {
+                    console.error("Erro desconhecido:", error); // Log para erros inesperados
+                }
                 setError(
                     axios.isAxiosError(error) && error.response
                         ? error.response.data.message || 'Erro ao buscar chamados.'

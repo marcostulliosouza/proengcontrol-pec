@@ -1,4 +1,3 @@
-// src/components/Layout.tsx
 import React, { useState } from 'react';
 import Sidebar from './Sidebar';
 import Header from './Header';
@@ -16,7 +15,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     return (
         <div className="flex h-screen bg-gray-100">
             <Sidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
-            <div className="flex-1 flex flex-col">
+            <div className={`flex-1 flex flex-col transition-all duration-300 ${sidebarOpen ? 'ml-64' : 'ml-0'}`}>
                 <Header toggleSidebar={toggleSidebar} />
                 <main className="flex-1 p-4">{children}</main>
                 <Footer />
