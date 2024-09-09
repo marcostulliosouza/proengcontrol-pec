@@ -49,6 +49,7 @@ const Table: React.FC<TableProps> = ({ chamados }) => {
 
     const handleRowClick = (chamadoId: number) => {
         setExpandedRow(expandedRow === chamadoId ? null : chamadoId);
+        console.log(chamados)
     };
 
     const handleRowDoubleClick = (chamado: Chamado) => {
@@ -108,7 +109,7 @@ const Table: React.FC<TableProps> = ({ chamados }) => {
                                     <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-500">{chamado.cha_local}</td>
                                     <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-500">{chamado.cha_cliente}</td>
                                     <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-500">{chamado.cha_produto}</td>
-                                    <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-500">{chamado.cha_status === 1 ? 'Pendente' : 'Em andamento'}</td>
+                                    <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-500">{chamado.cha_status === 1 ? 'Aberto' : 'Em atendimento'}</td>
                                     <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-500">{chamado.support}</td>
                                 </tr>
                                 {expandedRow === chamado.cha_id && (
