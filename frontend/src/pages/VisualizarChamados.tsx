@@ -1,3 +1,4 @@
+// frontend/pages/VisualizadorChamados.tsx
 import React, { useState } from 'react';
 import Layout from '../components/Layout';
 import { useChamados } from '../hooks/useChamados';
@@ -6,51 +7,52 @@ import Pagination from '../components/Pagination';
 import SearchBar from '../components/SearchBar';
 
 const VisualizarChamados: React.FC = () => {
+    // Declaração dos estados e hooks
     const [page, setPage] = useState(1);
     const [searchQuery, setSearchQuery] = useState('');
-    const [filters, setFilters] = useState<{ atendido?: boolean; plano?: boolean; status?: number }>({});
+    const [filters, setFilters] = useState<{ atendido?: number; tipo?: number; status?: number }>({});
     const pageSize = 10;
+
+    // Hook para buscar dados dos chamados
     const { chamados, loading, error, totalPages } = useChamados(page, pageSize);
 
+    // Função de filtragem dos chamados
     const filteredChamados = chamados.filter(chamado => {
-        // Converte para string para garantir que podemos chamar toLowerCase
-        const descricao = String(chamado.cha_descricao || '').toLowerCase();
-        const cliente = String(chamado.cha_cliente || '').toLowerCase();
         const produto = String(chamado.cha_produto || '').toLowerCase();
-
-        const matchesSearchQuery =
-            descricao.includes(searchQuery.toLowerCase()) ||
-            cliente.includes(searchQuery.toLowerCase()) ||
-            produto.includes(searchQuery.toLowerCase());
-
-        const matchesFilters =
+        const matchesSearchQuery = produto.includes(searchQuery.toLowerCase());
+        const matchesFilters = (
             (filters.atendido === undefined || chamado.cha_status === (filters.atendido ? 1 : 2)) &&
-            (filters.plano === undefined || chamado.cha_plano === filters.plano) &&
-            (filters.status === undefined || chamado.cha_status === filters.status);
-
+            (filters.status === undefined || chamado.cha_status === filters.status)
+        );
         return matchesSearchQuery && matchesFilters;
     });
 
-
-    if (loading) return <div className="flex justify-center items-center h-screen">Carregando...</div>;
-    if (error) return <div className="text-red-500 text-center mt-4">Erro: {error}</div>;
-
+    // Função para alterar a página
     const handlePageChange = (newPage: number) => {
         if (newPage > 0 && newPage <= totalPages) {
             setPage(newPage);
         }
     };
 
-
+    // Função para buscar
     const handleSearch = (query: string) => {
         setSearchQuery(query);
         setPage(1); // Resetar para a primeira página ao buscar
     };
 
-    const handleFilterChange = (filters: { atendido?: boolean; plano?: boolean; status?: number }) => {
-        setFilters(filters);
+    // Função para alterar filtros
+    const handleFilterChange = (newFilters: { atendido?: number; tipo?: number; status?: number }) => {
+        const convertedFilters = {
+            ...newFilters,
+            atendido: newFilters.atendido !== undefined ? (newFilters.atendido ? 1 : 2) : undefined,
+        };
+        setFilters(convertedFilters);
         setPage(1); // Resetar para a primeira página ao filtrar
     };
+
+    // Renderização condicional com base no estado de carregamento e erro
+    if (loading) return <div className="flex justify-center items-center h-screen">Carregando...</div>;
+    if (error) return <div className="text-red-500 text-center mt-4">Erro: {error}</div>;
 
     return (
         <Layout>

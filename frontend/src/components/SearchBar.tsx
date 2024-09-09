@@ -1,24 +1,42 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 interface SearchBarProps {
     onSearch: (query: string) => void;
-    onFilterChange: (filters: { atendido?: boolean; plano?: boolean; status?: number; tipo?: number }) => void;
+    onFilterChange: (filters: { atendido?: number; status?: number; tipo?: number }) => void;
 }
 
 const SearchBar: React.FC<SearchBarProps> = ({ onSearch, onFilterChange }) => {
     const [searchQuery, setSearchQuery] = useState('');
-    const [atendido, setAtendido] = useState<boolean | undefined>(undefined);
-    const [plano, setPlano] = useState<boolean | undefined>(undefined);
-    const [status] = useState<number | undefined>(undefined);
+    const [atendido, setAtendido] = useState<number | undefined>(undefined);
+    const [status, setStatus] = useState<number | undefined>(undefined);
     const [tipo, setTipo] = useState<number | undefined>(undefined);
 
-    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setSearchQuery(e.target.value);
-        onSearch(e.target.value);
+    // Função para atualizar filtros diretamente
+    const updateFilters = () => {
+        onFilterChange({ atendido, status, tipo });
     };
 
-    const handleFilterChange = () => {
-        onFilterChange({ atendido, plano, status, tipo });
+    // Atualiza filtros quando atendido, status ou tipo mudam
+    useEffect(() => {
+        updateFilters();
+    }, [atendido, status, tipo]); // Atualiza filtros apenas quando esses valores mudam
+
+    // Função para mudança no campo de busca
+    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const query = e.target.value;
+        setSearchQuery(query);
+        onSearch(query);
+    };
+
+    // Função para mudança no status
+    const handleStatusChange = (newStatus: number | undefined) => {
+        setStatus(newStatus);
+    };
+
+    // Função para mudança no tipo
+    const handleTipoChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const value = e.target.value;
+        setTipo(value ? parseInt(value) : undefined);
     };
 
     return (
@@ -30,55 +48,37 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch, onFilterChange }) => {
                 placeholder="Pesquisar por produto..."
                 className="px-4 py-2 border border-gray-300 rounded-lg"
             />
-            <div className="flex flex-col space-y-2">
+            <div className="flex flex-col space-y-2 mt-2">
                 <div className="flex flex-wrap space-x-4">
                     <label className="flex items-center space-x-2">
                         <input
-                            type="checkbox"
-                            checked={atendido === true}
-                            onChange={() => {
-                                setAtendido(atendido === true ? undefined : true);
-                                handleFilterChange();
-                            }}
-                            className="form-checkbox"
+                            type="radio"
+                            name="status"
+                            checked={status === undefined}
+                            onChange={() => handleStatusChange(undefined)}
+                            className="form-radio"
                         />
-                        <span>Em atendimento</span>
+                        <span>Todos</span>
                     </label>
                     <label className="flex items-center space-x-2">
                         <input
-                            type="checkbox"
-                            checked={plano === true}
-                            onChange={() => {
-                                setPlano(plano === true ? undefined : true);
-                                handleFilterChange();
-                            }}
-                            className="form-checkbox"
+                            type="radio"
+                            name="status"
+                            checked={status === 1}
+                            onChange={() => handleStatusChange(status === 1 ? undefined : 1)}
+                            className="form-radio"
                         />
-                        <span>Chamados do Plano</span>
+                        <span>Pendente</span>
                     </label>
                     <label className="flex items-center space-x-2">
                         <input
-                            type="checkbox"
-                            checked={plano === false}
-                            onChange={() => {
-                                setPlano(plano === false ? undefined : false);
-                                handleFilterChange();
-                            }}
-                            className="form-checkbox"
+                            type="radio"
+                            name="status"
+                            checked={status === 2}
+                            onChange={() => handleStatusChange(status === 2 ? undefined : 2)}
+                            className="form-radio"
                         />
-                        <span>Fora do Plano</span>
-                    </label>
-                    <label className="flex items-center space-x-2">
-                        <input
-                            type="checkbox"
-                            checked={tipo === 3}
-                            onChange={() => {
-                                setTipo(tipo === 3 ? undefined : 3);
-                                handleFilterChange();
-                            }}
-                            className="form-checkbox"
-                        />
-                        <span>Chamados de Engenharia</span>
+                        <span>Em andamento</span>
                     </label>
                 </div>
             </div>

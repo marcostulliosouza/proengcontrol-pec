@@ -12,15 +12,16 @@ interface Chamado {
     cha_descricao: string;
     cha_local: string;
     cha_operador: string;
-    cha_plano: boolean;
+    cha_plano: number;
     cha_produto: string;
     cha_status: number;
-    cha_tipo: number;
+    cha_tipo: string;
     cha_visualizado: boolean;
     duracao_total: number | null;
     duracao_atendimento: number | null;
     cha_DT: string | null;
-    atc_colaborador: string | null;
+    support: string | null;
+    call_type: string | null;
 }
 
 interface UseChamadosResponse {
@@ -37,7 +38,7 @@ export function useChamados(page: number = 1, pageSize: number = 10): UseChamado
     const [totalPages, setTotalPages] = useState<number>(1);
 
     useEffect(() => {
-        async function fetchChamados() {
+        const fetchChamados = async () => {
             setLoading(true);
             setError(null); // Resetando erro ao iniciar nova requisição
             try {
@@ -54,7 +55,7 @@ export function useChamados(page: number = 1, pageSize: number = 10): UseChamado
                 // Atualiza o estado com os dados e a contagem de páginas
                 setChamados(data.map((chamado: Chamado) => ({
                     ...chamado,
-                    cha_plano: Boolean(chamado.cha_plano),
+                    cha_plano: chamado.cha_plano,
                 })));
                 setTotalPages(calculatedTotalPages);
             } catch (error) {
@@ -71,7 +72,7 @@ export function useChamados(page: number = 1, pageSize: number = 10): UseChamado
             } finally {
                 setLoading(false);
             }
-        }
+        };
 
         fetchChamados();
     }, [page, pageSize]);

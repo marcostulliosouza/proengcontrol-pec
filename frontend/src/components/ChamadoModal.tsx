@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { useChronometer } from '../hooks/useChronometer';
+import { format, parseISO } from 'date-fns';
 
 interface Chamado {
     cha_id: number;
@@ -12,15 +13,16 @@ interface Chamado {
     cha_descricao: string;
     cha_local: string;
     cha_operador: string;
-    cha_plano: boolean;
+    cha_plano: number;
     cha_produto: string;
     cha_status: number;
-    cha_tipo: number;
+    cha_tipo: string;
     cha_visualizado: boolean;
     duracao_total: number | null;
     duracao_atendimento: number | null;
     cha_DT: string | null;
-    atc_colaborador: string | null;
+    support: string | null;
+    call_type: string | null;
 }
 
 interface ChamadoModalProps {
@@ -32,24 +34,15 @@ interface ChamadoModalProps {
 const ChamadoModal: React.FC<ChamadoModalProps> = ({ chamado, onClose, onAtender }) => {
     const elapsedTime = useChronometer({ startTime: chamado.cha_data_hora_abertura });
 
-    // Função para verificar se o tempo é negativo
-    const isNegativeTime = () => {
-        const [hours] = elapsedTime.split(':').map(Number);
-        return hours < 0;
+    const typeClass = () => {
+        if (chamado.cha_plano === 1) {
+            return 'bg-red-500'; // Retornar a classe de fundo vermelho
+        }
+        if (chamado.cha_plano === 0) {
+            return 'bg-yellow-500'; // Retornar a classe de fundo amarelo
+        }
+        return 'bg-blue-500'; // Retornar a classe de fundo azul para outros casos
     };
-
-    // Função para calcular se o tempo decorrido excedeu 30 minutos
-    const hasExceeded30Minutes = () => {
-        const [hours, minutes] = elapsedTime.split(':').map(Number);
-        return hours * 60 + minutes > 30;
-    };
-
-    // Define a classe CSS com base no estado do cronômetro
-    const timerClass = isNegativeTime()
-        ? 'text-blue-500' // Azul para tempo negativo
-        : hasExceeded30Minutes()
-            ? 'text-red-500' // Vermelho para tempo superior a 30 minutos
-            : 'text-black'; // Preto para o restante dos casos
 
     const handleAtenderChamado = () => {
         // Lógica para iniciar o atendimento do chamado
@@ -57,47 +50,33 @@ const ChamadoModal: React.FC<ChamadoModalProps> = ({ chamado, onClose, onAtender
         onClose();
     };
 
+    const formattedDate = chamado.cha_data_hora_atendimento
+        ? format(parseISO(chamado.cha_data_hora_atendimento), 'dd/MM/yyyy HH:mm:ss')
+        : 'Não atendido';
+
     return (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-75 flex items-center justify-center">
             <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-2xl">
-                <h2 className="text-xl font-bold mb-4">Detalhes do Chamado</h2>
+                <h2 className="text-xl font-bold mb-4">Detalhes do Chamado - {chamado.cha_id}</h2>
                 <div className="text-center mb-6">
-                    <div className={`text-5xl font-bold ${timerClass}`}>{elapsedTime}</div>
+                    <div className={`text-7xl text-slate-100 font-bold ${typeClass()}`}>{elapsedTime}</div>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                     {/* Exibir os detalhes do chamado em campos de formulário desabilitados */}
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700">Produto</label>
+                        <input
+                            type="text"
+                            value={chamado.cha_produto}
+                            disabled
+                            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+                        />
+                    </div>
                     <div>
                         <label className="block text-sm font-medium text-gray-700">Cliente</label>
                         <input
                             type="text"
                             value={chamado.cha_cliente}
-                            disabled
-                            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700">Data de Abertura</label>
-                        <input
-                            type="text"
-                            value={chamado.cha_data_hora_abertura}
-                            disabled
-                            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700">Data e Hora de Atendimento</label>
-                        <input
-                            type="text"
-                            value={chamado.cha_data_hora_atendimento || 'Não atendido'}
-                            disabled
-                            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700">Data e Hora de Término</label>
-                        <input
-                            type="text"
-                            value={chamado.cha_data_hora_termino || 'Não terminado'}
                             disabled
                             className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
                         />
@@ -112,15 +91,6 @@ const ChamadoModal: React.FC<ChamadoModalProps> = ({ chamado, onClose, onAtender
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">Local</label>
-                        <input
-                            type="text"
-                            value={chamado.cha_local}
-                            disabled
-                            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-                        />
-                    </div>
-                    <div>
                         <label className="block text-sm font-medium text-gray-700">Operador</label>
                         <input
                             type="text"
@@ -130,19 +100,46 @@ const ChamadoModal: React.FC<ChamadoModalProps> = ({ chamado, onClose, onAtender
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">Plano</label>
+                        <label className="block text-sm font-medium text-gray-700">Data de Abertura</label>
                         <input
                             type="text"
-                            value={chamado.cha_plano ? 'Sim' : 'Não'}
+                            value={format(parseISO(chamado.cha_data_hora_abertura), 'dd/MM/yyyy HH:mm:ss')}
                             disabled
                             className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">Produto</label>
+                        <label className="block text-sm font-medium text-gray-700">Data e Hora de Atendimento</label>
                         <input
                             type="text"
-                            value={chamado.cha_produto}
+                            value={formattedDate}
+                            disabled
+                            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+                        />
+                    </div>
+                    {/* <div>
+                        <label className="block text-sm font-medium text-gray-700">Data e Hora de Término</label>
+                        <input
+                            type="text"
+                            value={chamado.cha_data_hora_termino || 'Não terminado'}
+                            disabled
+                            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+                        />
+                    </div> */}
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700">Local</label>
+                        <input
+                            type="text"
+                            value={chamado.cha_local || 'Não definido'}
+                            disabled
+                            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700">Classe</label>
+                        <input
+                            type="text"
+                            value={chamado.cha_plano === 1 ? 'No plano' : 'Outros'}
                             disabled
                             className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
                         />
@@ -152,6 +149,15 @@ const ChamadoModal: React.FC<ChamadoModalProps> = ({ chamado, onClose, onAtender
                         <input
                             type="text"
                             value={chamado.cha_status === 1 ? 'Pendente' : 'Em andamento'}
+                            disabled
+                            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700">Suporte</label>
+                        <input
+                            type="text"
+                            value={chamado.support || ''}
                             disabled
                             className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
                         />

@@ -1,4 +1,4 @@
-// /models/CallModel.js
+// backend/models/CallModel.js
 const dbService = require('../services/dbService');
 
 class CallModel {
@@ -40,7 +40,7 @@ class CallModel {
         ];
 
         const where = [
-            "chamados.cha_status = 1 OR chamados.cha_status = 2"
+            "chamados.cha_status = 1 OR chamados.cha_status = 2",
             // "atendimentos_chamados.atc_data_hora_termino IS NULL"
         ];
 
