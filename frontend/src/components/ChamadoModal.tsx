@@ -16,7 +16,7 @@ interface Chamado {
     cha_plano: number;
     cha_produto: string;
     cha_status: number;
-    cha_tipo: string;
+    cha_tipo: number;
     cha_visualizado: boolean;
     duracao_total: number | null;
     duracao_atendimento: number | null;

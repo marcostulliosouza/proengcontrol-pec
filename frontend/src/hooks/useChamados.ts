@@ -15,7 +15,7 @@ interface Chamado {
     cha_plano: number;
     cha_produto: string;
     cha_status: number;
-    cha_tipo: string;
+    cha_tipo: number;
     cha_visualizado: boolean;
     duracao_total: number | null;
     duracao_atendimento: number | null;
@@ -31,6 +31,7 @@ interface UseChamadosResponse {
     totalPages: number;
 }
 
+// ./hooks/useChamados.ts
 export function useChamados(page: number = 1, pageSize: number = 10): UseChamadosResponse {
     const [chamados, setChamados] = useState<Chamado[]>([]);
     const [loading, setLoading] = useState(true);
@@ -40,30 +41,20 @@ export function useChamados(page: number = 1, pageSize: number = 10): UseChamado
     useEffect(() => {
         const fetchChamados = async () => {
             setLoading(true);
-            setError(null); // Resetando erro ao iniciar nova requisição
+            setError(null);
             try {
                 const response = await axios.get(`${API_URL}/api/chamados/paginados`, {
                     params: { page, pageSize }
                 });
 
                 const { data, total } = response.data;
-                const totalRecords = typeof total === 'object' ? total.total : total; // Trate o total como número ou objeto
+                const totalRecords = typeof total === 'object' ? total.total : total;
 
-                // Calcula totalPages baseado no total de registros e pageSize
                 const calculatedTotalPages = Math.ceil(totalRecords / pageSize);
 
-                // Atualiza o estado com os dados e a contagem de páginas
-                setChamados(data.map((chamado: Chamado) => ({
-                    ...chamado,
-                    cha_plano: chamado.cha_plano,
-                })));
+                setChamados(data);
                 setTotalPages(calculatedTotalPages);
             } catch (error) {
-                if (axios.isAxiosError(error) && error.response) {
-                    console.error("Erro na resposta do servidor:", error.response.data); // Log detalhado
-                } else {
-                    console.error("Erro desconhecido:", error); // Log para erros inesperados
-                }
                 setError(
                     axios.isAxiosError(error) && error.response
                         ? error.response.data.message || 'Erro ao buscar chamados.'

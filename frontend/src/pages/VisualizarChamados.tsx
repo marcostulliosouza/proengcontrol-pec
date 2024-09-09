@@ -21,8 +21,9 @@ const VisualizarChamados: React.FC = () => {
         const produto = String(chamado.cha_produto || '').toLowerCase();
         const matchesSearchQuery = produto.includes(searchQuery.toLowerCase());
         const matchesFilters = (
-            (filters.atendido === undefined || chamado.cha_status === (filters.atendido ? 1 : 2)) &&
-            (filters.status === undefined || chamado.cha_status === filters.status)
+            (filters.atendido === undefined || chamado.cha_status === filters.atendido) &&
+            (filters.status === undefined || chamado.cha_status === filters.status) &&
+            (filters.tipo === undefined || chamado.cha_tipo === filters.tipo)
         );
         return matchesSearchQuery && matchesFilters;
     });

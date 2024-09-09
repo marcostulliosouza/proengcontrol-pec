@@ -81,6 +81,21 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch, onFilterChange }) => {
                         <span>Em andamento</span>
                     </label>
                 </div>
+                {/* Exemplo de campo select para tipo */}
+                <div>
+                    <label htmlFor="tipo" className="block text-sm font-medium text-gray-700">Tipo</label>
+                    <select
+                        id="tipo"
+                        value={tipo ?? ''}
+                        onChange={handleTipoChange}
+                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    >
+                        <option value="">Selecione um tipo</option>
+                        <option value="1">Tipo 1</option>
+                        <option value="2">Tipo 2</option>
+                        {/* Adicione mais opções conforme necessário */}
+                    </select>
+                </div>
             </div>
         </div>
     );
