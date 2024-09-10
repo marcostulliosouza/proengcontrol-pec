@@ -53,6 +53,17 @@ const ChamadoModal: React.FC<ChamadoModalProps> = ({ chamado, onClose, onAtender
     const formattedDate = chamado.cha_data_hora_atendimento
         ? format(parseISO(chamado.cha_data_hora_atendimento), 'dd/MM/yyyy HH:mm:ss')
         : 'Não atendido';
+    const findClass = () => {
+        if (chamado.cha_plano === 1) {
+            return 'Chamado dentro do plano'
+        }
+        if (chamado.cha_plano === 0) {
+            return 'Chamado fora do plano'
+        }
+        else {
+            return 'Chamado de Engenharia'
+        }
+    }
 
     return (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-75 flex items-center justify-center">
@@ -139,7 +150,7 @@ const ChamadoModal: React.FC<ChamadoModalProps> = ({ chamado, onClose, onAtender
                         <label className="block text-sm font-medium text-gray-700">Classe</label>
                         <input
                             type="text"
-                            value={chamado.cha_plano === 1 ? 'No plano' : 'Outros'}
+                            value={findClass()}
                             disabled
                             className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
                         />
@@ -148,7 +159,7 @@ const ChamadoModal: React.FC<ChamadoModalProps> = ({ chamado, onClose, onAtender
                         <label className="block text-sm font-medium text-gray-700">Status</label>
                         <input
                             type="text"
-                            value={chamado.cha_status === 1 ? 'Pendente' : 'Em andamento'}
+                            value={chamado.cha_status === 1 ? 'Aberto' : 'Em atendimento'}
                             disabled
                             className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
                         />

@@ -49,7 +49,6 @@ const Table: React.FC<TableProps> = ({ chamados }) => {
 
     const handleRowClick = (chamadoId: number) => {
         setExpandedRow(expandedRow === chamadoId ? null : chamadoId);
-        console.log(chamados)
     };
 
     const handleRowDoubleClick = (chamado: Chamado) => {
