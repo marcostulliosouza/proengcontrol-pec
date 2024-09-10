@@ -37,9 +37,9 @@ const formatDuration = (minutes: number | null): string => {
 const getDurationClass = (minutes: number | null): string => {
     if (minutes === null) return '';
     if (minutes < 0) return 'text-blue-500';
-    if (minutes > 120) return 'text-red-500'; // Mais de 2 horas
-    if (minutes > 60) return 'text-orange-500'; // Entre 1 e 2 horas
-    if (minutes > 30) return 'text-yellow-500'; // Entre 30 minutos e 1 hora
+    if (minutes > 60) return 'text-red-500'; // Mais de 1 hora
+    if (minutes > 30) return 'text-orange-500'; // Entre 20 e 30 min
+    if (minutes > 20) return 'text-yellow-500'; // Entre 0 e 20 min
     return 'text-gray-500'; // Menos de 30 minutos
 };
 
@@ -113,9 +113,9 @@ const Table: React.FC<TableProps> = ({ chamados }) => {
                                 </tr>
                                 {expandedRow === chamado.cha_id && (
                                     <tr>
-                                        <td className="px-3 py-2 text-left text-sm font-medium bg-gray-100 text-gray-700 uppercase tracking-wider">Descrição:</td>
+                                        {/* <td className="px-3 py-2 text-left text-sm font-medium bg-gray-100 text-gray-700 uppercase tracking-wider">Descrição:</td> */}
                                         <td colSpan={10} className="px-3 py-5 bg-gray-100 text-sm text-gray-700 font-medium">
-                                            {chamado.cha_descricao}
+                                            DESCRIÇÃO: {chamado.cha_descricao}
                                         </td>
                                     </tr>
                                 )}

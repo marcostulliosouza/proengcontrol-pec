@@ -1,4 +1,5 @@
 // backend/models/CallModel.js
+const { query } = require('express');
 const dbService = require('../services/dbService');
 
 class CallModel {
@@ -39,6 +40,7 @@ class CallModel {
 
         const where = [
             "chamados.cha_status = 1 OR chamados.cha_status = 2",
+            "atendimentos_chamados.atc_data_hora_termino IS NULL"
         ];
 
         const groupBy = ["chamados.cha_id"];
@@ -54,6 +56,97 @@ class CallModel {
 
         return calls;
     }
+    static async createCall(callData) {
+        // Implementação para inserir um novo chamado no banco de dados
+        const [result] = await dbService.insert('chamados', callData);
+        const newCall = await this.getCallById(result.insertId); // Supondo que você tenha um método para obter um chamado por ID
+        return newCall;
+    }
+
+    static async getIndicators(period) {
+        try {
+            let whereConditions = [];
+            let periodCondition;
+
+            switch (period) {
+                case 'daily':
+                    periodCondition = "DATE(chamados.cha_data_hora_abertura) = DATE(NOW())";
+                    break;
+                case 'weekly':
+                    periodCondition = "WEEK(chamados.cha_data_hora_abertura) = WEEK(NOW()) AND MONTH(chamados.cha_data_hora_abertura) = MONTH(NOW()) AND YEAR(chamados.cha_data_hora_abertura) = YEAR(NOW())";
+                    break;
+                case 'monthly':
+                    periodCondition = "MONTH(chamados.cha_data_hora_abertura) = MONTH(NOW()) AND YEAR(chamados.cha_data_hora_abertura) = YEAR(NOW())";
+                    break;
+                default:
+                    throw new Error('Invalid period specified');
+            }
+
+            whereConditions.push("chamados.cha_status = 3", "chamados.cha_plano = 1", periodCondition, "detratores.dtr_indicador > 0");
+
+            // Consultar os dados principais
+            const fields = [
+                "COUNT(chamados.cha_id) AS totalCalls",
+                "SUM(IF(chamados.cha_data_hora_abertura < chamados.cha_data_hora_termino, TIMESTAMPDIFF(MINUTE, IF(chamados.cha_data_hora_abertura > chamados.cha_data_hora_atendimento, chamados.cha_data_hora_abertura, chamados.cha_data_hora_atendimento), chamados.cha_data_hora_termino), 0)) AS totalAnsweringTime",
+                "SUM(IF(chamados.cha_data_hora_abertura < chamados.cha_data_hora_atendimento, TIMESTAMPDIFF(MINUTE, chamados.cha_data_hora_abertura, chamados.cha_data_hora_atendimento), 0)) AS totalLateTime"
+            ];
+
+            const table = "chamados";
+
+            const joins = [
+                { table: "acoes_chamados", on: "chamados.cha_acao = acoes_chamados.ach_id", type: " LEFT" },
+                { table: "detratores", on: "acoes_chamados.ach_detrator = detratores.dtr_id", type: " LEFT" }
+            ];
+
+            const queryResult = await dbService.select(fields, table, whereConditions, joins);
+
+            let indicators = {
+                totalCalls: 0,
+                avgAnswering: "00:00",
+                avgLate: "00:00",
+                upTime: "0,00%"
+            };
+
+            if (queryResult.length > 0) {
+                const { totalCalls, totalAnsweringTime, totalLateTime } = queryResult[0];
+                const avgAnswering = totalCalls > 0 ? Math.round(totalAnsweringTime / totalCalls) : 0;
+                const avgLate = totalCalls > 0 ? Math.round(totalLateTime / totalCalls) : 0;
+
+                indicators.totalCalls = totalCalls;
+                indicators.avgAnswering = `${String(Math.floor(avgAnswering / 60)).padStart(2, '0')}:${String(avgAnswering % 60).padStart(2, '0')}`;
+                indicators.avgLate = `${String(Math.floor(avgLate / 60)).padStart(2, '0')}:${String(avgLate % 60).padStart(2, '0')}`;
+            }
+
+            // Consultar o uptime
+            const uptimeFields = ["SUM(planos_de_producao.pdp_total_horas * 60) AS totalMinutes"];
+            const uptimeTable = 'planos_de_producao';
+            const uptimeConditions = [`${periodCondition}`];
+
+            // Executar a consulta para uptime
+            const uptimeResult = await dbService.select(uptimeFields, uptimeTable, uptimeConditions);
+
+            console.log("uptimeResult:", uptimeResult);
+
+            if (uptimeResult.length > 0) {
+                const totalMinutes = uptimeResult[0].totalMinutes || 0;
+                if (totalMinutes > 0) {
+                    const uptime = 1 - ((totalAnsweringTime + totalLateTime) / totalMinutes);
+                    indicators.upTime = `${(uptime * 100).toFixed(2).replace('.', ',')}%`;
+                } else {
+                    indicators.upTime = "100,00%";
+                }
+            } else {
+                indicators.upTime = "0,00%";
+            }
+
+            return indicators;
+
+        } catch (error) {
+            throw new Error(`Error fetching ${period} indicators: ${error.message}`);
+        }
+    }
+
+
 }
 
 module.exports = CallModel;

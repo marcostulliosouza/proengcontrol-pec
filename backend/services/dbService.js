@@ -42,6 +42,8 @@ const select = (fields, table, where = [], joins = [], groupBy = [], having = []
         if (offset) sql += ` OFFSET ${offset}`;
     }
 
+    // console.log("Generated SQL Query:", sql); // Adicionado para logar a query completa
+
     return query(sql);
 };
 

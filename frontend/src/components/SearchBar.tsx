@@ -89,18 +89,9 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch, onFilterChange }) => {
                             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                         >
                             <option value="">Selecione uma opção</option>
-                            <option value="1" className="flex items-center">
-                                <span className="inline-block w-4 text-left">🔴</span>
-                                <span>Chamados dentro do plano</span>
-                            </option>
-                            <option value="0" className="flex items-center">
-                                <span className="inline-block w-4 text-left">🟡</span>
-                                <span>Chamados fora do plano</span>
-                            </option>
-                            <option value="-1" className="flex items-center">
-                                <span className="inline-block w-4 text-left">🔵</span>
-                                <span>Chamados de engenharia</span>
-                            </option>
+                            <option value="1">🔴 Chamados dentro do plano</option>
+                            <option value="0">🟡 Chamados fora do plano</option>
+                            <option value="-1">🔵 Chamados de engenharia</option>
                         </select>
                     </div>
 

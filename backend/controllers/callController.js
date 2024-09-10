@@ -1,4 +1,4 @@
-// /controllers/callController.js
+// backend/controllers/callController.js
 const CallService = require('../services/callService');
 
 class CallController {
@@ -10,9 +10,16 @@ class CallController {
             res.status(500).json({ error: error.message });
         }
     }
+
+    static async getIndicators(req, res) {
+        try {
+            const period = req.params.period;
+            const indicators = await CallService.getIndicators(period);
+            res.json(indicators);
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    }
 }
 
 module.exports = CallController;
-
-
-

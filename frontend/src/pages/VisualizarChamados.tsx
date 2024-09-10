@@ -9,7 +9,10 @@ const VisualizarChamados: React.FC = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [filters, setFilters] = useState<{ atendido?: number; plano?: number; status?: number }>({});
 
+
     const { chamados, loading, error } = useChamados();
+
+    const [period, setPeriod] = useState<'daily' | 'weekly' | 'monthly'>('daily');
 
     const filteredChamados = chamados.filter(chamado => {
         const produto = String(chamado.cha_produto || '').toLowerCase();
@@ -36,7 +39,7 @@ const VisualizarChamados: React.FC = () => {
     return (
         <Layout>
             <div className="p-6 bg-gray-100">
-                <div className="bg-white p-6 rounded-lg shadow overflow-auto max-h-[80vh]"> {/* Scroll interno na tabela */}
+                <div className="bg-white p-6 rounded-lg shadow overflow-auto max-h-[80vh]">
                     <h2 className="text-xl font-semibold mb-4">Lista de Chamados</h2>
                     <SearchBar onSearch={handleSearch} onFilterChange={handleFilterChange} />
                     <Table chamados={filteredChamados} />
