@@ -1,4 +1,5 @@
 // src/hooks/useAuth.ts
+
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -43,6 +44,7 @@ export function useAuth(): UseAuthReturn {
             if (response.ok) {
                 sessionStorage.setItem('token', data.token);
                 localStorage.setItem('user', col_login);
+                localStorage.setItem('userId', data.col_id); // Armazena o col_id
                 localStorage.setItem('saveUser', isChecked.toString());
                 setTimeout(() => {
                     navigate('/dashboard');

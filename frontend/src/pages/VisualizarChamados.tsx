@@ -12,8 +12,6 @@ const VisualizarChamados: React.FC = () => {
 
     const { chamados, loading, error } = useChamados();
 
-    const [period, setPeriod] = useState<'daily' | 'weekly' | 'monthly'>('daily');
-
     const filteredChamados = chamados.filter(chamado => {
         const produto = String(chamado.cha_produto || '').toLowerCase();
         const matchesSearchQuery = produto.includes(searchQuery.toLowerCase());

@@ -20,8 +20,8 @@ const login = (req, res) => {
 
         const user = result[0];
         if (user.col_senha === md5(col_senha)) {
-            const token = jwt.sign({ col_login }, secret);
-            return res.status(200).json({ token });
+            const token = jwt.sign({ col_login, col_id: user.col_id }, secret); // Inclui col_id no token
+            return res.status(200).json({ token, col_id: user.col_id }); // Inclui col_id na resposta
         } else {
             return res.status(401).json({ message: 'Credenciais inválidas' });
         }

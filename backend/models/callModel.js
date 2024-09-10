@@ -146,6 +146,42 @@ class CallModel {
         }
     }
 
+    // static async setCallAsBeingAnswered(callId, idResponsible) {
+    //     try {
+    //         // Inserir o atendimento no banco de dados
+    //         const table = "atendimentos_chamados";
+    //         const fields = ["atc_chamado", "atc_colaborador", "atc_data_hora_inicio"];
+    //         const values = [callId, idResponsible, "NOW()"];
+
+    //         // Inserir o novo atendimento
+    //         const [insertResult] = await dbService.insert(table, fields, values);
+
+    //         if (!insertResult) {
+    //             throw new Error("Falha ao tentar executar a inserção no banco.");
+    //         }
+
+    //         // Atualizar o chamado
+    //         const updateTable = "chamados";
+    //         const fieldsAndValues = [
+    //             ["cha_status", "'2'"],
+    //             ["cha_data_hora_atendimento", "NOW()"]
+    //         ];
+    //         const conditions = [
+    //             `cha_id = '${callId}'`
+    //         ];
+
+    //         const [updateResult] = await dbService.update(updateTable, fieldsAndValues, conditions);
+
+    //         if (!updateResult) {
+    //             throw new Error("Falha ao tentar executar a atualização no banco.");
+    //         }
+
+    //         return { success: true };
+
+    //     } catch (error) {
+    //         throw new Error(`Error setting call as being answered: ${error.message}`);
+    //     }
+    // }
 
 }
 
