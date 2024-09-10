@@ -68,7 +68,7 @@ const ChamadoModal: React.FC<ChamadoModalProps> = ({ chamado, onClose, onAtender
     return (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-75 flex items-center justify-center">
             <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-2xl">
-                <h2 className="text-xl font-bold mb-4">Detalhes do Chamado - {chamado.cha_id}</h2>
+                <h2 className="text-xl font-bold mb-4">Detalhes do Chamado - Produto: {chamado.cha_produto}</h2>
                 <div className="text-center mb-6">
                     <div className={`text-7xl text-slate-100 font-bold ${typeClass()}`}>{elapsedTime}</div>
                 </div>

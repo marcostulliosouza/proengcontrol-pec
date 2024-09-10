@@ -2,11 +2,10 @@
 const CallService = require('../services/callService');
 
 class CallController {
-    static async getPaginatedCalls(req, res) {
+    static async getAllCalls(req, res) {
         try {
-            const { page = 1, pageSize = 10 } = req.query; // Parâmetros de paginação via query params
-            const result = await CallService.getPaginatedCalls(parseInt(page), parseInt(pageSize));
-            res.json(result);
+            const calls = await CallService.getAllCalls();
+            res.json(calls);
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
@@ -14,5 +13,6 @@ class CallController {
 }
 
 module.exports = CallController;
+
 
 

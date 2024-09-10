@@ -2,9 +2,7 @@
 const dbService = require('../services/dbService');
 
 class CallModel {
-    static async getPaginatedCalls(page, pageSize) {
-        const offset = (page - 1) * pageSize;
-
+    static async getAllCalls() {
         const fields = [
             "chamados.cha_id",
             "chamados.cha_operador",
@@ -41,7 +39,6 @@ class CallModel {
 
         const where = [
             "chamados.cha_status = 1 OR chamados.cha_status = 2",
-            // "atendimentos_chamados.atc_data_hora_termino IS NULL"
         ];
 
         const groupBy = ["chamados.cha_id"];
@@ -52,18 +49,12 @@ class CallModel {
             "duracao_atendimento DESC"
         ];
 
-        // Executa a consulta paginada
-        const calls = await dbService.select(fields, table, where, joins, groupBy, [], orderBy, `${pageSize}`, `${offset}`);
+        // Executa a consulta
+        const calls = await dbService.select(fields, table, where, joins, groupBy, [], orderBy);
 
-        // Query para obter o número total de registros na tabela
-        const totalCountQuery = await dbService.count(table, where, joins);
-        const total = totalCountQuery.total;
-
-        return {
-            data: calls,
-            total
-        };
+        return calls;
     }
 }
 
 module.exports = CallModel;
+

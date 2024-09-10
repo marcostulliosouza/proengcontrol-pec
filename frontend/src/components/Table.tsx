@@ -92,7 +92,7 @@ const Table: React.FC<TableProps> = ({ chamados }) => {
                                     onClick={() => handleRowClick(chamado.cha_id)}
                                     onDoubleClick={() => handleRowDoubleClick(chamado)}
                                 >
-                                    <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-500">
+                                    <td className="px-3 py-2 text-center whitespace-nowrap text-sm text-gray-500">
                                         {chamado.cha_plano === 1 && <span>🔴</span>}
                                         {chamado.cha_plano === 0 && <span>🟡</span>}
                                         {chamado.cha_plano === -1 && <span>🔵</span>}
@@ -100,7 +100,7 @@ const Table: React.FC<TableProps> = ({ chamados }) => {
                                     <td className={`px-3 py-2 whitespace-nowrap text-sm ${getDurationClass(chamado.duracao_total)} font-bold`}>
                                         {formatDuration(chamado.duracao_total)}
                                     </td>
-                                    <td className={`px-3 py-2 whitespace-nowrap text-sm ${getDurationClass(chamado.duracao_atendimento)} font-bold`}>
+                                    <td className={`px-3 py-2 whitespace-nowrap text-sm ${getDurationClass(chamado.duracao_atendimento)}`}>
                                         {formatDuration(chamado.duracao_atendimento)}
                                     </td>
                                     <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-500">{chamado.call_type}</td>
@@ -113,7 +113,8 @@ const Table: React.FC<TableProps> = ({ chamados }) => {
                                 </tr>
                                 {expandedRow === chamado.cha_id && (
                                     <tr>
-                                        <td colSpan={10} className="px-3 py-2 bg-gray-50 text-sm text-gray-700">
+                                        <td className="px-3 py-2 text-left text-sm font-medium bg-gray-100 text-gray-700 uppercase tracking-wider">Descrição:</td>
+                                        <td colSpan={10} className="px-3 py-5 bg-gray-100 text-sm text-gray-700 font-medium">
                                             {chamado.cha_descricao}
                                         </td>
                                     </tr>

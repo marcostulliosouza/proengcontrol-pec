@@ -1,4 +1,5 @@
 // ./hooks/useChamados.ts
+// ./hooks/useChamados.ts
 import { useState, useEffect } from 'react';
 import { API_URL } from '../config/apiConfig';
 import axios from 'axios';
@@ -28,32 +29,21 @@ interface UseChamadosResponse {
     chamados: Chamado[];
     loading: boolean;
     error: string | null;
-    totalPages: number;
 }
 
-// ./hooks/useChamados.ts
-export function useChamados(page: number = 1, pageSize: number = 10): UseChamadosResponse {
+export function useChamados(): UseChamadosResponse {
     const [chamados, setChamados] = useState<Chamado[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [totalPages, setTotalPages] = useState<number>(1);
 
     useEffect(() => {
         const fetchChamados = async () => {
             setLoading(true);
             setError(null);
             try {
-                const response = await axios.get(`${API_URL}/api/chamados/paginados`, {
-                    params: { page, pageSize }
-                });
+                const response = await axios.get(`${API_URL}/api/chamados`);
 
-                const { data, total } = response.data;
-                const totalRecords = typeof total === 'object' ? total.total : total;
-
-                const calculatedTotalPages = Math.ceil(totalRecords / pageSize);
-
-                setChamados(data);
-                setTotalPages(calculatedTotalPages);
+                setChamados(response.data); // Assumindo que a resposta já vem no formato de array
             } catch (error) {
                 setError(
                     axios.isAxiosError(error) && error.response
@@ -66,7 +56,7 @@ export function useChamados(page: number = 1, pageSize: number = 10): UseChamado
         };
 
         fetchChamados();
-    }, [page, pageSize]);
+    }, []);
 
-    return { chamados, loading, error, totalPages };
+    return { chamados, loading, error };
 }
