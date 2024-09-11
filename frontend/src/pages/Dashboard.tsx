@@ -9,6 +9,7 @@ import {
     AiOutlineTeam,
     AiOutlineStock
 } from 'react-icons/ai';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 // Dados mockados para simulação de gráficos e estatísticas
 const mockData = {
@@ -81,7 +82,7 @@ const Dashboard: React.FC = () => {
     }, []);
 
     if (loading) {
-        return <p>Carregando dashboard...</p>;
+        return <LoadingSpinner />;
     }
 
     return (

@@ -39,7 +39,7 @@ export function useAuth(): UseAuthReturn {
                 localStorage.setItem('user', col_login);
                 localStorage.setItem('userId', data.col_id); // Armazena o col_id
                 setTimeout(() => {
-                    navigate('/dashboard');
+                    navigate('/home');
                 }, 2000);
             } else {
                 toast.error('Login ou senha incorretos. Tente novamente.');
@@ -62,7 +62,7 @@ export function useAuth(): UseAuthReturn {
         }
 
         if (token) {
-            navigate('/dashboard'); // Redireciona automaticamente se já houver um token
+            navigate('/home'); // Redireciona automaticamente se já houver um token
         }
     }, [navigate]);
 

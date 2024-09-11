@@ -12,10 +12,10 @@ const Home: React.FC = () => {
             <div className="bg-white p-6 rounded-lg shadow-md">
                 <h1 className="text-3xl font-semibold text-gray-800 mb-6">Bem-vindo ao PEC</h1>
                 <p className="text-gray-600 mb-6">
-                    Utilize as opções abaixo para navegar pelo sistema de gestão de chamados de engenharia.
+                    Utilize as opções abaixo para navegar pelo sistema de gestão de chamados de Engenharia de Testes da Hi-mix.
                 </p>
 
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <div className="grid grid-cols-3 mobile:grid-cols-2 2xl:grid-cols-4 gap-4">
                     {/* Dashboard */}
                     <div
                         className="bg-pec text-white p-4 rounded-lg shadow hover:shadow-lg transition cursor-pointer flex flex-col items-center justify-between"

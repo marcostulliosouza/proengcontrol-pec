@@ -4,6 +4,7 @@ import Layout from '../components/Layout';
 import { useChamados } from '../hooks/useChamados';
 import Table from '../components/Table';
 import SearchBar from '../components/SearchBar';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 const VisualizarChamados: React.FC = () => {
     const [searchQuery, setSearchQuery] = useState('');
@@ -31,13 +32,13 @@ const VisualizarChamados: React.FC = () => {
         setFilters(newFilters);
     };
 
-    if (loading) return <div className="flex justify-center items-center h-screen">Carregando...</div>;
+    if (loading) return <LoadingSpinner />;
     if (error) return <div className="text-red-500 text-center mt-4">Erro: {error}</div>;
 
     return (
         <Layout>
             <div className="p-6 bg-gray-100">
-                <div className="bg-white p-6 rounded-lg shadow overflow-auto max-h-[80vh]">
+                <div className="bg-white p-6 rounded-lg shadow overflow-auto max-h-screen max-w-screen">
                     <h2 className="text-xl font-semibold mb-4">Lista de Chamados</h2>
                     <SearchBar onSearch={handleSearch} onFilterChange={handleFilterChange} />
                     <Table chamados={filteredChamados} />

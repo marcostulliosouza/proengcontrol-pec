@@ -69,7 +69,7 @@ const Table: React.FC<TableProps> = ({ chamados }) => {
 
     return (
         <>
-            <div className="overflow-x-auto max-w-full max-h-[calc(100vh-50px)]">
+            <div className="max-w-full max-h-[calc(100vh-50px)] px-4">
                 <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-gray-50">
                         <tr>
@@ -114,7 +114,6 @@ const Table: React.FC<TableProps> = ({ chamados }) => {
                                 </tr>
                                 {expandedRow === chamado.cha_id && (
                                     <tr>
-                                        {/* <td className="px-3 py-2 text-left text-sm font-medium bg-gray-100 text-gray-700 uppercase tracking-wider">Descrição:</td> */}
                                         <td colSpan={10} className="px-3 py-5 bg-gray-100 text-sm text-gray-700 font-medium">
                                             DESCRIÇÃO: {chamado.cha_descricao}
                                         </td>
@@ -125,6 +124,7 @@ const Table: React.FC<TableProps> = ({ chamados }) => {
                     </tbody>
                 </table>
             </div>
+
 
             {selectedChamado && (
                 <ChamadoModal

@@ -71,7 +71,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
                 >
                     {loading ? (
                         <div className="flex items-center gap-2 p-2">
-                            Carregando
+                            Entrando...
                             <AiOutlineLoading3Quarters className="animate-spin" />
                         </div>
                     ) : (

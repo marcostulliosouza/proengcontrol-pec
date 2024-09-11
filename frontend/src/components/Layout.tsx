@@ -14,7 +14,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
 
     return (
-        <div className="flex h-screen bg-gray-100">
+        <div className="flex min-h-max bg-gray-100">
             <Sidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
             <div className={`flex-1 flex flex-col transition-all duration-300 ${sidebarOpen ? 'ml-64' : 'ml-0'}`}>
                 <Header toggleSidebar={toggleSidebar} />
