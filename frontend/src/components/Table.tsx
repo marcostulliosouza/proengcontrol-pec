@@ -104,10 +104,10 @@ const Table: React.FC<TableProps> = ({ chamados }) => {
                                     <td className={`px-3 py-2 whitespace-nowrap text-sm ${getDurationClass(chamado.duracao_atendimento)} font-bold`}>
                                         {formatDuration(chamado.duracao_atendimento)}
                                     </td>
-                                    <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-500">{chamado.call_type}</td>
+                                    <td className="px-3 py-2 whitespace-nowrap text-sm text- text-gray-500">{chamado.call_type}</td>
                                     <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-500">{chamado.cha_operador}</td>
                                     <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-500">{chamado.cha_local}</td>
-                                    <td className="px-3 py-2 whitespace-nowrap text-sm truncate text-gray-500">{chamado.cha_cliente}</td>
+                                    <td className="px-3 py-2 whitespace-nowrap text-sm text-wrap text-gray-500">{chamado.cha_cliente}</td>
                                     <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-500">{chamado.cha_produto}</td>
                                     <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-500">{chamado.cha_status === 1 ? 'Aberto' : 'Em atendimento'}</td>
                                     <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-500">{chamado.support}</td>

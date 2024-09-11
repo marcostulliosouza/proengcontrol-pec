@@ -17,7 +17,7 @@ class CallModel {
             "chamados.cha_status",
             "status_chamado.stc_descricao AS status",
             "atendimentos_chamados.atc_colaborador AS support_id",
-            "colaboradores.col_nome AS support",
+            "colaboradores.col_login AS support",
             "chamados.cha_descricao",
             "chamados.cha_plano",
             "chamados.cha_data_hora_abertura",
