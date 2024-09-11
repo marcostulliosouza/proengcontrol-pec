@@ -23,10 +23,12 @@ const Header: React.FC<HeaderProps> = ({ toggleSidebar }) => {
 
     return (
         <header className="bg-pec text-white p-4 flex items-center justify-between relative pl-16">
-            <div className="flex items-center gap-2">
-                <img src={logo} alt="PEC" className="w-10 h-10" />
+            <button className="flex items-center gap-2"
+                onClick={() => navigate('/home')}
+            >
+                <img src={logo} alt="PEC" className="w-6 h-6" />
                 <h1 className="text-xl font-semibold">PEC</h1>
-            </div>
+            </button>
             <nav className="flex items-center gap-4">
                 <button
                     onClick={toggleSidebar}

@@ -1,6 +1,6 @@
 // src/components/Sidebar.tsx
 import React from 'react';
-import { AiOutlineMenu, AiOutlineDashboard, AiOutlineEye, AiOutlinePlusCircle, AiOutlineUserAdd, AiOutlineTags, AiOutlineLink, AiOutlineAppstoreAdd, AiOutlineLaptop, AiOutlineHome } from 'react-icons/ai';
+import { AiOutlineMenu, AiOutlineDashboard, AiOutlineEye, AiOutlinePlusCircle, AiOutlineUserAdd, AiOutlineTags, AiOutlineLink, AiOutlineLaptop, AiOutlineHome } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
 
 interface SidebarProps {

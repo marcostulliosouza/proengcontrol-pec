@@ -101,20 +101,20 @@ const Table: React.FC<TableProps> = ({ chamados }) => {
                                     <td className={`px-3 py-2 whitespace-nowrap text-sm ${getDurationClass(chamado.duracao_total)} font-bold`}>
                                         {formatDuration(chamado.duracao_total)}
                                     </td>
-                                    <td className={`px-3 py-2 whitespace-nowrap text-sm ${getDurationClass(chamado.duracao_atendimento)}`}>
+                                    <td className={`px-3 py-2 whitespace-nowrap text-sm ${getDurationClass(chamado.duracao_atendimento)} font-bold`}>
                                         {formatDuration(chamado.duracao_atendimento)}
                                     </td>
                                     <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-500">{chamado.call_type}</td>
                                     <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-500">{chamado.cha_operador}</td>
                                     <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-500">{chamado.cha_local}</td>
-                                    <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-500">{chamado.cha_cliente}</td>
+                                    <td className="px-3 py-2 whitespace-nowrap text-sm truncate text-gray-500">{chamado.cha_cliente}</td>
                                     <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-500">{chamado.cha_produto}</td>
                                     <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-500">{chamado.cha_status === 1 ? 'Aberto' : 'Em atendimento'}</td>
                                     <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-500">{chamado.support}</td>
                                 </tr>
                                 {expandedRow === chamado.cha_id && (
                                     <tr>
-                                        <td colSpan={10} className="px-3 py-5 bg-gray-100 text-sm text-gray-700 font-medium">
+                                        <td colSpan={10} className="px-3 py-5 bg-gray-50 text-sm text-gray-700 font-medium">
                                             DESCRIÇÃO: {chamado.cha_descricao}
                                         </td>
                                     </tr>

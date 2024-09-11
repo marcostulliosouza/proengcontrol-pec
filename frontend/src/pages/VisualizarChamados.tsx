@@ -37,8 +37,8 @@ const VisualizarChamados: React.FC = () => {
 
     return (
         <Layout>
-            <div className="p-6 bg-gray-100">
-                <div className="bg-white p-6 rounded-lg shadow overflow-auto max-h-screen max-w-screen">
+            <div className="p-1 bg-gray-100">
+                <div className="bg-white p-6 rounded-lg shadow overflow-auto">
                     <h2 className="text-xl font-semibold mb-4">Lista de Chamados</h2>
                     <SearchBar onSearch={handleSearch} onFilterChange={handleFilterChange} />
                     <Table chamados={filteredChamados} />
