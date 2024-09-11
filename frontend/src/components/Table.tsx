@@ -126,7 +126,7 @@ const Table: React.FC<TableProps> = ({ chamados }) => {
                                     <td className="px-3 py-2 text-gray-500">{chamado.cha_cliente}</td>
                                     <td className="px-3 py-2 text-gray-500">{chamado.cha_produto}</td>
                                     <td className={`px-3 py-2 text-center ${chamado.cha_status === 1 ? 'status-open' : 'status-in-progress'}`}>
-                                        {chamado.cha_status === 1 ? 'Aberto' : 'Em Atendimento'}
+                                        {chamado.cha_status === 1 ? 'Aberto' : 'Atendendo'}
                                     </td>
                                     <td className="px-3 py-2 text-gray-500">{chamado.support}</td>
                                 </tr>

@@ -98,8 +98,8 @@
     border-color: #c6f6d5;
 }
 
-.status-open,
-.status-in-progress {
+.table-body .status-open,
+.table-body .status-in-progress {
     padding: 4px 8px;
     border-radius: 8px;
     display: inline-block;
@@ -107,6 +107,10 @@
     font-size: 0.75rem;
     color: #fff;
     font-weight: 600;
+    width: 100px;
+    /* Define uma largura fixa */
+    margin: 0 auto;
+    /* Centraliza o status horizontalmente */
 }
 
 .status-open {
@@ -115,6 +119,22 @@
 
 .status-in-progress {
     background-color: #3182ce;
+    animation: pulse 1s infinite;
+    /* Adiciona uma animação de pulsar ao status "Atendendo" */
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(49, 130, 206, 0.5);
+    }
+
+    70% {
+        box-shadow: 0 0 15px 10px rgba(49, 130, 206, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(49, 130, 206, 0);
+    }
 }
 
 .badge {
