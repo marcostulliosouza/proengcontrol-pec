@@ -1,3 +1,4 @@
+// ./components/Header.tsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import logo from '../assets/icon_pec_cinza.svg';

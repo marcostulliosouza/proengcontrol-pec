@@ -8,24 +8,17 @@ import { API_URL } from '../config/apiConfig';
 interface UseAuthReturn {
     col_login: string;
     col_senha: string;
-    isChecked: boolean;
     loading: boolean;
     handleLogin: (e: React.FormEvent<HTMLFormElement>) => void;
     setUsername: (username: string) => void;
     setPassword: (password: string) => void;
-    handleOnChange: () => void;
 }
 
 export function useAuth(): UseAuthReturn {
     const [col_login, setUsername] = useState('');
     const [col_senha, setPassword] = useState('');
-    const [isChecked, setIsChecked] = useState(false);
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
-
-    const handleOnChange = () => {
-        setIsChecked((prev) => !prev);
-    };
 
     const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -45,7 +38,6 @@ export function useAuth(): UseAuthReturn {
                 sessionStorage.setItem('token', data.token);
                 localStorage.setItem('user', col_login);
                 localStorage.setItem('userId', data.col_id); // Armazena o col_id
-                localStorage.setItem('saveUser', isChecked.toString());
                 setTimeout(() => {
                     navigate('/dashboard');
                 }, 2000);
@@ -67,7 +59,6 @@ export function useAuth(): UseAuthReturn {
 
         if (saveUser === 'true' && savedUser) {
             setUsername(savedUser);
-            setIsChecked(true);
         }
 
         if (token) {
@@ -78,11 +69,9 @@ export function useAuth(): UseAuthReturn {
     return {
         col_login,
         col_senha,
-        isChecked,
         loading,
         handleLogin,
         setUsername,
-        setPassword,
-        handleOnChange,
+        setPassword
     };
 }

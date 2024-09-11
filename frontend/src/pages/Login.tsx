@@ -8,11 +8,9 @@ export function Login() {
     const {
         col_login,
         col_senha,
-        isChecked,
         loading,
         setUsername,
         setPassword,
-        handleOnChange,
         handleLogin,
     } = useAuth();
 
@@ -43,11 +41,9 @@ export function Login() {
                 <LoginForm
                     col_login={col_login}
                     col_senha={col_senha}
-                    isChecked={isChecked}
                     loading={loading}
                     setUsername={setUsername}
                     setPassword={setPassword}
-                    handleOnChange={handleOnChange}
                     handleLogin={handleLogin}
                 />
             </div>

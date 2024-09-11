@@ -1,6 +1,6 @@
 // src/components/Sidebar.tsx
 import React from 'react';
-import { AiOutlineMenu, AiOutlineDashboard, AiOutlineEye } from 'react-icons/ai';
+import { AiOutlineMenu, AiOutlineDashboard, AiOutlineEye, AiOutlinePlusCircle, AiOutlineUserAdd, AiOutlineTags, AiOutlineLink, AiOutlineAppstoreAdd, AiOutlineLaptop } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
 
 interface SidebarProps {
@@ -44,13 +44,58 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
                         </li>
                         <li>
                             <button
-                                onClick={() => {
-                                    console.log('Navegando para /visualizar-chamados');
-                                    navigate('/visualizar-chamados');
-                                }}
+                                onClick={() => navigate('/visualizar-chamados')}
                                 className="w-full text-left px-4 py-2 hover:bg-cinza-200 flex items-center"
                             >
                                 <AiOutlineEye className="mr-2" /> Visualizar Chamados
+                            </button>
+                        </li>
+                        <li>
+                            <button
+                                onClick={() => navigate('/abrir-chamado')}
+                                className="w-full text-left px-4 py-2 hover:bg-cinza-200 flex items-center"
+                            >
+                                <AiOutlinePlusCircle className="mr-2" /> Abrir Chamado
+                            </button>
+                        </li>
+                        <li>
+                            <button
+                                onClick={() => navigate('/cadastrar-produto')}
+                                className="w-full text-left px-4 py-2 hover:bg-cinza-200 flex items-center"
+                            >
+                                <AiOutlineTags className="mr-2" /> Cadastrar Produto
+                            </button>
+                        </li>
+                        <li>
+                            <button
+                                onClick={() => navigate('/cadastrar-colaborador')}
+                                className="w-full text-left px-4 py-2 hover:bg-cinza-200 flex items-center"
+                            >
+                                <AiOutlineUserAdd className="mr-2" /> Cadastrar Colaborador
+                            </button>
+                        </li>
+                        <li>
+                            <button
+                                onClick={() => navigate('/cadastrar-cliente')}
+                                className="w-full text-left px-4 py-2 hover:bg-cinza-200 flex items-center"
+                            >
+                                <AiOutlineUserAdd className="mr-2" /> Cadastrar Cliente
+                            </button>
+                        </li>
+                        <li>
+                            <button
+                                onClick={() => navigate('/cadastrar-dispositivo')}
+                                className="w-full text-left px-4 py-2 hover:bg-cinza-200 flex items-center"
+                            >
+                                <AiOutlineLaptop className="mr-2" /> Cadastrar Dispositivo
+                            </button>
+                        </li>
+                        <li>
+                            <button
+                                onClick={() => navigate('/vincular-cliente-produto')}
+                                className="w-full text-left px-4 py-2 hover:bg-cinza-200 flex items-center"
+                            >
+                                <AiOutlineLink className="mr-2" /> Vincular Cliente ao Produto
                             </button>
                         </li>
                     </ul>

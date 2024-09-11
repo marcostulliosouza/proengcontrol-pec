@@ -7,22 +7,18 @@ import { GoKey, GoCheck } from 'react-icons/go';
 interface LoginFormProps {
     col_login: string;
     col_senha: string;
-    isChecked: boolean;
     loading: boolean;
     setUsername: (username: string) => void;
     setPassword: (password: string) => void;
-    handleOnChange: () => void;
     handleLogin: (e: React.FormEvent<HTMLFormElement>) => void;
 }
 
 const LoginForm: React.FC<LoginFormProps> = ({
     col_login,
     col_senha,
-    isChecked,
     loading,
     setUsername,
     setPassword,
-    handleOnChange,
     handleLogin,
 }) => {
     return (
@@ -50,7 +46,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
                 />
             </div>
             {/* Lembrar usuário */}
-            <div className="inline-flex items-center">
+            {/* <div className="inline-flex items-center">
                 <label className="relative flex items-center p-3 rounded-full cursor-pointer" htmlFor="check">
                     <input type="checkbox"
                         className="peer relative h-5 w-5 cursor-pointer appearance-none rounded-md border transition-all bg-gray-400 checked:border-pec checked:bg-pec"
@@ -65,7 +61,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
                 <label className="font-semibold text-pec cursor-pointer select-none" htmlFor="check">
                     Lembrar usuário
                 </label>
-            </div>
+            </div> */}
             {/* Botão de entrar */}
             <footer className="w-full flex justify-center">
                 <button
