@@ -1,4 +1,3 @@
-// frontend/pages/VisualizadorChamados.tsx
 import React, { useState } from 'react';
 import Layout from '../components/Layout';
 import { useChamados } from '../hooks/useChamados';
@@ -8,8 +7,7 @@ import LoadingSpinner from '../components/LoadingSpinner';
 
 const VisualizarChamados: React.FC = () => {
     const [searchQuery, setSearchQuery] = useState('');
-    const [filters, setFilters] = useState<{ atendido?: number; plano?: number; status?: number }>({});
-
+    const [filters, setFilters] = useState<{ atendido?: number; plano?: number[]; status?: number }>({});
 
     const { chamados, loading, error } = useChamados();
 
@@ -19,7 +17,7 @@ const VisualizarChamados: React.FC = () => {
         const matchesFilters = (
             (filters.atendido === undefined || chamado.cha_status === filters.atendido) &&
             (filters.status === undefined || chamado.cha_status === filters.status) &&
-            (filters.plano === undefined || chamado.cha_plano === filters.plano)
+            (filters.plano === undefined || filters.plano.includes(chamado.cha_plano))
         );
         return matchesSearchQuery && matchesFilters;
     });
@@ -28,7 +26,7 @@ const VisualizarChamados: React.FC = () => {
         setSearchQuery(query);
     };
 
-    const handleFilterChange = (newFilters: { atendido?: number; plano?: number; status?: number }) => {
+    const handleFilterChange = (newFilters: { atendido?: number; plano?: number[]; status?: number }) => {
         setFilters(newFilters);
     };
 
