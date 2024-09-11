@@ -1,7 +1,8 @@
-// /components/Table.tsx
+// ./components/Table.tsx
+
 import React, { useState } from 'react';
 import ChamadoModal from '../components/ChamadoModal';
-
+import '../style/Table.css';
 interface Chamado {
     cha_id: number;
     cha_cliente: string;
@@ -36,12 +37,12 @@ const formatDuration = (minutes: number | null): string => {
 };
 
 const getDurationClass = (minutes: number | null): string => {
-    if (minutes === null) return '';
-    if (minutes < 0) return 'text-blue-500';
-    if (minutes > 60) return 'text-red-500'; // Mais de 1 hora
-    if (minutes > 30) return 'text-orange-500'; // Entre 20 e 30 min
-    if (minutes > 20) return 'text-yellow-500'; // Entre 0 e 20 min
-    return 'text-gray-500'; // Menos de 30 minutos
+    if (minutes === null) return 'duration-na';
+    if (minutes > 60) return 'duration-slow'; // Mais de 1 hora
+    if (minutes > 30) return 'duration-medium'; // Entre 30 e 60 min
+    if (minutes > 20) return 'duration-fast'; // Entre 20 e 30 min
+    if (minutes < 0) return 'duration-negative'
+    return 'duration-very-fast'; // Menos de 20 minutos
 };
 
 const Table: React.FC<TableProps> = ({ chamados }) => {
@@ -67,55 +68,72 @@ const Table: React.FC<TableProps> = ({ chamados }) => {
         }
     };
 
+    const calcDurationLate = (chamadoDuracaoTotal: number | null, chamadoDuracaoAtendimento: number | null) => {
+        if (chamadoDuracaoTotal != null && chamadoDuracaoAtendimento != null) {
+            const durationLate = chamadoDuracaoTotal - chamadoDuracaoAtendimento;
+            return durationLate;
+        } else {
+            return 0;
+        }
+    }
+
     return (
         <>
-            <div className="max-w-full max-h-[calc(100vh-50px)] px-4">
-                <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
+            <div className="table-container">
+                <table className="table">
+                    <thead className="table-header">
                         <tr>
-                            <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Classe</th>
-                            <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Duração Total</th>
-                            <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Duração Atendimento</th>
-                            <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tipo de Chamado</th>
-                            <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Criado Por</th>
-                            <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Local</th>
-                            <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cliente</th>
-                            <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Produto</th>
-                            <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                            <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Suporte</th>
+                            <th className="table-header-cell">Prioridade</th>
+                            <th className="table-header-cell">Duração</th>
+                            <th className="table-header-cell">Tipo de Chamado</th>
+                            <th className="table-header-cell">Criado Por</th>
+                            <th className="table-header-cell">Local</th>
+                            <th className="table-header-cell">Cliente</th>
+                            <th className="table-header-cell">Produto</th>
+                            <th className="table-header-cell">Status</th>
+                            <th className="table-header-cell">Suporte</th>
                         </tr>
                     </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
+                    <tbody className="table-body">
                         {chamados.map((chamado) => (
                             <React.Fragment key={chamado.cha_id}>
                                 <tr
-                                    className="cursor-pointer hover:bg-gray-100"
+                                    className={`table-row cursor-pointer ${expandedRow === chamado.cha_id ? 'selected-row' : ''}`}
                                     onClick={() => handleRowClick(chamado.cha_id)}
                                     onDoubleClick={() => handleRowDoubleClick(chamado)}
                                 >
-                                    <td className="px-3 py-2 text-center whitespace-nowrap text-sm text-gray-500">
-                                        {chamado.cha_plano === 1 && <span>🔴</span>}
-                                        {chamado.cha_plano === 0 && <span>🟡</span>}
-                                        {chamado.cha_plano === -1 && <span>🔵</span>}
+                                    <td className="px-3 py-2 text-center">
+                                        <span className={`badge badge-${chamado.cha_plano === 1 ? 'high' : (chamado.cha_plano === 0 ? 'medium' : 'low')}`}>
+                                            {chamado.cha_plano === 1 ? 'Alta' : (chamado.cha_plano === 0 ? 'Média' : 'Baixa')}
+                                        </span>
                                     </td>
-                                    <td className={`px-3 py-2 whitespace-nowrap text-sm ${getDurationClass(chamado.duracao_total)} font-bold`}>
-                                        {formatDuration(chamado.duracao_total)}
+                                    <td className="px-3 py-2">
+                                        <div className="duration-container">
+                                            <div className={getDurationClass(chamado.duracao_total)}>
+                                                TT: {formatDuration(chamado.duracao_total)}
+                                            </div>
+                                            <div className={getDurationClass(chamado.duracao_atendimento)}>
+                                                TA: {formatDuration(chamado.duracao_atendimento)}
+                                            </div>
+                                            <div className={getDurationClass(calcDurationLate(chamado.duracao_total, chamado.duracao_atendimento))}>
+                                                TAtr: {formatDuration(calcDurationLate(chamado.duracao_total, chamado.duracao_atendimento))}
+                                            </div>
+                                        </div>
                                     </td>
-                                    <td className={`px-3 py-2 whitespace-nowrap text-sm ${getDurationClass(chamado.duracao_atendimento)} font-bold`}>
-                                        {formatDuration(chamado.duracao_atendimento)}
+                                    <td className="px-3 py-2 text-gray-500">{chamado.call_type}</td>
+                                    <td className="px-3 py-2 text-gray-500">{chamado.cha_operador}</td>
+                                    <td className="px-3 py-2 text-gray-500">{chamado.cha_local}</td>
+                                    <td className="px-3 py-2 text-gray-500">{chamado.cha_cliente}</td>
+                                    <td className="px-3 py-2 text-gray-500">{chamado.cha_produto}</td>
+                                    <td className={`px-3 py-2 text-center ${chamado.cha_status === 1 ? 'status-open' : 'status-in-progress'}`}>
+                                        {chamado.cha_status === 1 ? 'Aberto' : 'Em Atendimento'}
                                     </td>
-                                    <td className="px-3 py-2 whitespace-nowrap text-sm text- text-gray-500">{chamado.call_type}</td>
-                                    <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-500">{chamado.cha_operador}</td>
-                                    <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-500">{chamado.cha_local}</td>
-                                    <td className="px-3 py-2 whitespace-nowrap text-sm text-wrap text-gray-500">{chamado.cha_cliente}</td>
-                                    <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-500">{chamado.cha_produto}</td>
-                                    <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-500">{chamado.cha_status === 1 ? 'Aberto' : 'Em atendimento'}</td>
-                                    <td className="px-3 py-2 whitespace-nowrap text-sm text-gray-500">{chamado.support}</td>
+                                    <td className="px-3 py-2 text-gray-500">{chamado.support}</td>
                                 </tr>
                                 {expandedRow === chamado.cha_id && (
                                     <tr>
-                                        <td colSpan={10} className="px-3 py-5 bg-gray-50 text-sm text-gray-700 font-medium">
-                                            DESCRIÇÃO: {chamado.cha_descricao}
+                                        <td colSpan={9} className="description-cell">
+                                            <strong>Descrição:</strong> {chamado.cha_descricao}
                                         </td>
                                     </tr>
                                 )}
@@ -123,8 +141,8 @@ const Table: React.FC<TableProps> = ({ chamados }) => {
                         ))}
                     </tbody>
                 </table>
-            </div>
 
+            </div>
 
             {selectedChamado && (
                 <ChamadoModal

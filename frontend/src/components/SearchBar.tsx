@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Select, { MultiValue } from 'react-select';
+import '../style/Table.css';
 
 interface SearchBarProps {
     onSearch: (query: string) => void;
@@ -14,13 +15,31 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch, onFilterChange }) => {
     const [plano, setPlano] = useState<number[] | undefined>(undefined);
 
     const optionsPlano = [
-        { value: 1, label: '🔴 Chamados dentro do plano' },
-        { value: 0, label: '🟡 Chamados fora do plano' },
-        { value: -1, label: '🔵 Chamados de engenharia' },
+        {
+            value: 1, label:
+                <div className="legend-item">
+                    <div className="legend-color-box legend-high"></div>
+                    <span>Alta</span>
+                </div>
+        },
+        {
+            value: 0, label:
+                <div className="legend-item">
+                    <div className="legend-color-box legend-medium"></div>
+                    <span>Média</span>
+                </div>
+        },
+        {
+            value: -1, label:
+                <div className="legend-item">
+                    <div className="legend-color-box legend-low"></div>
+                    <span>Baixa</span>
+                </div>
+        },
     ];
 
     // Função para mudança no plano
-    const handlePlanoChange = (selectedOptions: MultiValue<{ value: number; label: string }>) => {
+    const handlePlanoChange = (selectedOptions: MultiValue<{ value: number; label: JSX.Element }>) => {
         const values = selectedOptions.map(option => option.value);
         setPlano(values.length > 0 ? values : undefined); // Atualiza com array de valores
     };

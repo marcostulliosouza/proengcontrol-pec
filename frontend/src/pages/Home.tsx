@@ -76,14 +76,14 @@ const Home: React.FC = () => {
                         <p className="text-sm text-center">Adicione novos clientes ao sistema.</p>
                     </div>
 
-                    {/* Cadastrar Dispositivo */}
+                    {/* Gerenciamento de Dispositivos */}
                     <div
                         className="bg-indigo-500 text-white p-4 rounded-lg shadow hover:shadow-lg transition cursor-pointer flex flex-col items-center justify-between"
-                        onClick={() => navigate('/cadastrar-dispositivo')}
+                        onClick={() => navigate('/gerenciamento-dispositivo')}
                     >
                         <AiOutlineLaptop className="text-3xl mb-2" />
-                        <h2 className="text-lg font-semibold">Cadastrar Dispositivo</h2>
-                        <p className="text-sm text-center">Registre novos dispositivos no sistema.</p>
+                        <h2 className="text-lg font-semibold">Gerenciamento de Dispositivo</h2>
+                        <p className="text-sm text-center">Gerencie os dispositivos no sistema.</p>
                     </div>
 
                     {/* Vincular Cliente ao Produto */}

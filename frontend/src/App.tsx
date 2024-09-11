@@ -17,6 +17,7 @@ import Home from './pages/Home';
 import AbrirChamado from './pages/AbrirChamado';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import DeviceManagement from './pages/DeviceManagement';
 
 export function App() {
   return (
@@ -36,6 +37,7 @@ export function App() {
         <Route path="/configuracoes" element={<Configuracoes />} />
         <Route path="/perfil" element={<Perfil />} />
         <Route path="/historico-atividades" element={<HistoricoAtividades />} />
+        <Route path='/gerenciamento-dispositivo' element={<DeviceManagement />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <ToastContainer />
