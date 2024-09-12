@@ -1,5 +1,4 @@
 // backend/models/CallModel.js
-const { query } = require('express');
 const dbService = require('../services/dbService');
 
 class CallModel {
@@ -146,42 +145,92 @@ class CallModel {
         }
     }
 
-    // static async setCallAsBeingAnswered(callId, idResponsible) {
-    //     try {
-    //         // Inserir o atendimento no banco de dados
-    //         const table = "atendimentos_chamados";
-    //         const fields = ["atc_chamado", "atc_colaborador", "atc_data_hora_inicio"];
-    //         const values = [callId, idResponsible, "NOW()"];
+    // Atender Chamado
+    static async setCallAsBeingAnswered(callId, idResponsible) {
+        try {
+            console.log(`Iniciando o atendimento para o chamado ${callId} pelo colaborador ${idResponsible}`);
 
-    //         // Inserir o novo atendimento
-    //         const [insertResult] = await dbService.insert(table, fields, values);
+            // Inserir o atendimento no banco de dados
+            const table = "atendimentos_chamados";
+            const fields = ["atc_chamado", "atc_colaborador", "atc_data_hora_inicio"];
+            const values = [callId, idResponsible];  // Remover 'NOW()' dos valores e usar diretamente na consulta
 
-    //         if (!insertResult) {
-    //             throw new Error("Falha ao tentar executar a inserção no banco.");
-    //         }
+            // Inserir o novo atendimento
+            await dbService.insert(table, fields, [...values, new Date()]); // Passar a data atual
 
-    //         // Atualizar o chamado
-    //         const updateTable = "chamados";
-    //         const fieldsAndValues = [
-    //             ["cha_status", "'2'"],
-    //             ["cha_data_hora_atendimento", "NOW()"]
-    //         ];
-    //         const conditions = [
-    //             `cha_id = '${callId}'`
-    //         ];
+            // Atualizar o chamado
+            const updateTable = "chamados";
+            const fieldsAndValues = [
+                ["cha_status", "2"],
+                ["cha_data_hora_atendimento", "NOW()"] // Usar a função NOW() diretamente na consulta SQL
+            ];
+            const conditions = [
+                `cha_id = ${callId}`
+            ];
 
-    //         const [updateResult] = await dbService.update(updateTable, fieldsAndValues, conditions);
+            const updateResult = await dbService.update(updateTable, fieldsAndValues, conditions);
+            if (!updateResult) {
+                console.error("Falha ao tentar executar a atualização no banco.");
+            }
 
-    //         if (!updateResult) {
-    //             throw new Error("Falha ao tentar executar a atualização no banco.");
-    //         }
+            return { success: true };
 
-    //         return { success: true };
+        } catch (error) {
+            console.error(`Error setting call as being answered: ${error.message}`);
+        }
+    }
 
-    //     } catch (error) {
-    //         throw new Error(`Error setting call as being answered: ${error.message}`);
-    //     }
-    // }
+
+
+    // Desistir do Chamado
+    static async giveUpFromCall(callID, idResponsible) {
+        try {
+            const table = "atendimentos_chamados";
+            const conditions = [
+                `atc_chamado = "${callID}"`
+            ];
+
+            // Deletando o atendimento do chamado
+            const [deleteResult] = await dbService.deleteQuery(table, conditions);
+
+            if (!deleteResult) {
+                throw new Error("Falha ao tentar desistir do chamado no banco.")
+            } else {
+                // Atualizando o chamado
+                const updateTable = "chamados";
+                const fieldsAndValues = [
+                    ["cha_status", "1"],
+                    ["cha_data_hora_termino", "NULL"],
+                    ["cha_visualizado", "0"]
+                ];
+                const conditions = [
+                    `cha_id = ${this.callID}`
+                ];
+
+                const [updateResult] = await dbService.update(updateTable, fieldsAndValues, conditions);
+
+                if (!updateResult) {
+                    console.error("Falha ao tentar executar a atualização no banco");
+                }
+            }
+        } catch (error) {
+            console.error(`Error setting call as give up from call: ${error.message}`);
+        }
+    }
+
+    // Fechar Chamado
+    static async closeCall(callID, detractorID, actionTaked) {
+        const table = "atendimentos_chamados"
+        const fieldsAndValues = [
+            ["atc_data_hora_termino", "NOW()"]
+        ];
+        const conditions = [
+            `atc_chamado = "${callID}"`,
+            "atc_data_hora_termino IS NULL"
+        ];
+
+        const [] = dbService
+    }
 
 }
 

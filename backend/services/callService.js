@@ -1,3 +1,4 @@
+// ./sevices/callServices.js
 const CallModel = require('../models/callModel');
 const { emitCallUpdate } = require('./socketService');
 
@@ -47,30 +48,16 @@ class CallService {
 
     static async setCallAsBeingAnswered(callId, idResponsible) {
         try {
-            const updateData = {
-                cha_status: '2',  // Estado de "atendendo"
-                cha_data_hora_atendimento: new Date()  // Atualiza o horário de atendimento para o momento atual
-            };
-
-            // Primeiro, cria o atendimento
-            const atendimentoData = {
-                atc_chamado: callId,
-                atc_colaborador: idResponsible,
-                atc_data_hora_inicio: new Date() // Atualiza o horário de início para o momento atual
-            };
-
-            await CallModel.createAtendimento(atendimentoData);
-
-            // Depois, atualiza o chamado
-            const updatedCall = await CallModel.updateCall(callId, updateData);
-            console.log('Emitting updated call:', updatedCall);
-            emitCallUpdate(updatedCall);
-
-            return updatedCall;
+            const result = await CallModel.setCallAsBeingAnswered(callId, idResponsible);
+            console.log('Emitting updated call:', result);
+            emitCallUpdate(result);
+            return result;
         } catch (error) {
-            throw new Error('Error setting call as being answered');
+            throw new Error(`Error setting call as being answered: ${error.message}`);
         }
     }
+
+
 }
 
 module.exports = CallService;

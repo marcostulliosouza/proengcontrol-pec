@@ -22,22 +22,23 @@ class CallController {
     }
 
     static async setCallAsBeingAnswered(req, res) {
+        console.log("setCallAsBeingAnswered called with callId:", req.params.callId);
+        const callId = req.params.callId;
+        const idResponsible = req.body.idResponsible;
+
+        if (!callId || !idResponsible) {
+            return res.status(400).json({ error: "Missing required parameters: callId or idResponsible" });
+        }
+
         try {
-            const callId = req.params.callId;
-            const idResponsible = req.body.idResponsible;
-
-            if (!callId || !idResponsible) {
-                return res.status(400).json({ error: "Missing required parameters: callId or idResponsible" });
-            }
-
-            // Chama o serviço para definir o chamado como atendido
-            const result = await CallService.setCallAsBeingAnswered(callId, idResponsible);
-
-            res.json(result);
+            const setCall = await CallService.setCallAsBeingAnswered(callId, idResponsible);
+            res.json(setCall);
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
     }
+
+
 }
 
 module.exports = CallController;

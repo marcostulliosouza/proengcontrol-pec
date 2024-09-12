@@ -1,11 +1,15 @@
+/* Container da Tabela */
 .table-container {
     max-width: 100%;
     padding: 16px;
     background-color: #f9fafb;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    overflow-x: auto;
+    /* Adiciona rolagem horizontal quando necessário */
 }
 
+/* Tabela */
 .table {
     width: 100%;
     border-collapse: collapse;
@@ -13,6 +17,7 @@
     overflow: hidden;
 }
 
+/* Cabeçalho da Tabela */
 .table-header {
     background-color: #2d3748;
     color: #fff;
@@ -27,6 +32,7 @@
     border-bottom: 2px solid #4a5568;
 }
 
+/* Corpo da Tabela */
 .table-body .table-row {
     transition: background-color 0.3s ease, transform 0.2s ease;
     border-bottom: 1px solid #e2e8f0;
@@ -50,6 +56,7 @@
     max-width: max-content;
 }
 
+/* Classificações de Duração */
 .duration-na {
     color: #a0aec0;
 }
@@ -98,19 +105,19 @@
     border-color: #c6f6d5;
 }
 
-.table-body .status-open,
-.table-body .status-in-progress {
+/* Status */
+.status-open,
+.status-in-progress {
     padding: 4px 8px;
     border-radius: 8px;
-    display: inline-block;
-    text-align: center;
-    font-size: 0.75rem;
     color: #fff;
     font-weight: 600;
-    width: 100px;
-    /* Define uma largura fixa */
-    margin: 0 auto;
-    /* Centraliza o status horizontalmente */
+    font-size: 0.875rem;
+    text-align: center;
+    display: inline-block;
+    margin-right: 4px;
+    border: 1px solid transparent;
+    width: 80px;
 }
 
 .status-open {
@@ -120,7 +127,6 @@
 .status-in-progress {
     background-color: #3182ce;
     animation: pulse 1s infinite;
-    /* Adiciona uma animação de pulsar ao status "Atendendo" */
 }
 
 @keyframes pulse {
@@ -137,6 +143,7 @@
     }
 }
 
+/* Badges */
 .badge {
     padding: 4px 8px;
     border-radius: 8px;
@@ -165,6 +172,7 @@
     border-color: #2975d0;
 }
 
+/* Células de Descrição */
 .description-cell {
     padding: 10px 14px;
     text-align: left;
@@ -174,10 +182,17 @@
     background-color: #f7fafc;
 }
 
+/* Contêiner da Legenda */
 .legend-container {
     margin-top: 16px;
     font-size: 0.75rem;
     color: #4a5568;
+    border: 1px solid #dcdcdc;
+    border-radius: 8px;
+    padding: 8px 16px;
+    background-color: #f7fafc;
+    max-width: screen;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .legend-item {
@@ -204,13 +219,4 @@
 
 .legend-low {
     background-color: #248eff;
-}
-
-.legend-container {
-    border: 1px solid #dcdcdc;
-    border-radius: 8px;
-    padding: 8px 16px;
-    background-color: #f7fafc;
-    max-width: screen;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }

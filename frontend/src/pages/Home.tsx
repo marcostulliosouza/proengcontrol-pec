@@ -22,7 +22,7 @@ const Home: React.FC = () => {
                         onClick={() => navigate('/dashboard')}
                     >
                         <AiOutlineDashboard className="text-3xl mb-2" />
-                        <h2 className="text-lg font-semibold">Dashboard</h2>
+                        <h2 className="text-lg font-semibold text-center">Dashboard</h2>
                         <p className="text-sm text-center">Veja os principais indicadores e acompanhe os chamados em tempo real.</p>
                     </div>
 
@@ -32,7 +32,7 @@ const Home: React.FC = () => {
                         onClick={() => navigate('/visualizar-chamados')}
                     >
                         <AiOutlineEye className="text-3xl mb-2" />
-                        <h2 className="text-lg font-semibold">Visualizar Chamados</h2>
+                        <h2 className="text-lg font-semibold text-center">Visualizar Chamados</h2>
                         <p className="text-sm text-center">Acesse todos os chamados registrados e acompanhe seus status.</p>
                     </div>
 
@@ -42,7 +42,7 @@ const Home: React.FC = () => {
                         onClick={() => navigate('/abrir-chamado')}
                     >
                         <AiOutlinePlusCircle className="text-3xl mb-2" />
-                        <h2 className="text-lg font-semibold">Abrir Chamado</h2>
+                        <h2 className="text-lg font-semibold text-center">Abrir Chamado</h2>
                         <p className="text-sm text-center">Registre um novo chamado para a engenharia de testes.</p>
                     </div>
 
@@ -52,7 +52,7 @@ const Home: React.FC = () => {
                         onClick={() => navigate('/cadastrar-produto')}
                     >
                         <AiOutlineTags className="text-3xl mb-2" />
-                        <h2 className="text-lg font-semibold">Cadastrar Produto</h2>
+                        <h2 className="text-lg font-semibold text-center">Cadastrar Produto</h2>
                         <p className="text-sm text-center">Adicione novos produtos ao sistema.</p>
                     </div>
 
@@ -62,7 +62,7 @@ const Home: React.FC = () => {
                         onClick={() => navigate('/cadastrar-colaborador')}
                     >
                         <AiOutlineUserAdd className="text-3xl mb-2" />
-                        <h2 className="text-lg font-semibold">Cadastrar Colaborador</h2>
+                        <h2 className="text-lg font-semibold text-center">Cadastrar Colaborador</h2>
                         <p className="text-sm text-center">Inclua novos colaboradores no sistema.</p>
                     </div>
 
@@ -72,7 +72,7 @@ const Home: React.FC = () => {
                         onClick={() => navigate('/cadastrar-cliente')}
                     >
                         <AiOutlineUserAdd className="text-3xl mb-2" />
-                        <h2 className="text-lg font-semibold">Cadastrar Cliente</h2>
+                        <h2 className="text-lg font-semibold text-center">Cadastrar Cliente</h2>
                         <p className="text-sm text-center">Adicione novos clientes ao sistema.</p>
                     </div>
 
@@ -82,7 +82,7 @@ const Home: React.FC = () => {
                         onClick={() => navigate('/gerenciamento-dispositivo')}
                     >
                         <AiOutlineLaptop className="text-3xl mb-2" />
-                        <h2 className="text-lg font-semibold">Gerenciamento de Dispositivo</h2>
+                        <h2 className="text-lg font-semibold text-center">Gerenciamento de Dispositivo</h2>
                         <p className="text-sm text-center">Gerencie os dispositivos no sistema.</p>
                     </div>
 
@@ -92,7 +92,7 @@ const Home: React.FC = () => {
                         onClick={() => navigate('/vincular-cliente-produto')}
                     >
                         <AiOutlineLink className="text-3xl mb-2" />
-                        <h2 className="text-lg font-semibold">Vincular Cliente ao Produto</h2>
+                        <h2 className="text-lg font-semibold text-center">Vincular Cliente ao Produto</h2>
                         <p className="text-sm text-center">Associe clientes aos produtos específicos.</p>
                     </div>
 
@@ -102,7 +102,7 @@ const Home: React.FC = () => {
                         onClick={() => navigate('/relatorios')}
                     >
                         <AiOutlineFileText className="text-3xl mb-2" />
-                        <h2 className="text-lg font-semibold">Relatórios</h2>
+                        <h2 className="text-lg font-semibold text-center">Relatórios</h2>
                         <p className="text-sm text-center">Gere e visualize relatórios detalhados.</p>
                     </div>
 
@@ -112,7 +112,7 @@ const Home: React.FC = () => {
                         onClick={() => navigate('/configuracoes')}
                     >
                         <AiOutlineSetting className="text-3xl mb-2" />
-                        <h2 className="text-lg font-semibold">Configurações</h2>
+                        <h2 className="text-lg font-semibold text-center">Configurações</h2>
                         <p className="text-sm text-center">Ajuste as configurações do sistema.</p>
                     </div>
 
@@ -122,7 +122,7 @@ const Home: React.FC = () => {
                         onClick={() => navigate('/perfil')}
                     >
                         <AiOutlineUser className="text-3xl mb-2" />
-                        <h2 className="text-lg font-semibold">Perfil</h2>
+                        <h2 className="text-lg font-semibold text-center">Perfil</h2>
                         <p className="text-sm text-center">Visualize e edite seu perfil.</p>
                     </div>
 
@@ -132,7 +132,7 @@ const Home: React.FC = () => {
                         onClick={() => navigate('/historico-atividades')}
                     >
                         <AiOutlineHistory className="text-3xl mb-2" />
-                        <h2 className="text-lg font-semibold">Histórico de Atividades</h2>
+                        <h2 className="text-lg font-semibold text-center">Histórico de Atividades</h2>
                         <p className="text-sm text-center">Veja o histórico de atividades do sistema.</p>
                     </div>
                 </div>

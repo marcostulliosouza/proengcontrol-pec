@@ -2,7 +2,9 @@
 
 import React, { useState } from 'react';
 import ChamadoModal from '../components/ChamadoModal';
+import { useChamados } from '../hooks/useChamados';
 import '../style/Table.css';
+
 interface Chamado {
     cha_id: number;
     cha_cliente: string;
@@ -27,6 +29,7 @@ interface Chamado {
 
 interface TableProps {
     chamados: Chamado[];
+    onChamadoClick: (chamado: Chamado) => void; // Adicionar a propriedade
 }
 
 const formatDuration = (minutes: number | null): string => {
@@ -41,11 +44,11 @@ const getDurationClass = (minutes: number | null): string => {
     if (minutes > 60) return 'duration-slow'; // Mais de 1 hora
     if (minutes > 30) return 'duration-medium'; // Entre 30 e 60 min
     if (minutes > 20) return 'duration-fast'; // Entre 20 e 30 min
-    if (minutes < 0) return 'duration-negative'
+    if (minutes < 0) return 'duration-negative';
     return 'duration-very-fast'; // Menos de 20 minutos
 };
 
-const Table: React.FC<TableProps> = ({ chamados }) => {
+const Table: React.FC<TableProps> = ({ chamados, onChamadoClick }) => {
     const [selectedChamado, setSelectedChamado] = useState<Chamado | null>(null);
     const [expandedRow, setExpandedRow] = useState<number | null>(null);
 
@@ -61,6 +64,7 @@ const Table: React.FC<TableProps> = ({ chamados }) => {
         setSelectedChamado(null);
     };
 
+
     const handleAtenderChamado = () => {
         if (selectedChamado) {
             console.log('Atender chamado:', selectedChamado.cha_id);
@@ -75,7 +79,7 @@ const Table: React.FC<TableProps> = ({ chamados }) => {
         } else {
             return 0;
         }
-    }
+    };
 
     return (
         <>
@@ -112,10 +116,10 @@ const Table: React.FC<TableProps> = ({ chamados }) => {
                                             <div className={getDurationClass(chamado.duracao_total)}>
                                                 TT: {formatDuration(chamado.duracao_total)}
                                             </div>
-                                            <div className={getDurationClass(chamado.duracao_atendimento)}>
+                                            <div className={`${chamado.cha_status === 1 ? 'hidden' : ''} ${getDurationClass(chamado.duracao_atendimento)}`}>
                                                 TA: {formatDuration(chamado.duracao_atendimento)}
                                             </div>
-                                            <div className={getDurationClass(calcDurationLate(chamado.duracao_total, chamado.duracao_atendimento))}>
+                                            <div className={`${chamado.cha_status === 1 ? 'hidden' : ''} ${getDurationClass(calcDurationLate(chamado.duracao_total, chamado.duracao_atendimento))}`}>
                                                 TAtr: {formatDuration(calcDurationLate(chamado.duracao_total, chamado.duracao_atendimento))}
                                             </div>
                                         </div>
@@ -125,13 +129,13 @@ const Table: React.FC<TableProps> = ({ chamados }) => {
                                     <td className="px-3 py-2 text-gray-500">{chamado.cha_local}</td>
                                     <td className="px-3 py-2 text-gray-500">{chamado.cha_cliente}</td>
                                     <td className="px-3 py-2 text-gray-500">{chamado.cha_produto}</td>
-                                    <td className={`px-3 py-2 text-center ${chamado.cha_status === 1 ? 'status-open' : 'status-in-progress'}`}>
+                                    <td className={`px-3 py-2 ${chamado.cha_status === 1 ? 'status-open' : 'status-in-progress'} middle`}>
                                         {chamado.cha_status === 1 ? 'Aberto' : 'Atendendo'}
                                     </td>
                                     <td className="px-3 py-2 text-gray-500">{chamado.support}</td>
                                 </tr>
                                 {expandedRow === chamado.cha_id && (
-                                    <tr>
+                                    <tr key={`desc-${chamado.cha_id}`}>
                                         <td colSpan={9} className="description-cell">
                                             <strong>Descrição:</strong> {chamado.cha_descricao}
                                         </td>
@@ -141,14 +145,13 @@ const Table: React.FC<TableProps> = ({ chamados }) => {
                         ))}
                     </tbody>
                 </table>
-
             </div>
 
             {selectedChamado && (
                 <ChamadoModal
                     chamado={selectedChamado}
                     onClose={handleCloseModal}
-                    onAtender={handleAtenderChamado}
+                    onAtender={handleAtenderChamado} // Verifique se o ChamadoModalProps está correto
                 />
             )}
         </>

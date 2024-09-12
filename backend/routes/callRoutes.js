@@ -1,7 +1,7 @@
 // backend/routes/callRoutes.js
 const express = require('express');
 const CallController = require('../controllers/callController');
-const { authenticateToken } = require('../middlewares/authMiddleware');
+// const { authenticateToken } = require('../middlewares/authMiddleware');
 
 const router = express.Router();
 
