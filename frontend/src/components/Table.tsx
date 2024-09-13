@@ -106,12 +106,12 @@ const Table: React.FC<TableProps> = ({ chamados, onChamadoClick }) => {
                                     onClick={() => handleRowClick(chamado.cha_id)}
                                     onDoubleClick={() => handleRowDoubleClick(chamado)}
                                 >
-                                    <td className="px-3 py-2 text-center">
+                                    <td className="text-center">
                                         <span className={`badge badge-${chamado.cha_plano === 1 ? 'high' : (chamado.cha_plano === 0 ? 'medium' : 'low')}`}>
                                             {chamado.cha_plano === 1 ? 'Alta' : (chamado.cha_plano === 0 ? 'Média' : 'Baixa')}
                                         </span>
                                     </td>
-                                    <td className="px-3 py-2">
+                                    <td>
                                         <div className="duration-container">
                                             <div className={getDurationClass(chamado.duracao_total)}>
                                                 TT: {formatDuration(chamado.duracao_total)}
@@ -124,15 +124,15 @@ const Table: React.FC<TableProps> = ({ chamados, onChamadoClick }) => {
                                             </div>
                                         </div>
                                     </td>
-                                    <td className="px-3 py-2 text-gray-500">{chamado.call_type}</td>
-                                    <td className="px-3 py-2 text-gray-500">{chamado.cha_operador}</td>
-                                    <td className="px-3 py-2 text-gray-500">{chamado.cha_local}</td>
-                                    <td className="px-3 py-2 text-gray-500">{chamado.cha_cliente}</td>
-                                    <td className="px-3 py-2 text-gray-500">{chamado.cha_produto}</td>
-                                    <td className={`px-3 py-2 ${chamado.cha_status === 1 ? 'status-open' : 'status-in-progress'} middle`}>
+                                    <td className=" text-gray-500 text-center">{chamado.call_type}</td>
+                                    <td className=" text-gray-500 text-center">{chamado.cha_operador}</td>
+                                    <td className=" text-gray-500 text-center">{chamado.cha_local}</td>
+                                    <td className=" text-gray-500 text-center">{chamado.cha_cliente}</td>
+                                    <td className=" text-gray-500 text-center font-bold">{chamado.cha_produto}</td>
+                                    <td className={` ${chamado.cha_status === 1 ? 'status-open' : 'status-in-progress'} middle text-center`}>
                                         {chamado.cha_status === 1 ? 'Aberto' : 'Atendendo'}
                                     </td>
-                                    <td className="px-3 py-2 text-gray-500">{chamado.support}</td>
+                                    <td className=" text-blue-800 font-bold text-center">{chamado.support}</td>
                                 </tr>
                                 {expandedRow === chamado.cha_id && (
                                     <tr key={`desc-${chamado.cha_id}`}>

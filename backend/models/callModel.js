@@ -62,165 +62,6 @@ class CallModel {
 
 	}
 
-	// // 	// Implementação para inserir um novo chamado no banco de dados
-	// // 	const [result] = await dbService.insert('chamados', callData);
-	// // 	const newCall = await this.getCallById(result.insertId); // Supondo que você tenha um método para obter um chamado por ID
-	// // 	return newCall;
-	// // }
-
-	// // static async getIndicators(period) {
-	// // 	try {
-	// // 		let whereConditions = [];
-	// // 		let periodCondition;
-
-	// // 		switch (period) {
-	// // 			case 'daily':
-	// // 				periodCondition = "DATE(chamados.cha_data_hora_abertura) = DATE(NOW())";
-	// // 				break;
-	// // 			case 'weekly':
-	// // 				periodCondition = "WEEK(chamados.cha_data_hora_abertura) = WEEK(NOW()) AND MONTH(chamados.cha_data_hora_abertura) = MONTH(NOW()) AND YEAR(chamados.cha_data_hora_abertura) = YEAR(NOW())";
-	// // 				break;
-	// // 			case 'monthly':
-	// // 				periodCondition = "MONTH(chamados.cha_data_hora_abertura) = MONTH(NOW()) AND YEAR(chamados.cha_data_hora_abertura) = YEAR(NOW())";
-	// // 				break;
-	// // 			default:
-	// // 				throw new Error('Invalid period specified');
-	// // 		}
-
-	// // 		whereConditions.push("chamados.cha_status = 3", "chamados.cha_plano = 1", periodCondition, "detratores.dtr_indicador > 0");
-
-	// // 		// Consultar os dados principais
-	// // 		const fields = [
-	// // 			"COUNT(chamados.cha_id) AS totalCalls",
-	// // 			"SUM(IF(chamados.cha_data_hora_abertura < chamados.cha_data_hora_termino, TIMESTAMPDIFF(MINUTE, IF(chamados.cha_data_hora_abertura > chamados.cha_data_hora_atendimento, chamados.cha_data_hora_abertura, chamados.cha_data_hora_atendimento), chamados.cha_data_hora_termino), 0)) AS totalAnsweringTime",
-	// // 			"SUM(IF(chamados.cha_data_hora_abertura < chamados.cha_data_hora_atendimento, TIMESTAMPDIFF(MINUTE, chamados.cha_data_hora_abertura, chamados.cha_data_hora_atendimento), 0)) AS totalLateTime"
-	// // 		];
-
-	// // 		const table = "chamados";
-
-	// // 		const joins = [
-	// // 			{ table: "acoes_chamados", on: "chamados.cha_acao = acoes_chamados.ach_id", type: " LEFT" },
-	// // 			{ table: "detratores", on: "acoes_chamados.ach_detrator = detratores.dtr_id", type: " LEFT" }
-	// // 		];
-
-	// // 		const queryResult = await dbService.select(fields, table, whereConditions, joins);
-
-	// // 		let indicators = {
-	// // 			totalCalls: 0,
-	// // 			avgAnswering: "00:00",
-	// // 			avgLate: "00:00",
-	// // 			upTime: "0,00%"
-	// // 		};
-
-	// // 		if (queryResult.length > 0) {
-	// // 			const { totalCalls, totalAnsweringTime, totalLateTime } = queryResult[0];
-	// // 			const avgAnswering = totalCalls > 0 ? Math.round(totalAnsweringTime / totalCalls) : 0;
-	// // 			const avgLate = totalCalls > 0 ? Math.round(totalLateTime / totalCalls) : 0;
-
-	// // 			indicators.totalCalls = totalCalls;
-	// // 			indicators.avgAnswering = `${String(Math.floor(avgAnswering / 60)).padStart(2, '0')}:${String(avgAnswering % 60).padStart(2, '0')}`;
-	// // 			indicators.avgLate = `${String(Math.floor(avgLate / 60)).padStart(2, '0')}:${String(avgLate % 60).padStart(2, '0')}`;
-	// // 		}
-
-	// // 		// Consultar o uptime
-	// // 		const uptimeFields = ["SUM(planos_de_producao.pdp_total_horas * 60) AS totalMinutes"];
-	// // 		const uptimeTable = 'planos_de_producao';
-	// // 		const uptimeConditions = [`${periodCondition}`];
-
-	// // 		// Executar a consulta para uptime
-	// // 		const uptimeResult = await dbService.select(uptimeFields, uptimeTable, uptimeConditions);
-
-	// // 		console.log("uptimeResult:", uptimeResult);
-
-	// // 		if (uptimeResult.length > 0) {
-	// // 			const totalMinutes = uptimeResult[0].totalMinutes || 0;
-	// // 			if (totalMinutes > 0) {
-	// // 				const uptime = 1 - ((totalAnsweringTime + totalLateTime) / totalMinutes);
-	// // 				indicators.upTime = `${(uptime * 100).toFixed(2).replace('.', ',')}%`;
-	// // 			} else {
-	// // 				indicators.upTime = "100,00%";
-	// // 			}
-	// // 		} else {
-	// // 			indicators.upTime = "0,00%";
-	// // 		}
-
-	// // 		return indicators;
-
-	// // 	} catch (error) {
-	// // 		throw new Error(`Error fetching ${period} indicators: ${error.message}`);
-	// // 	}
-	// // }
-
-	// // Atender Chamado
-	// static async setCallAsBeingAnswered(callId, idResponsible) {
-	// 	try {
-	// 		// Inserir o atendimento no banco de dados
-	// 		const table = "atendimentos_chamados";
-	// 		const fields = ["atc_chamado", "atc_colaborador", "atc_data_hora_inicio"];
-	// 		const values = [callId, idResponsible];  // Remover 'NOW()' dos valores e usar diretamente na consulta
-
-	// 		// Inserir o novo atendimento
-	// 		await dbService.insert(table, fields, [...values, new Date()]); // Passar a data atual
-
-	// 		// Atualizar o chamado
-	// 		const updateTable = "chamados";
-	// 		const fieldsAndValues = [
-	// 			["cha_status", "2"],
-	// 			["cha_data_hora_atendimento", "NOW()"] // Usar a função NOW() diretamente na consulta SQL
-	// 		];
-	// 		const conditions = [
-	// 			`cha_id = ${callId}`
-	// 		];
-
-	// 		const updateResult = await dbService.update(updateTable, fieldsAndValues, conditions);
-	// 		if (!updateResult) {
-	// 			console.error("Falha ao tentar executar a atualização no banco.");
-	// 		}
-
-	// 		return { success: true };
-
-	// 	} catch (error) {
-	// 		console.error(`Error ao atender o chamado: ${error.message}`);
-	// 	}
-	// }
-
-
-	// Desistir do Chamado
-	// static async giveUpFromCall(callID, idResponsible) {
-	// 	try {
-	// 		const table = "atendimentos_chamados";
-	// 		const conditions = [
-	// 			`atc_chamado = "${callID}"`
-	// 		];
-
-	// 		// Deletando o atendimento do chamado
-	// 		const [deleteResult] = await dbService.deleteQuery(table, conditions);
-
-	// 		if (!deleteResult) {
-	// 			throw new Error("Falha ao tentar desistir do chamado no banco.")
-	// 		} else {
-	// 			// Atualizando o chamado
-	// 			const updateTable = "chamados";
-	// 			const fieldsAndValues = [
-	// 				["cha_status", "1"],
-	// 				["cha_data_hora_termino", "NULL"],
-	// 				["cha_visualizado", "0"]
-	// 			];
-	// 			const conditions = [
-	// 				`cha_id = ${this.callID}`
-	// 			];
-
-	// 			const [updateResult] = await dbService.update(updateTable, fieldsAndValues, conditions);
-
-	// 			if (!updateResult) {
-	// 				console.error("Falha ao tentar executar a atualização no banco");
-	// 			}
-	// 		}
-	// 	} catch (error) {
-	// 		console.error(`Error setting call as give up from call: ${error.message}`);
-	// 	}
-	// }
-
 	// Fechar Chamado
 	static async closeCall(callID, detractorID, actionTaked) {
 		try {
@@ -229,7 +70,7 @@ class CallModel {
 				["atc_data_hora_termino", "NOW()"]
 			];
 			const conditions = [
-				`atc_chamado = "${callID}"`,
+				`atc_chamado = ${callID}`,
 				"atc_data_hora_termino IS NULL"
 			];
 
@@ -361,6 +202,8 @@ class CallModel {
 	// chamado e atualiza o status e a hora de início do atendimento.
 
 	static async setCallAsBeingAnswered(callID, idResponsible) {
+		console.log("CallID: " + callID)
+		console.log("idResponsible: " + idResponsible)
 		try {
 			// Atualizar o status e o responsável pelo chamado
 			await CallModel.updateCallData(callID, {

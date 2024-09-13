@@ -30,12 +30,12 @@ const Header: React.FC<HeaderProps> = ({ toggleSidebar }) => {
                 <h1 className="text-xl font-semibold">PEC</h1>
             </button>
             <nav className="flex items-center gap-4">
-                <button
+                {/* <button
                     onClick={toggleSidebar}
                     className="text-white hover:text-gray-200"
                 >
                     Menu
-                </button>
+                </button> */}
                 <button
                     onClick={() => navigate('/about')}
                     className="text-white hover:text-gray-200"

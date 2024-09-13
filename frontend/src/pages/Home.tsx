@@ -1,6 +1,6 @@
 // ./pages/Home.tsx
 import React from 'react';
-import { AiOutlineDashboard, AiOutlineEye, AiOutlinePlusCircle, AiOutlineUserAdd, AiOutlineTags, AiOutlineLink, AiOutlineAppstoreAdd, AiOutlineLaptop, AiOutlineFileText, AiOutlineSetting, AiOutlineUser, AiOutlineHistory } from 'react-icons/ai';
+import { AiOutlineDashboard, AiOutlineEye, AiOutlinePlusCircle, AiOutlineUserAdd, AiOutlineTags, AiOutlineLink, AiOutlineAppstoreAdd, AiOutlineLaptop, AiOutlineFileText, AiOutlineSetting, AiOutlineUser, AiOutlineHistory, AiOutlineDownload } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
 import Layout from '../components/Layout';
 
@@ -46,9 +46,19 @@ const Home: React.FC = () => {
                         <p className="text-sm text-center">Registre um novo chamado para a engenharia de testes.</p>
                     </div>
 
-                    {/* Cadastrar Produto */}
+                    {/* Cadastrar Insumos */}
                     <div
                         className="bg-yellow-500 text-white p-4 rounded-lg shadow hover:shadow-lg transition cursor-pointer flex flex-col items-center justify-between"
+                        onClick={() => navigate('/cadastrar-insumos')}
+                    >
+                        <AiOutlineDownload className="text-3xl mb-2" />
+                        <h2 className="text-lg font-semibold text-center">Cadastrar Insumo</h2>
+                        <p className="text-sm text-center">Adicione novos insumos ao sistema.</p>
+                    </div>
+
+                    {/* Cadastrar Produto */}
+                    <div
+                        className="bg-gray-400 text-white p-4 rounded-lg shadow hover:shadow-lg transition cursor-pointer flex flex-col items-center justify-between"
                         onClick={() => navigate('/cadastrar-produto')}
                     >
                         <AiOutlineTags className="text-3xl mb-2" />

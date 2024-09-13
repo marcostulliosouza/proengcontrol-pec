@@ -71,7 +71,7 @@ const ChamadoModal: React.FC<ChamadoModalProps> = ({ chamado, onClose, onAtender
         try {
             await atenderChamado();
             onAtender(); // Atualiza a UI do componente pai, se necessário
-            // setIsModalOpen(true); // Mantém o modal aberto após atendimento
+            setIsModalOpen(true); // Mantém o modal aberto após atendimento
         } catch (error) {
             toast.error('Erro ao atender o chamado.');
         }
@@ -203,7 +203,7 @@ const ChamadoModal: React.FC<ChamadoModalProps> = ({ chamado, onClose, onAtender
                             onClick={onClose}
                             className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded mr-2"
                         >
-                            Fechar
+                            Sair
                         </button>
                     ) : null}
 
@@ -214,7 +214,16 @@ const ChamadoModal: React.FC<ChamadoModalProps> = ({ chamado, onClose, onAtender
                         >
                             Desistir
                         </button>
-                    )}
+                    ) && (
+                            (
+                                <button
+                                    onClick={handleDesistirChamado}
+                                    className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2"
+                                >
+                                    Transferir
+                                </button>
+                            )
+                        )}
 
                     {chamado.cha_status === 1 && (
                         <button

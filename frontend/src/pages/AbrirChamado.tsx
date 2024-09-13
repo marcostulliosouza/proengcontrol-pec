@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import Layout from '../components/Layout';
 import SelectField from '../components/SelectField';
 import { useNavigate } from 'react-router-dom';
+import { Label } from 'recharts';
 
 const AbrirChamado: React.FC = () => {
     const navigate = useNavigate();
@@ -47,7 +48,14 @@ const AbrirChamado: React.FC = () => {
                         <SelectField
                             options={produtos}
                             onChange={setProduto}
-                            placeholder="Selecione um produto"
+                            placeholder="Tipo de Chamado"
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <SelectField
+                            options={produtos}
+                            onChange={setProduto}
+                            placeholder="Local"
                         />
                     </div>
                     <div className="mb-4">
@@ -55,6 +63,13 @@ const AbrirChamado: React.FC = () => {
                             options={clientes}
                             onChange={setCliente}
                             placeholder="Selecione um cliente"
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <SelectField
+                            options={produtos}
+                            onChange={setProduto}
+                            placeholder="Selecione um produto"
                         />
                     </div>
                     <div className="mb-4">
