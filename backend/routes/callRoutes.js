@@ -5,10 +5,19 @@ const CallController = require('../controllers/callController');
 
 const router = express.Router();
 
+// Rota para obter todos os chamados
 router.get('/chamados', CallController.getAllCalls);
-router.get('/indicadores/:period', CallController.getIndicators); // Nova rota para indicadores
-// Rota para definir um chamado como atendido
-// Espera o ID do chamado na URL e o ID do responsável no corpo da requisição
-router.post('/chamados/:callId/atender', CallController.setCallAsBeingAnswered);
+
+// Rota para atender um chamado
+router.post('/chamados/:id/atender', CallController.setCallAsBeingAnswered);
+
+// Rota para transferir um chamado
+router.post('/chamados/:id/transferir', CallController.transferCallFromTo);
+
+// Rota para desistir de um chamado
+router.post('/chamados/:id/desistir', CallController.giveUpFromCall);
+
+// Rota para fechar um chamado
+router.post('/chamados/:id/fechar', CallController.closeCall);
 
 module.exports = router;
