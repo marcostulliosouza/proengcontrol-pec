@@ -36,18 +36,24 @@ const CallModal: React.FC<CallModalProps> = ({ call, onClose, refreshCalls }) =>
     setIsAttended(call.cha_status === 2);
   }, [call.cha_status]);
 
+  useEffect(() => {
+    // Atualiza o estado do modal quando o call muda
+    setIsAttended(call.cha_status === 2);
+  }, [call]);
+
   const handleAttend = async () => {
+    console.log('userId:', userId); // Verificar se o userId está definido
     if (userId) {
       try {
-        setLoading(true); // Começa o carregamento
+        setLoading(true);
         await attendCall(call.cha_id, userId);
-        setIsAttended(true); // Atualiza o estado para refletir que o chamado foi atendido
         await refreshCalls();
+        setIsAttended(true);
         console.log('Chamado atendido e lista de chamados atualizada.');
       } catch (error) {
         console.error('Erro ao atender o chamado:', error);
       } finally {
-        setLoading(false); // Termina o carregamento
+        setLoading(false);
       }
     } else {
       console.error('Usuário não encontrado');
@@ -59,16 +65,17 @@ const CallModal: React.FC<CallModalProps> = ({ call, onClose, refreshCalls }) =>
   };
 
   const confirmTransfer = async () => {
+    console.log('userId:', userId); // Verificar se o userId está definido
     if (userId && newUserId) {
       try {
-        setLoading(true); // Começa o carregamento
+        setLoading(true);
         await transferCall(call.cha_id, userId, newUserId);
         await refreshCalls();
         onClose();
       } catch (error) {
         console.error('Erro ao transferir o chamado:', error);
       } finally {
-        setLoading(false); // Termina o carregamento
+        setLoading(false);
       }
     } else {
       console.error('Usuário não selecionado para a transferência');
@@ -76,16 +83,17 @@ const CallModal: React.FC<CallModalProps> = ({ call, onClose, refreshCalls }) =>
   };
 
   const handleGiveUp = async () => {
+    console.log('userId:', userId); // Verificar se o userId está definido
     if (userId) {
       try {
-        setLoading(true); // Começa o carregamento
+        setLoading(true);
         await giveUpCall(call.cha_id, userId);
-        setIsAttended(false); // Atualiza o estado para refletir que o chamado não está mais atendido
+        setIsAttended(false);
         await refreshCalls();
       } catch (error) {
         console.error('Erro ao desistir do chamado:', error);
       } finally {
-        setLoading(false); // Termina o carregamento
+        setLoading(false);
       }
     } else {
       console.error('Usuário não encontrado');
@@ -96,31 +104,20 @@ const CallModal: React.FC<CallModalProps> = ({ call, onClose, refreshCalls }) =>
     const detractorId = 'detractor_id';
     const actionTaken = 'action_taken';
     try {
-      setLoading(true); // Começa o carregamento
+      setLoading(true);
       await closeCall(call.cha_id, detractorId, actionTaken);
       await refreshCalls();
       onClose();
     } catch (error) {
       console.error('Erro ao fechar o chamado:', error);
     } finally {
-      setLoading(false); // Termina o carregamento
+      setLoading(false);
     }
   };
 
   const isUserResponsible = userId === String(call.support_id);
-  const canAttend = call.cha_status === 1;
-  const canClose = isUserResponsible && call.cha_status === 2;
-
-  // Verificação para depuração
-  console.log('Renderizando CallModal:');
-  console.log('Props do CallModal:', { call, isAttended });
-  console.log('Status do chamado:', call.cha_status);
-  console.log('isAttended:', isAttended);
-  console.log('canAttend:', canAttend);
-  console.log('isUserResponsible:', isUserResponsible);
-  console.log('canClose:', canClose);
-
-  if (loading) return <div>Loading...</div>; // Exibe um carregador enquanto os dados estão sendo carregados
+  const canAttend = call.cha_status === 1 && !isAttended;
+  const canClose = isUserResponsible && isAttended;
 
   return (
     <div key={call.cha_id} className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
@@ -162,7 +159,7 @@ const CallModal: React.FC<CallModalProps> = ({ call, onClose, refreshCalls }) =>
           </div>
         ) : (
           <div className="flex flex-col space-y-4 mt-4">
-            {canAttend && !isAttended && (
+            {canAttend && (
               <button
                 className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
                 onClick={handleAttend}
@@ -171,30 +168,26 @@ const CallModal: React.FC<CallModalProps> = ({ call, onClose, refreshCalls }) =>
               </button>
             )}
 
-            {isAttended && (
+            {isAttended && isUserResponsible && (
               <>
-                {isUserResponsible && (
-                  <>
-                    <button
-                      className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-                      onClick={handleGiveUp}
-                    >
-                      Desistir
-                    </button>
-                    <button
-                      className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600"
-                      onClick={initiateTransfer}
-                    >
-                      Transferir
-                    </button>
-                    <button
-                      className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
-                      onClick={handleClose}
-                    >
-                      Fechar Chamado
-                    </button>
-                  </>
-                )}
+                <button
+                  className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+                  onClick={handleGiveUp}
+                >
+                  Desistir
+                </button>
+                <button
+                  className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600"
+                  onClick={initiateTransfer}
+                >
+                  Transferir
+                </button>
+                <button
+                  className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+                  onClick={handleClose}
+                >
+                  Fechar Chamado
+                </button>
               </>
             )}
 
