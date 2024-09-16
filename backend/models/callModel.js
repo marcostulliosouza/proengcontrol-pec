@@ -200,7 +200,6 @@ class CallModel {
 
 	// Essa função define um responsável pelo atendimento do 
 	// chamado e atualiza o status e a hora de início do atendimento.
-
 	static async setCallAsBeingAnswered(callID, idResponsible) {
 		try {
 			// Registrar o atendimento do responsável
@@ -208,11 +207,10 @@ class CallModel {
 			const fields = [
 				["atc_chamado", `${callID}`],
 				["atc_colaborador", `${idResponsible}`],
-				["atc_data_hora_inicio", "NOW()"]
+				["atc_data_hora_inicio", 'NOW()'] // 'NOW()' será tratado corretamente pelo dbService
 			];
-			const values = []
 
-			await dbService.insert(table, fields, values);
+			await dbService.insert(table, fields);
 
 			// Atualizar o status e o responsável pelo chamado
 			await CallModel.updateCallData(callID, {
@@ -224,6 +222,29 @@ class CallModel {
 			console.error(`Erro ao definir a chamada ${callID} como sendo atendida por ${idResponsible}: ${error.message}`);
 		}
 	}
+	// static async setCallAsBeingAnswered(callID, idResponsible) {
+	// 	try {
+	// 		// Registrar o atendimento do responsável
+	// 		const table = "atendimentos_chamados";
+	// 		const fields = [
+	// 			["atc_chamado", `${callID}`],
+	// 			["atc_colaborador", `${idResponsible}`],
+	// 			["atc_data_hora_inicio", 'NOW()']
+	// 		];
+	// 		const values = []
+
+	// 		await dbService.insert(table, fields, values);
+
+	// 		// Atualizar o status e o responsável pelo chamado
+	// 		await CallModel.updateCallData(callID, {
+	// 			cha_status: 2,  // Em atendimento
+	// 			cha_data_hora_atendimento: "NOW()"
+	// 		});
+
+	// 	} catch (error) {
+	// 		console.error(`Erro ao definir a chamada ${callID} como sendo atendida por ${idResponsible}: ${error.message}`);
+	// 	}
+	// }
 
 	// Permite que um usuário desista do atendimento de um chamado, 
 	// removendo o registro de atendimento e redefinindo o status.

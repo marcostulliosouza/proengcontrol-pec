@@ -101,13 +101,15 @@ const update = async (table, fieldsAndValues, conditions = []) => {
     }
 };
 
-const insert = async (table, fields, values) => {
-
+const insert = async (table, fields) => {
     // Construir a consulta SQL
-    const sql = `INSERT INTO ${table} (${fields.map(field => field[0]).join(', ')}) VALUES (${fields.map(() => '?').join(', ')})`;
-    console.log(sql)
-    // Extrair apenas os valores para o array de parâmetros
-    const valuesArray = fields.map(field => field[1]);
+    const sql = `INSERT INTO ${table} (${fields.map(field => field[0]).join(', ')}) VALUES (${fields.map(field => field[1] === 'NOW()' ? 'NOW()' : '?').join(', ')})`;
+    console.log(sql);
+
+    // Extrair apenas os valores para o array de parâmetros, exceto para funções SQL como 'NOW()'
+    const valuesArray = fields
+        .filter(field => field[1] !== 'NOW()')  // Filtrar 'NOW()' para não ser passado como parâmetro
+        .map(field => field[1]);
 
     const connection = await getConnection();
     try {

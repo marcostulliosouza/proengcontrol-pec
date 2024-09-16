@@ -9,6 +9,7 @@ class UserModel {
         "col_id",
         "col_nome",
         "col_login",
+        "COUNT(*)"
       ];
 
       const table = "colaboradores";
@@ -19,7 +20,10 @@ class UserModel {
         "colaboradores.col_ativo = 1"
       ];
 
-      const groupBy = ["colaboradores.col_nome"];
+      const groupBy = [
+        "colaboradores.col_nome",
+        "colaboradores.col_id"
+      ];
 
       const orderBy = [
         "colaboradores.col_nome ASC"
