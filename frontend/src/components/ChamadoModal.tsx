@@ -1,9 +1,8 @@
 // ./components/ChamadoModal.tsx
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useChronometer } from '../hooks/useChronometer';
 import { format, parseISO } from 'date-fns';
-import useChamado from '../hooks/useChamado';
-import { toast } from 'react-toastify';
+import { useChamados } from '../hooks/useChamados';
 
 interface Chamado {
     cha_id: number;
@@ -28,59 +27,32 @@ interface Chamado {
 }
 
 interface ChamadoModalProps {
+    userId: number;
     chamado: Chamado;
+    isModalOpen: boolean;
     onClose: () => void;
-    onAtender: () => void;
 }
 
-const ChamadoModal: React.FC<ChamadoModalProps> = ({ chamado, onClose, onAtender }) => {
-    const elapsedTime = useChronometer({ startTime: chamado.cha_data_hora_abertura });
-    const { isBeingAnswered, atenderChamado, desistirChamado } = useChamado(chamado.cha_id);
-    const [isModalOpen, setIsModalOpen] = useState<boolean>(true);
-
-    const userId = Number(localStorage.getItem('userId') || '0');
+const ChamadoModal: React.FC<ChamadoModalProps> = ({ userId, chamado, isModalOpen, onClose }) => {
+    const { atenderChamado, desistirChamado } = useChamados(userId);
+    const [isBeingAnswered, setIsBeingAnswered] = useState(false);
+    const elapsedTime = useChronometer(chamado.cha_data_hora_atendimento);
 
     useEffect(() => {
-        // Define o chamado como o atual no localStorage quando o modal é aberto
-        if (isModalOpen) {
-            localStorage.setItem('currentChamadoId', chamado.cha_id.toString());
+        if (chamado.cha_status === 2 && chamado.support_id === userId) {
+            setIsBeingAnswered(true);
         } else {
-            localStorage.removeItem('currentChamadoId');
+            setIsBeingAnswered(false);
         }
-    }, [isModalOpen, chamado.cha_id]);
-
-    useEffect(() => {
-        // Verifica se o chamado atual deve abrir o modal
-        const currentChamadoId = localStorage.getItem('currentChamadoId');
-        if (currentChamadoId === chamado.cha_id.toString()) {
-            setIsModalOpen(true);
-        }
-    }, [chamado.cha_id]);
+    }, [chamado, userId]);
 
     const typeClass = () => {
         if (chamado.cha_plano === 1) {
             return 'bg-red-500';
-        }
-        if (chamado.cha_plano === 0) {
+        } else if (chamado.cha_plano === 0) {
             return 'bg-yellow-500';
         }
         return 'bg-blue-500';
-    };
-
-    const handleAtenderChamado = async () => {
-        try {
-            await atenderChamado();
-            onAtender(); // Atualiza a UI do componente pai, se necessário
-            setIsModalOpen(true); // Mantém o modal aberto após atendimento
-        } catch (error) {
-            toast.error('Erro ao atender o chamado.');
-        }
-    };
-
-    const handleDesistirChamado = () => {
-        desistirChamado();
-        setIsModalOpen(false);
-        onClose();
     };
 
     const formattedDate = chamado.cha_data_hora_atendimento
@@ -96,8 +68,7 @@ const ChamadoModal: React.FC<ChamadoModalProps> = ({ chamado, onClose, onAtender
         }
         return 'Chamado de Engenharia';
     };
-
-    return isModalOpen ? (
+    return (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-75 flex items-center justify-center">
             <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-2xl">
                 <h2 className="text-xl font-bold mb-4">Detalhes do Chamado - Produto: {chamado.cha_produto}</h2>
@@ -209,35 +180,25 @@ const ChamadoModal: React.FC<ChamadoModalProps> = ({ chamado, onClose, onAtender
 
                     {chamado.support_id === userId && chamado.cha_status === 2 && (
                         <button
-                            onClick={handleDesistirChamado}
+                            onClick={() => desistirChamado(chamado.cha_id)}
                             className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-2"
                         >
                             Desistir
                         </button>
-                    ) && (
-                            (
-                                <button
-                                    onClick={handleDesistirChamado}
-                                    className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2"
-                                >
-                                    Transferir
-                                </button>
-                            )
-                        )}
+                    )}
 
-                    {chamado.cha_status === 1 && (
+                    {chamado.cha_status === 1 && !isBeingAnswered && (
                         <button
-                            onClick={handleAtenderChamado}
+                            onClick={() => atenderChamado(chamado.cha_id, userId)}
                             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
-                            hidden={isBeingAnswered}
                         >
-                            {isBeingAnswered ? 'Atendendo...' : 'Atender Chamado'}
+                            Atender Chamado
                         </button>
                     )}
                 </div>
             </div>
         </div>
-    ) : null; // Retorna null para não renderizar o modal quando fechado
+    );
 };
 
 export default ChamadoModal;

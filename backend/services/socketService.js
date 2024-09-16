@@ -13,7 +13,7 @@ const initializeSocket = (server) => {
 
 const emitCallUpdate = (call) => {
     if (io) {
-        console.log('Emitting call update:', call); // Adicione este log para verificar
+        // console.log('Emitting call update:', call); // Adicione este log para verificar
         io.emit('callUpdated', call);
     }
 };

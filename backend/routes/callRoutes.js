@@ -9,15 +9,15 @@ const router = express.Router();
 router.get('/chamados', CallController.getAllCalls);
 
 // Rota para atender um chamado
-router.post('/chamados/:id/atender', CallController.setCallAsBeingAnswered);
+router.post('/chamados/:callID/atender', CallController.setCallAsBeingAnswered);
 
 // Rota para transferir um chamado
-router.post('/chamados/:id/transferir', CallController.transferCallFromTo);
+router.post('/chamados/:callID/transferir', CallController.transferCallFromTo);
 
 // Rota para desistir de um chamado
-router.post('/chamados/:id/desistir', CallController.giveUpFromCall);
+router.post('/chamados/:callID/desistir', CallController.giveUpFromCall);
 
 // Rota para fechar um chamado
-router.post('/chamados/:id/fechar', CallController.closeCall);
+router.post('/chamados/:callID/fechar', CallController.closeCall);
 
 module.exports = router;

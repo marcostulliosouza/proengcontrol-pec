@@ -31,10 +31,11 @@ interface UseChamadosResponse {
     chamados: Chamado[];
     loading: boolean;
     error: string | null;
-    refetch: () => void;
+    atenderChamado: (callId: number, userId: number) => Promise<void>;
+    desistirChamado: (callId: number) => Promise<void>;
 }
 
-export function useChamados(): UseChamadosResponse {
+export function useChamados(userId: number): UseChamadosResponse {
     const [chamados, setChamados] = useState<Chamado[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -56,18 +57,35 @@ export function useChamados(): UseChamadosResponse {
         }
     };
 
+    const atenderChamado = async (callId: number) => {
+        try {
+            await axios.post(`${API_URL}/api/chamados/${callId}/atender`, {
+                idResponsible: userId
+            });
+            fetchChamados(); //recarrega os chamados após o atendimento
+        } catch (error) {
+            setError('Erro ao tentar atneder o chamado')
+        }
+    };
+
+    const desistirChamado = async (callId: number) => {
+        try {
+            await axios.post(`${API_URL}/api/chamados/${callId}/desistir`);
+            fetchChamados(); // recarrega os chamados após desistir
+        } catch (error) {
+            setError('Erro ao tentar desistir do chamado');
+        }
+    };
+
     useEffect(() => {
         fetchChamados();
 
         const socket = io(API_URL);
 
         socket.on('callUpdated', (updatedCall: Chamado) => {
-            console.log('Recebido evento callUpdated:', updatedCall);
-
             setChamados((prevChamados) => {
                 // Verifica se o chamado já existe na lista
                 const index = prevChamados.findIndex((c) => c.cha_id === updatedCall.cha_id);
-
                 if (index !== -1) {
                     // Atualiza o chamado existente
                     const updatedChamados = [...prevChamados];
@@ -87,5 +105,5 @@ export function useChamados(): UseChamadosResponse {
 
     }, []);
 
-    return { chamados, loading, error, refetch: fetchChamados };
+    return { chamados, loading, error, atenderChamado, desistirChamado };
 }

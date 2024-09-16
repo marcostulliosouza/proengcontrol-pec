@@ -132,7 +132,7 @@ const Table: React.FC<TableProps> = ({ chamados, onChamadoClick }) => {
                                     <td className={` ${chamado.cha_status === 1 ? 'status-open' : 'status-in-progress'} middle text-center`}>
                                         {chamado.cha_status === 1 ? 'Aberto' : 'Atendendo'}
                                     </td>
-                                    <td className=" text-blue-800 font-bold text-center">{chamado.support}</td>
+                                    <td className=" text-blue-800 font-bold text-center text-sm">{chamado.support}</td>
                                 </tr>
                                 {expandedRow === chamado.cha_id && (
                                     <tr key={`desc-${chamado.cha_id}`}>

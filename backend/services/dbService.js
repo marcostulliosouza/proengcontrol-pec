@@ -36,6 +36,21 @@ const buildWhere = (conditions = []) => {
     return conditions.length ? ` WHERE ${conditions.join(' AND ')}` : '';
 };
 
+const where = (conditions = []) => {
+    if (conditions.length === 0) {
+        return '';
+    }
+
+    // Construir a WHERE clause corretamente
+    const whereClause = conditions.map(([field, value]) => {
+        // Escapar valores para evitar SQL Injection
+        const escapedValue = typeof value === 'string' ? `'${value}'` : value;
+        return `${field} = ${escapedValue}`;
+    }).join(' AND ');
+
+    return ` WHERE ${whereClause}`;
+};
+
 const buildGroupBy = (groupBy = []) => {
     return groupBy.length ? ` GROUP BY ${groupBy.join(', ')}` : '';
 };
@@ -74,7 +89,9 @@ const update = async (table, fieldsAndValues, conditions = []) => {
         // Não usar ? para valores diretos como NOW()
         `${field} = ${value}`
     ).join(', ');
-    const sql = `UPDATE ${table} SET ${setClause}${buildWhere(conditions)}`;
+    const sql = `UPDATE ${table} SET ${setClause}${buildWhere(conditions)};`;
+
+    console.log(sql);
 
     const connection = await getConnection();
     try {
@@ -85,20 +102,21 @@ const update = async (table, fieldsAndValues, conditions = []) => {
 };
 
 const insert = async (table, fields, values) => {
-    if (!fields.length || !values.length) {
-        throw new Error('Fields and values must be provided for INSERT query.');
-    }
 
-    // Inserir valores diretamente como parâmetros
-    const sql = `INSERT INTO ${table} (${fields.join(', ')}) VALUES (${fields.map(() => '?').join(', ')})`;
+    // Construir a consulta SQL
+    const sql = `INSERT INTO ${table} (${fields.map(field => field[0]).join(', ')}) VALUES (${fields.map(() => '?').join(', ')})`;
+    console.log(sql)
+    // Extrair apenas os valores para o array de parâmetros
+    const valuesArray = fields.map(field => field[1]);
 
     const connection = await getConnection();
     try {
-        return await query(connection, sql, values);
+        return await query(connection, sql, valuesArray);
     } finally {
         connection.release();
     }
 };
+
 
 const count = async (table, where = []) => {
     const sql = `SELECT COUNT(*) AS total FROM ${table}${buildWhere(where)}`;
@@ -117,7 +135,12 @@ const deleteQuery = async (table, conditions = []) => {
         throw new Error('DELETE query must have conditions to avoid affecting all rows.');
     }
 
-    const sql = `DELETE FROM ${table}${buildWhere(conditions)}`;
+    // Construir a cláusula WHERE corretamente
+    const whereClause = where(conditions);
+
+    // Montar a query DELETE
+    const sql = `DELETE FROM ${table}${whereClause};`;
+    console.log(sql);
 
     const connection = await getConnection();
     try {
@@ -126,6 +149,7 @@ const deleteQuery = async (table, conditions = []) => {
         connection.release();
     }
 };
+
 
 module.exports = {
     select,

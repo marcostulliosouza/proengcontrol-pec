@@ -92,7 +92,7 @@ class CallModel {
 				"IF(cha_status > 1, TIMESTAMPDIFF(MINUTE, cha_data_hora_atendimento, NOW()), 0) AS duracao_atendimento"
 			];
 			const table = "chamados";
-			const where = [`cha_id = "${callID}"`];
+			const where = [`cha_id = ${callID}`];
 
 			const result = await dbService.select(fields, table, where);
 
@@ -121,13 +121,13 @@ class CallModel {
 			// Encerrar o atendimento do antigo operador
 			const table = "atendimentos_chamados";
 			const fieldsAndValues = [["atc_data_hora_termino", "NOW()"]];
-			const conditions = [`atc_chamado = "${callID}"`, `atc_colaborador = "${oldUser}"`, "atc_data_hora_termino IS NULL"];
+			const conditions = [`atc_chamado = ${callID}`, `atc_colaborador = ${oldUser}`, "atc_data_hora_termino IS NULL"];
 			await dbService.update(table, fieldsAndValues, conditions);
 
 			// Criar um novo registro para o novo operador
 			const newFieldsAndValues = [
-				["atc_chamado", `"${callID}"`],
-				["atc_colaborador", `"${newUser}"`],
+				["atc_chamado", `${callID}`],
+				["atc_colaborador", `${newUser}`],
 				["atc_data_hora_inicio", "NOW()"]
 			];
 			await dbService.insert(table, newFieldsAndValues);
@@ -145,11 +145,11 @@ class CallModel {
 		try {
 			const table = "chamados";
 			const fieldsAndValues = Object.entries(updates);  // updates: { column: value }
-			const conditions = [`cha_id = "${callID}"`];
+			const conditions = [`cha_id = ${callID}`];
 
 			await dbService.update(table, fieldsAndValues, conditions);
 		} catch (error) {
-			console.error(`Error updating call data for call ${callID}: ${error.message}`);
+			console.error(`Erro ao atualizar os dados da chamada ${callID}: ${error.message}`);
 		}
 	}
 
@@ -176,7 +176,7 @@ class CallModel {
 		try {
 			const table = "chamados";
 			const fieldsAndValues = [["cha_visualizado", lock ? "1" : "0"]];
-			const conditions = [`cha_id = "${callID}"`];
+			const conditions = [`cha_id = ${callID}`];
 
 			await dbService.update(table, fieldsAndValues, conditions);
 		} catch (error) {
@@ -202,26 +202,26 @@ class CallModel {
 	// chamado e atualiza o status e a hora de início do atendimento.
 
 	static async setCallAsBeingAnswered(callID, idResponsible) {
-		console.log("CallID: " + callID)
-		console.log("idResponsible: " + idResponsible)
 		try {
+			// Registrar o atendimento do responsável
+			const table = "atendimentos_chamados";
+			const fields = [
+				["atc_chamado", `${callID}`],
+				["atc_colaborador", `${idResponsible}`],
+				["atc_data_hora_inicio", "NOW()"]
+			];
+			const values = []
+
+			await dbService.insert(table, fields, values);
+
 			// Atualizar o status e o responsável pelo chamado
 			await CallModel.updateCallData(callID, {
 				cha_status: 2,  // Em atendimento
 				cha_data_hora_atendimento: "NOW()"
 			});
 
-			// Registrar o atendimento do responsável
-			const table = "atendimentos_chamados";
-			const fieldsAndValues = [
-				["atc_chamado", `"${callID}"`],
-				["atc_colaborador", `"${idResponsible}"`],
-				["atc_data_hora_inicio", "NOW()"]
-			];
-			await dbService.insert(table, fieldsAndValues);
-
 		} catch (error) {
-			console.error(`Error setting call ${callID} as being answered by ${idResponsible}: ${error.message}`);
+			console.error(`Erro ao definir a chamada ${callID} como sendo atendida por ${idResponsible}: ${error.message}`);
 		}
 	}
 
@@ -233,10 +233,17 @@ class CallModel {
 		}
 
 		try {
-			const query = 'UPDATE calls SET status = ?, responsible = ? WHERE id = ?';
-			const values = ['DROPPED', idResponsible, callID];
-			const [result] = await db.execute(query, values);
-			return result;
+			const table = "atendimentos_chamados";
+			const conditions = [
+				["atc_chamado", `${callID}`]
+			];
+
+			await dbService.deleteQuery(table, conditions);
+
+			await CallModel.updateCallData(callID, {
+				cha_status: 1,
+				cha_data_hora_atendimento: null
+			})
 		} catch (error) {
 			throw new Error('Database error: ' + error.message);
 		}

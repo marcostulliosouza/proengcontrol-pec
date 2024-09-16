@@ -15,9 +15,11 @@ class CallService {
 
     // Define um chamado como em atendimento
     static async setCallAsBeingAnswered(callId, idResponsible) {
+        if (!callId || !idResponsible) {
+            console.log('Parametros invalidos')
+        }
         try {
             const result = await CallModel.setCallAsBeingAnswered(callId, idResponsible);
-            console.log('Emitting updated call:', result);
             emitCallUpdate(result);
             return result;
         } catch (error) {
@@ -33,7 +35,6 @@ class CallService {
 
         try {
             const result = await CallModel.giveUpFromCall(callID, idResponsible);
-            console.log('Emitting updated call:', result);
             emitCallUpdate(result);
             return result;
         } catch (error) {
@@ -45,7 +46,6 @@ class CallService {
     static async closeCall(callID, detractorID, actionTaked) {
         try {
             const result = await CallModel.closeCall(callID, detractorID, actionTaked);
-            console.log('Emitting updated call:', result);
             emitCallUpdate(result);
             return result;
         } catch (error) {
@@ -67,7 +67,6 @@ class CallService {
     static async transferCallFromTo(callID, oldUser, newUser) {
         try {
             const result = await CallModel.transferCallFromTo(callID, oldUser, newUser);
-            console.log('Emitting updated call:', result);
             emitCallUpdate(result);
             return result;
         } catch (error) {
@@ -79,7 +78,6 @@ class CallService {
     static async updateCallData(callID, updates) {
         try {
             const result = await CallModel.updateCallData(callID, updates);
-            console.log('Emitting updated call:', result);
             emitCallUpdate(result);
             return result;
         } catch (error) {
@@ -91,7 +89,6 @@ class CallService {
     static async changeCallDateTimes(callID, beginningDate, endDate) {
         try {
             const result = await CallModel.changeCallDateTimes(callID, beginningDate, endDate);
-            console.log('Emitting updated call:', result);
             emitCallUpdate(result);
             return result;
         } catch (error) {
@@ -103,7 +100,6 @@ class CallService {
     static async lockCall(callID, lock = true) {
         try {
             const result = await CallModel.lockCall(callID, lock);
-            console.log('Emitting updated call:', result);
             emitCallUpdate(result);
             return result;
         } catch (error) {

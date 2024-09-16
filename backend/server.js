@@ -5,6 +5,7 @@ const http = require('http'); // Importa o módulo http
 const socketService = require('./services/socketService'); // Importa o serviço de socket
 const authRoutes = require('./routes/authRoutes');
 const callRoutes = require('./routes/callRoutes');
+const userRoutes = require('./routes/userRoutes');
 
 const app = express();
 const server = http.createServer(app); // Cria um servidor HTTP
@@ -18,6 +19,7 @@ app.use(express.json());
 // Rotas
 app.use('/api', authRoutes); // Rotas de autenticação
 app.use('/api', callRoutes); // Rotas de chamados
+app.use('/api', userRoutes); // Rotas de usuários/colaboradores
 
 // Inicializa o Socket.io com o servidor HTTP
 socketService.initializeSocket(server);

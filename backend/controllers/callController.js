@@ -66,18 +66,27 @@ class CallController {
 
     static async setCallAsBeingAnswered(req, res) {
         const { callID } = req.params;
-        const { idResponsible } = req.body;
+        const { idResponsible } = req.body; // Verifique se está vindo do corpo da requisição
+
         try {
+            // Verifique se callID e idResponsible estão definidos
+            if (!callID || !idResponsible) {
+                return res.status(400).json({ error: 'Missing required parameters' });
+            }
+
             await CallService.setCallAsBeingAnswered(callID, idResponsible);
             res.json({ message: 'Call set as being answered successfully' });
         } catch (error) {
+            console.error('Error setting call:', error);
             res.status(500).json({ error: error.message });
         }
     }
 
+
     static async giveUpFromCall(req, res) {
         const { callID } = req.params;
         const { idResponsible } = req.body;
+
         try {
             await CallService.giveUpFromCall(callID, idResponsible);
             res.json({ message: 'Successfully gave up from call' });

@@ -30,6 +30,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
                     id='login'
                     type="text"
                     placeholder='Login'
+                    autoComplete='username'
                     value={col_login}
                     onChange={(e) => setUsername(e.target.value)}
                 />
@@ -41,6 +42,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
                     id='password'
                     type="password"
                     placeholder='Senha'
+                    autoComplete='current-password'
                     value={col_senha}
                     onChange={(e) => setPassword(e.target.value)}
                 />
