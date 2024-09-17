@@ -26,4 +26,7 @@ router.post('/chamados/:callID/lock', CallController.lockCall);
 // Rota para verificar se um chamado está bloqueado
 router.get('/chamados/:callID/locked', CallController.isLockedCall);
 
+// Rota para obter ações realizadas em um chamado
+router.get('/chamados/:callID/acoes', CallController.getActionTaken);
+
 module.exports = router;

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { attendCall, transferCall, giveUpCall, closeCall, isLockedCall } from '../api/callApi';
+import { attendCall, transferCall, giveUpCall, closeCall, isLockedCall, getActionTaken } from '../api/callApi';
 import { getAllUsers } from '../api/userApi';
 
 interface CallModalProps {
@@ -16,6 +16,7 @@ const CallModal: React.FC<CallModalProps> = ({ call, onClose, refreshCalls }) =>
   const [isAttended, setIsAttended] = useState(call.cha_status === 2);
   const [loading, setLoading] = useState(false);
   const [isLocked, setIsLocked] = useState(false);
+  const [actionTaken, setActionTaken] = useState<any | null>(null);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -47,12 +48,21 @@ const CallModal: React.FC<CallModalProps> = ({ call, onClose, refreshCalls }) =>
   }, [call]);
 
   useEffect(() => {
-    setIsAttended(call.cha_status === 2);
-  }, [call.cha_status]);
+    const fetchActionTaken = async () => {
+      try {
+        const data = await getActionTaken(call.cha_id);
+        setActionTaken(data);
+      } catch (error) {
+        console.error('Erro ao buscar ações realizadas:', error);
+      }
+    };
+
+    fetchActionTaken();
+  }, [call.cha_id]);
 
   useEffect(() => {
     setIsAttended(call.cha_status === 2);
-  }, [call]);
+  }, [call.cha_status]);
 
   const handleAttend = async () => {
     if (userId) {
@@ -110,8 +120,8 @@ const CallModal: React.FC<CallModalProps> = ({ call, onClose, refreshCalls }) =>
   };
 
   const handleClose = async () => {
-    const detractorId = 'detractor_id';
-    const actionTaken = 'action_taken';
+    const detractorId = 'detractor_id'; // Substitua com o ID real do detrator se disponível
+    const actionTaken = 'action_taken'; // Substitua com a ação real se disponível
     try {
       setLoading(true);
       await closeCall(call.cha_id, detractorId, actionTaken);
@@ -136,14 +146,21 @@ const CallModal: React.FC<CallModalProps> = ({ call, onClose, refreshCalls }) =>
         <p>Cliente: {call.cha_cliente}</p>
         <p>Status: {call.cha_status}</p>
 
+        {/* Exibe ações realizadas */}
+        {actionTaken && (
+          <div className="mb-4">
+            <h3 className="text-lg font-semibold">Ações Realizadas:</h3>
+            <p>Detrator: {actionTaken.detractor}</p>
+            <p>Ação: {actionTaken.actionTaken}</p>
+          </div>
+        )}
+
         {showUserSelect ? (
           <div>
             <h3 className="text-lg font-semibold mb-2">Selecione um novo usuário para transferir o chamado:</h3>
             <select
               className="w-full p-2 border border-gray-300 rounded"
               onChange={(e) => setNewUserId(e.target.value)}
-
-
             >
               <option value="">Selecione um usuário</option>
               {users.map((user) => (

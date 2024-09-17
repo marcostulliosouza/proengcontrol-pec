@@ -286,7 +286,7 @@ class CallModel {
 				{ table: "acoes_chamados", on: "chamados.cha_id = acoes_chamados.ach_chamado", type: " LEFT" }
 			];
 
-			const where = [`chamados.cha_id = "${callID}"`];
+			const where = [`chamados.cha_id = ${callID}`];
 
 			const result = await dbService.select(fields, table, where, joins);
 
