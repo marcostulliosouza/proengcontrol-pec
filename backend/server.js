@@ -6,6 +6,7 @@ const socketService = require('./services/socketService'); // Importa o serviço
 const authRoutes = require('./routes/authRoutes');
 const callRoutes = require('./routes/callRoutes');
 const userRoutes = require('./routes/userRoutes');
+const detractorRoutes = require('./routes/detractorRoutes');
 
 const app = express();
 const server = http.createServer(app); // Cria um servidor HTTP
@@ -20,6 +21,7 @@ app.use(express.json());
 app.use('/api', authRoutes); // Rotas de autenticação
 app.use('/api', callRoutes); // Rotas de chamados
 app.use('/api', userRoutes); // Rotas de usuários/colaboradores
+app.use('/api', detractorRoutes); // Rotas de detratores
 
 // Inicializa o Socket.io com o servidor HTTP
 socketService.initializeSocket(server);
