@@ -18,7 +18,7 @@ class DetractorModel {
       const table = "detratores";
 
       const joins = [
-        { table: "tipos_chamado", on: "detratores.dtr_tipo = tipos_chamado.tch_id", type: "LEFT" }
+        { table: "tipos_chamado", on: "detratores.dtr_tipo = tipos_chamado.tch_id", type: " LEFT" }
       ];
 
       const where = [

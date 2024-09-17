@@ -164,8 +164,8 @@ const CallModal: React.FC<CallModalProps> = ({ call, onClose, refreshCalls }) =>
             >
               <option value="">Selecione um usuário</option>
               {users.map((user) => (
-                <option key={user.user_id} value={user.user_id}>
-                  {user.user_name}
+                <option key={user.col_id} value={user.col_id}>
+                  {user.col_nome}
                 </option>
               ))}
             </select>
@@ -213,6 +213,10 @@ const CallModal: React.FC<CallModalProps> = ({ call, onClose, refreshCalls }) =>
             )}
           </div>
         )}
+        <div>
+
+        </div>
+
         <button
           className="mt-4 bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400"
           onClick={onClose}
