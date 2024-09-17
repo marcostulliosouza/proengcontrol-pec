@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { attendCall, transferCall, giveUpCall, closeCall, isLockedCall, getActionTaken } from '../api/callApi';
 import { getAllUsers } from '../api/userApi';
+import { loadDetractors } from '../api/dectratorApi'; // Supondo que você tenha uma API para pegar detratores
 
 interface CallModalProps {
   call: any;
@@ -17,6 +18,9 @@ const CallModal: React.FC<CallModalProps> = ({ call, onClose, refreshCalls }) =>
   const [loading, setLoading] = useState(false);
   const [isLocked, setIsLocked] = useState(false);
   const [actionTaken, setActionTaken] = useState<any | null>(null);
+  const [detractors, setDetractors] = useState<any[]>([]); // Lista de detratores
+  const [selectedDetractor, setSelectedDetractor] = useState<string | null>(null); // Detrator selecionado
+  const [solutionDescription, setSolutionDescription] = useState<string>(''); // Descrição da solução
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -63,6 +67,20 @@ const CallModal: React.FC<CallModalProps> = ({ call, onClose, refreshCalls }) =>
   useEffect(() => {
     setIsAttended(call.cha_status === 2);
   }, [call.cha_status]);
+
+  // Buscar detratores
+  useEffect(() => {
+    const fetchDetractors = async () => {
+      try {
+        const data = await loadDetractors(call.cha_tipo);
+        setDetractors(data);
+      } catch (error) {
+        console.error('Erro ao buscar detratores:', error);
+      }
+    };
+
+    fetchDetractors();
+  }, [call.cha_tipo]);
 
   const handleAttend = async () => {
     if (userId) {
@@ -120,11 +138,14 @@ const CallModal: React.FC<CallModalProps> = ({ call, onClose, refreshCalls }) =>
   };
 
   const handleClose = async () => {
-    const detractorId = 'detractor_id'; // Substitua com o ID real do detrator se disponível
-    const actionTaken = 'action_taken'; // Substitua com a ação real se disponível
+    if (!selectedDetractor || !solutionDescription) {
+      alert('Por favor, selecione um detrator e insira a descrição da solução.');
+      return;
+    }
+
     try {
       setLoading(true);
-      await closeCall(call.cha_id, detractorId, actionTaken);
+      await closeCall(call.cha_id, selectedDetractor, solutionDescription);
       await refreshCalls();
       onClose();
     } catch (error) {
@@ -202,24 +223,48 @@ const CallModal: React.FC<CallModalProps> = ({ call, onClose, refreshCalls }) =>
                 >
                   Desistir
                 </button>
+
+                {/* Seção para selecionar detrator e descrição da solução */}
+                <div className="mb-4">
+                  <h3 className="text-lg font-semibold">Selecione um Detrator:</h3>
+                  <select
+                    className="w-full p-2 border border-gray-300 rounded"
+                    onChange={(e) => setSelectedDetractor(e.target.value)}
+                  >
+                    <option value="">Selecione um detrator</option>
+                    {detractors.map((detractor) => (
+                      <option key={detractor.dtr_id} value={detractor.dtr_id}>
+                        {detractor.dtr_descricao}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="mb-4">
+                  <h3 className="text-lg font-semibold">Descrição da Solução:</h3>
+                  <textarea
+                    className="w-full p-2 border border-gray-300 rounded"
+                    value={solutionDescription}
+                    onChange={(e) => setSolutionDescription(e.target.value)}
+                    placeholder="Descreva a solução para o chamado"
+                  />
+                </div>
+
                 <button
                   className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
                   onClick={handleClose}
                   disabled={loading}
                 >
-                  Fechar Chamado
+                  {loading ? 'Fechando...' : 'Fechar Chamado'}
                 </button>
               </>
             )}
           </div>
         )}
-        <div>
-
-        </div>
-
         <button
-          className="mt-4 bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400"
+          className="mt-4 bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
           onClick={onClose}
+          disabled={loading}
         >
           Fechar
         </button>
@@ -229,3 +274,4 @@ const CallModal: React.FC<CallModalProps> = ({ call, onClose, refreshCalls }) =>
 };
 
 export default CallModal;
+
