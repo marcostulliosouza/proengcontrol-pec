@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { attendCall, transferCall, giveUpCall, closeCall } from '../api/callApi';
+import { attendCall, transferCall, giveUpCall, closeCall, isLockedCall } from '../api/callApi';
 import { getAllUsers } from '../api/userApi';
 
 interface CallModalProps {
@@ -14,18 +14,19 @@ const CallModal: React.FC<CallModalProps> = ({ call, onClose, refreshCalls }) =>
   const [newUserId, setNewUserId] = useState<string | null>(null);
   const [showUserSelect, setShowUserSelect] = useState(false);
   const [isAttended, setIsAttended] = useState(call.cha_status === 2);
-  const [loading, setLoading] = useState(false); // Estado de carregamento
+  const [loading, setLoading] = useState(false);
+  const [isLocked, setIsLocked] = useState(false);
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        setLoading(true); // Começa o carregamento
+        setLoading(true);
         const data = await getAllUsers();
         setUsers(data);
       } catch (error) {
         console.error('Erro ao buscar usuários:', error);
       } finally {
-        setLoading(false); // Termina o carregamento
+        setLoading(false);
       }
     };
 
@@ -33,23 +34,33 @@ const CallModal: React.FC<CallModalProps> = ({ call, onClose, refreshCalls }) =>
   }, []);
 
   useEffect(() => {
+    const checkLockStatus = async () => {
+      try {
+        const response = await isLockedCall(call.cha_id);
+        setIsLocked(response);
+      } catch (error) {
+        console.error('Erro ao verificar bloqueio do chamado:', error);
+      }
+    };
+
+    checkLockStatus();
+  }, [call]);
+
+  useEffect(() => {
     setIsAttended(call.cha_status === 2);
   }, [call.cha_status]);
 
   useEffect(() => {
-    // Atualiza o estado do modal quando o call muda
     setIsAttended(call.cha_status === 2);
   }, [call]);
 
   const handleAttend = async () => {
-    console.log('userId:', userId); // Verificar se o userId está definido
     if (userId) {
       try {
         setLoading(true);
         await attendCall(call.cha_id, userId);
         await refreshCalls();
         setIsAttended(true);
-        console.log('Chamado atendido e lista de chamados atualizada.');
       } catch (error) {
         console.error('Erro ao atender o chamado:', error);
       } finally {
@@ -65,7 +76,6 @@ const CallModal: React.FC<CallModalProps> = ({ call, onClose, refreshCalls }) =>
   };
 
   const confirmTransfer = async () => {
-    console.log('userId:', userId); // Verificar se o userId está definido
     if (userId && newUserId) {
       try {
         setLoading(true);
@@ -83,7 +93,6 @@ const CallModal: React.FC<CallModalProps> = ({ call, onClose, refreshCalls }) =>
   };
 
   const handleGiveUp = async () => {
-    console.log('userId:', userId); // Verificar se o userId está definido
     if (userId) {
       try {
         setLoading(true);
@@ -133,72 +142,66 @@ const CallModal: React.FC<CallModalProps> = ({ call, onClose, refreshCalls }) =>
             <select
               className="w-full p-2 border border-gray-300 rounded"
               onChange={(e) => setNewUserId(e.target.value)}
+
+
             >
               <option value="">Selecione um usuário</option>
               {users.map((user) => (
-                <option key={user.col_id} value={user.col_id}>
-                  {user.col_nome}
+                <option key={user.user_id} value={user.user_id}>
+                  {user.user_name}
                 </option>
               ))}
             </select>
-            <div className="flex justify-end space-x-4 mt-4">
-              <button
-                className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
-                onClick={confirmTransfer}
-                disabled={!newUserId}
-              >
-                Transferir
-              </button>
-              <button
-                className="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400"
-                onClick={onClose}
-              >
-                Fechar
-              </button>
-            </div>
+            <button
+              className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+              onClick={confirmTransfer}
+            >
+              Confirmar Transferência
+            </button>
           </div>
         ) : (
-          <div className="flex flex-col space-y-4 mt-4">
+          <div>
             {canAttend && (
               <button
-                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mr-2"
                 onClick={handleAttend}
+                disabled={loading}
               >
-                Atender
+                {loading ? 'Atendendo...' : 'Atender'}
               </button>
             )}
-
             {isAttended && isUserResponsible && (
               <>
                 <button
-                  className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-                  onClick={handleGiveUp}
-                >
-                  Desistir
-                </button>
-                <button
-                  className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600"
+                  className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 mr-2"
                   onClick={initiateTransfer}
                 >
                   Transferir
                 </button>
                 <button
-                  className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+                  className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 mr-2"
+                  onClick={handleGiveUp}
+                  disabled={loading}
+                >
+                  Desistir
+                </button>
+                <button
+                  className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
                   onClick={handleClose}
+                  disabled={loading}
                 >
                   Fechar Chamado
                 </button>
               </>
             )}
-
-            <button
-              className="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400"
-              onClick={onClose}
-            >
-              Fechar Modal
-            </button>
           </div>
         )}
+        <button
+          className="mt-4 bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400"
+          onClick={onClose}
+        >
+          Fechar
+        </button>
       </div>
     </div>
   );

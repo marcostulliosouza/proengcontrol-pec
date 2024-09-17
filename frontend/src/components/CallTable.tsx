@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getAllCalls } from '../api/callApi';
+import { getAllCalls, lockCall } from '../api/callApi';
 import CallModal from '../components/CallModal';
 
 const CallTable: React.FC = () => {
@@ -24,14 +24,19 @@ const CallTable: React.FC = () => {
         await fetchCalls();
     }
 
-    const handleRowClick = (call: any) => {
-        setSelectedCall(call);
+    const handleRowClick = async (call: any) => {
+        if (!call.isLocked) {
+            setSelectedCall(call);
+            await lockCall(call.cha_id, true); // Bloquear o chamado
+        }
     };
 
-    const handleCloseModal = () => {
+    const handleCloseModal = async () => {
+        if (selectedCall) {
+            await lockCall(selectedCall.cha_id, false);
+        }
         setSelectedCall(null);
     };
-
 
     return (
         <div className="p-4">
@@ -49,19 +54,22 @@ const CallTable: React.FC = () => {
                         <tr
                             key={call.cha_id}
                             onClick={() => handleRowClick(call)}
-                            className="hover:bg-gray-50 cursor-pointer"
+                            className={`hover:bg-gray-50 cursor-pointer ${call.isLocked ? 'bg-gray-200' : ''}`}
                         >
                             <td className="px-4 py-2">{call.cha_id}</td>
                             <td className="px-4 py-2">{call.cha_cliente}</td>
                             <td className="px-4 py-2">{call.cha_status}</td>
-                            <td className='px-4 py-2'>{call.support}</td>
                             <td className="px-4 py-2">
-                                <button
-                                    className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
-                                    onClick={() => handleRowClick(call)}
-                                >
-                                    Detalhes
-                                </button>
+                                {call.isLocked ? (
+                                    <span>Bloqueado</span>
+                                ) : (
+                                    <button
+                                        className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
+                                        onClick={() => handleRowClick(call)}
+                                    >
+                                        Detalhes
+                                    </button>
+                                )}
                             </td>
                         </tr>
                     ))}

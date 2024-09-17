@@ -20,4 +20,10 @@ router.post('/chamados/:callID/desistir', CallController.giveUpFromCall);
 // Rota para fechar um chamado
 router.post('/chamados/:callID/fechar', CallController.closeCall);
 
+// Rota para bloquear ou desbloquear um chamado
+router.post('/chamados/:callID/lock', CallController.lockCall);
+
+// Rota para verificar se um chamado está bloqueado
+router.get('/chamados/:callID/locked', CallController.isLockedCall);
+
 module.exports = router;

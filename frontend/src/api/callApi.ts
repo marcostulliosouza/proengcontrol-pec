@@ -21,3 +21,12 @@ export const giveUpCall = async (callID: string, idResponsible: string) => {
 export const closeCall = async (callID: string, detractorID: string, actionTaken: string) => {
   await axios.post(`${API_URL}/api/chamados/${callID}/fechar`, { detractorID, actionTaken });
 };
+
+export const lockCall = async (callID: string, lock: boolean) => {
+  await axios.post(`${API_URL}/api/chamados/${callID}/lock`, { lock });
+};
+
+export const isLockedCall = async (callID: string) => {
+  const response = await axios.get(`${API_URL}/api/chamados/${callID}/locked`);
+  return response.data; // Deve retornar { isLocked: true/false }
+};
