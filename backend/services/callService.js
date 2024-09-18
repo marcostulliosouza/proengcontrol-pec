@@ -13,6 +13,16 @@ class CallService {
         }
     }
 
+    static async changeCallDateTimes(callID, beginningDate, endDate) {
+        try {
+            const result = await CallModel.changeCallDateTimes(callID, beginningDate, endDate);
+            emitCallUpdate(result);
+            return result;
+        } catch (error) {
+            throw new Error('Error changing call dates: ' + error.message);
+        }
+    }
+
     // Define um chamado como em atendimento
     static async setCallAsBeingAnswered(callId, idResponsible) {
         if (!callId || !idResponsible) {

@@ -62,21 +62,75 @@ class CallModel {
 
 	}
 
+	// Responsável por atualiza a tabela "chamados" com as novas datas de início e término
+	static async changeCallDateTimes(callID, beginningDate, endDate) {
+		try {
+			// Atualiza a tabela "chamados" com as novas datas de início e término
+			const table = "chamados";
+			const fieldsAndValues = [
+				["cha_data_hora_atendimento", beginningDate],  // Data de início
+				["cha_data_hora_termino", endDate]             // Data de término
+			];
+			const conditions = [
+				`cha_id = ${callID}`                          // Condição para o ID do chamado
+			];
+
+			// Executa a atualização
+			await dbService.update(table, fieldsAndValues, conditions);
+		} catch (error) {
+			console.error(`Erro ao atualizar as datas do chamado ${callID}: ${error.message}`);
+		}
+	}
+
 	// Fechar Chamado
 	static async closeCall(callID, detractorID, actionTaked) {
 		try {
-			const table = "atendimentos_chamados"
-			const fieldsAndValues = [
+			// Atualiza a tabela "atendimentos_chamados" com a data de término
+			const table1 = "atendimentos_chamados";
+			const fieldsAndValues1 = [
 				["atc_data_hora_termino", "NOW()"]
 			];
-			const conditions = [
+			const conditions1 = [
 				`atc_chamado = ${callID}`,
 				"atc_data_hora_termino IS NULL"
 			];
 
-			const [] = dbService
+			await dbService.update(table1, fieldsAndValues1, conditions1);
+
 		} catch (error) {
-			console.error(`Error ao fechar o chamado: ${error.message}`);
+			console.error(`Erro ao atualizar o atendimento de chamados para finalizado: ${error.message}`);
+		}
+
+		try {
+			// Insere a ação tomada na tabela "acoes_chamados"
+			const table2 = "acoes_chamados";
+			const fields2 = [
+				["ach_descricao", "UPPER(?)"]
+				["ach_detrator", detractorID]
+			];
+
+			await dbService.insert(table2, fields2, [actionTaked, detractorID]);
+
+		} catch (error) {
+			console.error(`Erro ao registrar a ação do chamado: ${error.message}`);
+		}
+
+		try {
+			// Atualiza o status do chamado na tabela "chamados"
+			const table3 = "chamados";
+			const fieldsAndValues3 = [
+				["cha_status", "3"],  // Status '3' indica que o chamado foi concluído
+				["cha_data_hora_termino", "NOW()"],
+				["cha_acao", "LAST_INSERT_ID()"]  // Refere-se à última ação inserida
+			];
+			const conditions3 = [
+				`cha_id = ${callID}`
+			];
+
+			await dbService.update(table3, fieldsAndValues3, conditions3);
+
+		} catch (error) {
+			console.error(`Erro ao atualizar o status do chamado para concluído: ${error.message}`);
 		}
 	}
 
@@ -222,29 +276,7 @@ class CallModel {
 			console.error(`Erro ao definir a chamada ${callID} como sendo atendida por ${idResponsible}: ${error.message}`);
 		}
 	}
-	// static async setCallAsBeingAnswered(callID, idResponsible) {
-	// 	try {
-	// 		// Registrar o atendimento do responsável
-	// 		const table = "atendimentos_chamados";
-	// 		const fields = [
-	// 			["atc_chamado", `${callID}`],
-	// 			["atc_colaborador", `${idResponsible}`],
-	// 			["atc_data_hora_inicio", 'NOW()']
-	// 		];
-	// 		const values = []
 
-	// 		await dbService.insert(table, fields, values);
-
-	// 		// Atualizar o status e o responsável pelo chamado
-	// 		await CallModel.updateCallData(callID, {
-	// 			cha_status: 2,  // Em atendimento
-	// 			cha_data_hora_atendimento: "NOW()"
-	// 		});
-
-	// 	} catch (error) {
-	// 		console.error(`Erro ao definir a chamada ${callID} como sendo atendida por ${idResponsible}: ${error.message}`);
-	// 	}
-	// }
 
 	// Permite que um usuário desista do atendimento de um chamado, 
 	// removendo o registro de atendimento e redefinindo o status.
@@ -275,27 +307,26 @@ class CallModel {
 
 	static async getActionTaken(callID) {
 		try {
-			const fields = [
+			const campos = [
 				"detratores.dtr_descricao AS detractor",
-				"acoes_chamados.ach_acao AS actionTaken"
+				"acoes_chamados.ach_descricao AS actionTaken"
 			];
-			const table = "chamados";
+			const tabela = "chamados";
 
 			const joins = [
-				{ table: "detratores", on: "chamados.cha_detrator = detratores.dtr_id", type: " LEFT" },
-				{ table: "acoes_chamados", on: "chamados.cha_id = acoes_chamados.ach_chamado", type: " LEFT" }
+				{ table: "acoes_chamados", on: "chamados.cha_acao = acoes_chamados.ach_id", type: " LEFT" },
+				{ table: "detratores", on: "acoes_chamados.ach_detrator = detratores.dtr_id", type: "LEFT" }
 			];
 
-			const where = [`chamados.cha_id = ${callID}`];
+			const where = [`cha_id = ${callID}`];
 
-			const result = await dbService.select(fields, table, where, joins);
+			const result = await dbService.select(campos, tabela, where, joins);
 
 			return result.length > 0 ? result[0] : null;
-		} catch (error) {
-			console.error(`Error fetching action taken for call ${callID}: ${error.message}`);
+		} catch (erro) {
+			console.error(`Erro ao buscar a ação tomada para o chamado ${callID}: ${erro.message}`);
 		}
 	}
 }
 
 module.exports = CallModel;
-

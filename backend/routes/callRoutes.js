@@ -8,6 +8,10 @@ const router = express.Router();
 // Rota para obter todos os chamados
 router.get('/chamados', CallController.getAllCalls);
 
+// Rota para alterar as datas de início e término de um chamado
+router.post('/chamados/:callID/alterarDatas', CallController.changeCallDateTimes);
+
+
 // Rota para atender um chamado
 router.post('/chamados/:callID/atender', CallController.setCallAsBeingAnswered);
 

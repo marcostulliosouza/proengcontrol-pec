@@ -11,6 +11,22 @@ class CallController {
         }
     }
 
+    static async changeCallDateTimes(req, res) {
+        const { callID } = req.params;
+        const { beginningDate, endDate } = req.body;
+
+        try {
+            if (!callID || !beginningDate || !endDate) {
+                return res.status(400).json({ error: 'Missing required parameters: callID, beginningDate, endDate' });
+            }
+
+            await CallService.changeCallDateTimes(callID, beginningDate, endDate);
+            res.json({ message: 'Call date times updated successfully' });
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    }
+
     static async getCallById(req, res) {
         const { callID } = req.params;
         try {
