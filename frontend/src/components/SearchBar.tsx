@@ -1,5 +1,5 @@
 // components/SearchBar.tsx
-import React, { useState } from 'react';
+import React from 'react';
 import { CiSearch } from 'react-icons/ci';
 
 interface SearchBarProps {
@@ -9,10 +9,8 @@ interface SearchBarProps {
 }
 
 const SearchBar: React.FC<SearchBarProps> = ({ query, onSearch, placeholder }) => {
-    const [isSearching, setIsSearching] = useState(false);
 
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setIsSearching(true);
         onSearch(e.target.value);
     };
 
