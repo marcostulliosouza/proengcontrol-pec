@@ -1,335 +1,226 @@
-import React, { useEffect, useState } from 'react';
-import { Dialog, Transition } from '@headlessui/react';
-import { Fragment } from 'react';
-import {
-    getAllCalls,
-    attendCall,
-    closeCall,
-    transferCall,
-    giveUpCall,
-    isLockedCall,
-    lockCall
-} from '../api/callApi';
-import { getDetractorList } from '../api/dectratorApi';
-import { getUsersList } from '../api/userApi';
+import { useEffect, useState } from 'react';
+import { getAllCalls } from '../api/callApi';
+import Layout from '../components/Layout';
+import SearchBar from '../components/SearchBar';
 
-interface CallModalProps {
-    call: any;
-    onClose: () => void;
-    refreshCalls: () => void;
-}
-
-const CallModal: React.FC<CallModalProps> = ({ call, onClose, refreshCalls }) => {
-    const [isOpen, setIsOpen] = useState(true);
-    const [isAttending, setIsAttending] = useState(false);
-    const [showTransfer, setShowTransfer] = useState(false);
-    const [showClose, setShowClose] = useState(false);
-    const [showGiveUp, setShowGiveUp] = useState(false);
-    const [transferTo, setTransferTo] = useState<string | null>(null);
-    const [actionTaken, setActionTaken] = useState<string>('');
-    const [detractorList, setDetractorList] = useState<any[]>([]);
-    const [usersList, setUsersList] = useState<any[]>([]);
-    const [locked, setLocked] = useState(false);
-
-    useEffect(() => {
-        const fetchInitialData = async () => {
-            const lockedStatus = await isLockedCall(call.cha_id);
-            setLocked(lockedStatus);
-            const detractors = await getDetractorList();
-            setDetractorList(detractors);
-            const users = await getUsersList();
-            setUsersList(users);
-        };
-
-        fetchInitialData();
-    }, [call.cha_id]);
-
-    useEffect(() => {
-        if (isOpen) {
-            lockCall(call.cha_id, true).then(() => setLocked(true));
-        } else {
-            lockCall(call.cha_id, false).then(() => setLocked(false));
-        }
-    }, [isOpen]);
-
-    const handleAttend = async () => {
-        await attendCall(call.cha_id, 'userId'); // Replace 'userId' with actual user ID
-        setIsAttending(true);
-        refreshCalls();
-    };
-
-    const handleTransfer = async () => {
-        if (transferTo) {
-            await transferCall(call.cha_id, 'currentUserId', transferTo); // Replace 'currentUserId' with actual user ID
-            setShowTransfer(false);
-            refreshCalls();
-        }
-    };
-
-    const handleClose = async () => {
-        await closeCall(call.cha_id, 'detractorId', actionTaken); // Replace 'detractorId' with actual detractor ID
-        setShowClose(false);
-        refreshCalls();
-    };
-
-    const handleGiveUp = async () => {
-        await giveUpCall(call.cha_id, 'currentUserId'); // Replace 'currentUserId' with actual user ID
-        setShowGiveUp(false);
-        refreshCalls();
-    };
-
-    return (
-        <Transition appear show={isOpen} as={Fragment}>
-            <Dialog as="div" className="relative z-10" onClose={() => {
-                setIsOpen(false);
-                onClose();
-            }}>
-                <Transition.Child
-                    as={Fragment}
-                    enter="ease-out duration-300"
-                    enterFrom="opacity-0"
-                    enterTo="opacity-100"
-                    leave="ease-in duration-200"
-                    leaveFrom="opacity-100"
-                    leaveTo="opacity-0"
-                >
-                    <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
-                </Transition.Child>
-
-                <div className="fixed inset-0 flex items-center justify-center p-4">
-                    <Transition.Child
-                        as={Fragment}
-                        enter="ease-out duration-300"
-                        enterFrom="opacity-0 scale-95"
-                        enterTo="opacity-100 scale-100"
-                        leave="ease-in duration-200"
-                        leaveFrom="opacity-100 scale-100"
-                        leaveTo="opacity-0 scale-95"
-                    >
-                        <Dialog.Panel className="mx-auto max-w-4xl p-6 bg-white rounded-lg shadow-lg">
-                            <Dialog.Title className="text-lg font-medium leading-6 text-gray-900">Detalhes do Chamado</Dialog.Title>
-
-                            <div className="mt-2 space-y-4">
-                                <div>
-                                    <h3 className="text-sm font-semibold">Tempo Total</h3>
-                                    <p>{isAttending ? 'Tempo de Atendimento: ' + call.duracao_atendimento : call.duracao_total}</p>
-                                </div>
-                                <div>
-                                    <h3 className="text-sm font-semibold">Criador</h3>
-                                    <p>{call.cha_cliente}</p>
-                                </div>
-                                <div>
-                                    <h3 className="text-sm font-semibold">Tipo de Chamado</h3>
-                                    <p>{call.call_type}</p>
-                                </div>
-                                <div>
-                                    <h3 className="text-sm font-semibold">Cliente</h3>
-                                    <p>{call.cha_cliente}</p>
-                                </div>
-                                <div>
-                                    <h3 className="text-sm font-semibold">Produto</h3>
-                                    <p>{call.cha_produto}</p>
-                                </div>
-                                <div>
-                                    <h3 className="text-sm font-semibold">Dispositivo de Teste</h3>
-                                    <p>{call.cha_plano}</p>
-                                </div>
-                                <div>
-                                    <h3 className="text-sm font-semibold">Local</h3>
-                                    <p>{call.cha_local}</p>
-                                </div>
-                                <div>
-                                    <h3 className="text-sm font-semibold">Descrição</h3>
-                                    <p>{call.cha_descricao}</p>
-                                </div>
-                            </div>
-
-                            <div className="mt-4 flex gap-4">
-                                {isAttending ? (
-                                    <>
-                                        <button
-                                            type="button"
-                                            className="inline-flex justify-center rounded-md border border-transparent bg-blue-500 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-blue-600"
-                                            onClick={() => setShowClose(true)}
-                                        >
-                                            Finalizar Chamado
-                                        </button>
-                                        <button
-                                            type="button"
-                                            className="inline-flex justify-center rounded-md border border-transparent bg-green-500 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-green-600"
-                                            onClick={() => setShowTransfer(true)}
-                                        >
-                                            Transferir Chamado
-                                        </button>
-                                        <button
-                                            type="button"
-                                            className="inline-flex justify-center rounded-md border border-transparent bg-red-500 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-600"
-                                            onClick={() => setShowGiveUp(true)}
-                                        >
-                                            Desistir do Chamado
-                                        </button>
-                                    </>
-                                ) : (
-                                    <button
-                                        type="button"
-                                        className="inline-flex justify-center rounded-md border border-transparent bg-yellow-500 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-yellow-600"
-                                        onClick={handleAttend}
-                                    >
-                                        Atender Chamado
-                                    </button>
-                                )}
-                                <button
-                                    type="button"
-                                    className="inline-flex justify-center rounded-md border border-transparent bg-gray-300 px-4 py-2 text-base font-medium text-gray-800 shadow-sm hover:bg-gray-400"
-                                    onClick={() => {
-                                        setIsOpen(false);
-                                        onClose();
-                                    }}
-                                >
-                                    Fechar
-                                </button>
-                            </div>
-
-                            {/* Transfer Modal */}
-                            <Transition appear show={showTransfer} as={Fragment}>
-                                <Dialog as="div" className="relative z-10" onClose={() => setShowTransfer(false)}>
-                                    <Transition.Child
-                                        as={Fragment}
-                                        enter="ease-out duration-300"
-                                        enterFrom="opacity-0 scale-95"
-                                        enterTo="opacity-100 scale-100"
-                                        leave="ease-in duration-200"
-                                        leaveFrom="opacity-100 scale-100"
-                                        leaveTo="opacity-0 scale-95"
-                                    >
-                                        <Dialog.Panel className="mx-auto max-w-sm p-6 bg-white rounded-lg shadow-lg">
-                                            <Dialog.Title className="text-lg font-medium leading-6 text-gray-900">Transferir Chamado</Dialog.Title>
-                                            <div className="mt-2">
-                                                <label className="block text-sm font-medium text-gray-700">Transferir para</label>
-                                                <select
-                                                    value={transferTo ?? ''}
-                                                    onChange={(e) => setTransferTo(e.target.value)}
-                                                    className="block w-full mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                                >
-                                                    <option value="">Selecione um usuário</option>
-                                                    {
-                                                        usersList.map((user) => (
-                                                            <option key={user.id} value={user.id}>
-                                                                {user.name}
-                                                            </option>
-                                                        ))
-                                                    }
-                                                </select>
-                                            </div>
-                                            <div className="mt-4 flex gap-4">
-                                                <button
-                                                    type="button"
-                                                    className="inline-flex justify-center rounded-md border border-transparent bg-blue-500 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-blue-600"
-                                                    onClick={handleTransfer}
-                                                >
-                                                    Confirmar
-                                                </button>
-                                                <button
-                                                    type="button"
-                                                    className="inline-flex justify-center rounded-md border border-transparent bg-gray-300 px-4 py-2 text-base font-medium text-gray-800 shadow-sm hover:bg-gray-400"
-                                                    onClick={() => setShowTransfer(false)}
-                                                >
-                                                    Cancelar
-                                                </button>
-                                            </div>
-                                        </Dialog.Panel>
-                                    </Transition.Child>
-                                </Dialog>
-                            </Transition>
-
-                            {/* Close Modal */}
-                            <Transition appear show={showClose} as={Fragment}>
-                                <Dialog as="div" className="relative z-10" onClose={() => setShowClose(false)}>
-                                    <Transition.Child
-                                        as={Fragment}
-                                        enter="ease-out duration-300"
-                                        enterFrom="opacity-0 scale-95"
-                                        enterTo="opacity-100 scale-100"
-                                        leave="ease-in duration-200"
-                                        leaveFrom="opacity-100 scale-100"
-                                        leaveTo="opacity-0 scale-95"
-                                    >
-                                        <Dialog.Panel className="mx-auto max-w-sm p-6 bg-white rounded-lg shadow-lg">
-                                            <Dialog.Title className="text-lg font-medium leading-6 text-gray-900">Fechar Chamado</Dialog.Title>
-                                            <div className="mt-2">
-                                                <label className="block text-sm font-medium text-gray-700">Motivo</label>
-                                                <textarea
-                                                    rows={3}
-                                                    value={actionTaken}
-                                                    onChange={(e) => setActionTaken(e.target.value)}
-                                                    className="block w-full mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                                />
-                                            </div>
-                                            <div className="mt-4 flex gap-4">
-                                                <button
-                                                    type="button"
-                                                    className="inline-flex justify-center rounded-md border border-transparent bg-blue-500 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-blue-600"
-                                                    onClick={handleClose}
-                                                >
-                                                    Confirmar
-                                                </button>
-                                                <button
-                                                    type="button"
-                                                    className="inline-flex justify-center rounded-md border border-transparent bg-gray-300 px-4 py-2 text-base font-medium text-gray-800 shadow-sm hover:bg-gray-400"
-                                                    onClick={() => setShowClose(false)}
-                                                >
-                                                    Cancelar
-                                                </button>
-                                            </div>
-                                        </Dialog.Panel>
-                                    </Transition.Child>
-                                </Dialog>
-                            </Transition>
-
-                            {/* Give Up Modal */}
-                            <Transition appear show={showGiveUp} as={Fragment}>
-                                <Dialog as="div" className="relative z-10" onClose={() => setShowGiveUp(false)}>
-                                    <Transition.Child
-                                        as={Fragment}
-                                        enter="ease-out duration-300"
-                                        enterFrom="opacity-0 scale-95"
-                                        enterTo="opacity-100 scale-100"
-                                        leave="ease-in duration-200"
-                                        leaveFrom="opacity-100 scale-100"
-                                        leaveTo="opacity-0 scale-95"
-                                    >
-                                        <Dialog.Panel className="mx-auto max-w-sm p-6 bg-white rounded-lg shadow-lg">
-                                            <Dialog.Title className="text-lg font-medium leading-6 text-gray-900">Desistir do Chamado</Dialog.Title>
-                                            <div className="mt-2">
-                                                <p className="text-sm text-gray-500">Você tem certeza de que deseja desistir deste chamado? Esta ação não pode ser desfeita.</p>
-                                            </div>
-                                            <div className="mt-4 flex gap-4">
-                                                <button
-                                                    type="button"
-                                                    className="inline-flex justify-center rounded-md border border-transparent bg-red-500 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-600"
-                                                    onClick={handleGiveUp}
-                                                >
-                                                    Confirmar
-                                                </button>
-                                                <button
-                                                    type="button"
-                                                    className="inline-flex justify-center rounded-md border border-transparent bg-gray-300 px-4 py-2 text-base font-medium text-gray-800 shadow-sm hover:bg-gray-400"
-                                                    onClick={() => setShowGiveUp(false)}
-                                                >
-                                                    Cancelar
-                                                </button>
-                                            </div>
-                                        </Dialog.Panel>
-                                    </Transition.Child>
-                                </Dialog>
-                            </Transition>
-                        </Dialog.Panel>
-                    </Transition.Child>
-                </div>
-            </Dialog>
-        </Transition>
-    );
+type Call = {
+  cha_id: number;
+  cha_operador: string;
+  duracao_total: number;
+  duracao_atendimento: number;
+  cha_tipo: number;
+  call_type: string;
+  cha_cliente: string;
+  cha_produto: string;
+  cha_DT: string;
+  cha_status: number;
+  status: string;
+  support_id: number;
+  support: string;
+  cha_descricao: string;
+  cha_plano: number;
+  cha_data_hora_abertura: string;
+  cha_data_hora_atendimento: string | null;
+  cha_data_hora_termino: string | null;
+  cha_local: string;
 };
 
-export default CallModal;
+const formatDuration = (ms: number) => {
+  const totalSeconds = Math.floor(ms / 1000);
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+};
 
+const CallTable = () => {
+  const [calls, setCalls] = useState<Call[]>([]);
+  const [filteredCalls, setFilteredCalls] = useState<Call[]>([]);
+  const [query, setQuery] = useState('');
+  const [expandedRow, setExpandedRow] = useState<number | null>(null);
+  const [selectedPriorities, setSelectedPriorities] = useState<number[]>([]); // Novo estado para múltiplas prioridades selecionadas
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getAllCalls();
+        setCalls(data);
+        setFilteredCalls(data); // Inicialmente exibe todos os chamados
+      } catch (error) {
+        console.error('Erro ao carregar chamados:', error);
+      }
+    };
+
+    fetchData();
+
+    const interval = setInterval(() => {
+      setCalls((prevCalls) => [...prevCalls]);
+    }, 60000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    // Filtra com base na busca e nas prioridades selecionadas
+    const results = calls.filter(call => {
+      const matchesQuery = call.cha_cliente.toLowerCase().includes(query.toLowerCase()) ||
+        call.cha_produto.toLowerCase().includes(query.toLowerCase()) ||
+        call.call_type.toLowerCase().includes(query.toLowerCase());
+
+      const matchesPriority = selectedPriorities.length > 0 ? selectedPriorities.includes(call.cha_plano) : true;
+      return matchesQuery && matchesPriority;
+    });
+    setFilteredCalls(results);
+  }, [query, selectedPriorities, calls]);
+
+  const toggleExpandRow = (callId: number) => {
+    setExpandedRow(expandedRow === callId ? null : callId);
+  };
+
+  const getDurationStyle = (duration: number) => {
+    if (duration < 0) {
+      return 'text-blue-500 font-bold';
+    }
+    const hours = Math.floor(duration / 3600000);
+    const minutes = Math.floor((duration % 3600000) / 60000);
+
+    if (hours >= 1) {
+      return 'text-red-500 font-bold';
+    } else if (minutes > 30) {
+      return 'text-yellow-500 font-bold';
+    }
+
+    return 'text-black font-bold';
+  };
+
+  const getPriorityStyle = (cha_plano: number) => {
+    switch (cha_plano) {
+      case 1:
+        return { color: 'bg-red-500 rounded', height: '100%' };
+      case 0:
+        return { color: 'bg-yellow-500 rounded', height: '75%' };
+      case -1:
+        return { color: 'bg-blue-500 rounded', height: '50%' };
+      default:
+        return { color: 'bg-gray-400 rounded', height: '0%' };
+    }
+  };
+
+  const handlePriorityChange = (priority: number) => {
+    setSelectedPriorities(prevPriorities => {
+      if (prevPriorities.includes(priority)) {
+        return prevPriorities.filter(p => p !== priority);
+      } else {
+        return [...prevPriorities, priority];
+      }
+    });
+  };
+
+  return (
+    <Layout>
+      <div className="flex justify-end mb-1"> {/* Alinha a barra de pesquisa à direita */}
+        <SearchBar query={query} onSearch={setQuery} placeholder={'Pesquise por chamados...'} />
+      </div>
+      <div className="container mx-auto p-2">
+        {/* Filtro de Prioridades */}
+        <div className="mb-1">
+          <h3 className="text-lg font-semibold mb-1">Filtrar por Prioridade:</h3>
+          <div className="flex gap-4">
+            <label className="flex items-center">
+              <input
+                type="checkbox"
+                checked={selectedPriorities.includes(1)}
+                onChange={() => handlePriorityChange(1)}
+                className="mr-2"
+              />
+              Dentro do Plano
+            </label>
+            <label className="flex items-center">
+              <input
+                type="checkbox"
+                checked={selectedPriorities.includes(0)}
+                onChange={() => handlePriorityChange(0)}
+                className="mr-2"
+              />
+              Fora do Plano
+            </label>
+            <label className="flex items-center">
+              <input
+                type="checkbox"
+                checked={selectedPriorities.includes(-1)}
+                onChange={() => handlePriorityChange(-1)}
+                className="mr-2"
+              />
+              Engenharia
+            </label>
+          </div>
+
+        </div>
+        <div className="overflow-x-auto">
+          <table className="min-w-full bg-white border border-gray-200 rounded-lg">
+            <thead>
+              <tr className="bg-pec text-white text-left">
+                <th className="py-3 px-6 border-b text-xs text-center">Prioridade</th>
+                <th className="py-3 px-6 border-b text-xs text-center">Duração Total</th>
+                <th className="py-3 px-2 border-b text-xs text-center">Tipo do Chamado</th>
+                <th className="py-3 px-6 border-b text-xs text-center">Cliente</th>
+                <th className="py-3 px-6 border-b text-xs text-center">Produto</th>
+                <th className="py-3 px-6 border-b text-xs text-center">Local</th>
+                <th className="py-3 px-6 border-b text-xs text-center">Status</th>
+                <th className="py-3 px-6 border-b text-xs text-center">Suporte</th>
+                <th className="py-3 px-6 border-b text-xs text-center">Atendimento</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredCalls.map((call) => {
+                const abertura = new Date(call.cha_data_hora_abertura).getTime();
+                const atendimento = call.cha_data_hora_atendimento ? new Date(call.cha_data_hora_atendimento).getTime() : 0;
+                const termino = call.cha_data_hora_termino ? new Date(call.cha_data_hora_termino).getTime() : Date.now();
+                const totalDuration = termino - abertura;
+                const attendanceDuration = atendimento > 0 ? termino - atendimento : 0;
+
+                return (
+                  <>
+                    <tr key={call.cha_id} onClick={() => toggleExpandRow(call.cha_id)} className="hover:bg-gray-100 cursor-pointer transition duration-200">
+                      <td className="py-2 px-4 border-b flex justify-center items-center"> {/* Centraliza o conteúdo da célula */}
+                        <div className="relative w-8 h-16 bg-gray-300 rounded">
+                          <div
+                            className={`absolute bottom-0 w-full ${getPriorityStyle(call.cha_plano).color}`}
+                            style={{ height: getPriorityStyle(call.cha_plano).height }}
+                          />
+                        </div>
+                      </td>
+                      <td className={`py-2 px-4 border-b text-center ${getDurationStyle(totalDuration)}`}>
+                        {formatDuration(totalDuration)}
+                      </td>
+                      <td className="py-2 px-2 border-b text-center">{call.call_type}</td>
+                      <td className="py-2 px-4 border-b text-center">{call.cha_cliente}</td>
+                      <td className="py-2 px-4 border-b text-center">{call.cha_produto}</td>
+                      <td className="py-2 px-4 border-b text-center">{call.cha_local}</td>
+                      <td className="py-2 px-4 border-b text-center">{call.status}</td>
+                      <td className="py-2 px-4 border-b uppercase text-center">{call.support}</td>
+                      <td className="py-2 px-4 border-b text-center">{formatDuration(attendanceDuration)}</td>
+                    </tr>
+                    {expandedRow === call.cha_id && (
+                      <tr key={`${call.cha_id}`}>
+                        <td colSpan={9} className="py-2 px-4 border-b bg-gray-50 text-gray-700 uppercase">
+                          <div>
+                            <strong>Descrição:</strong> {call.cha_descricao}
+                          </div>
+                          <div>
+                            <strong>Operador:</strong> {call.cha_operador}
+                          </div>
+                        </td>
+                      </tr >
+                    )}
+                  </>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </Layout>
+  );
+};
+
+export default CallTable;

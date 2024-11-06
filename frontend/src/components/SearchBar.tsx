@@ -1,115 +1,31 @@
-// src/components/SearchBar.tsx
-
-import React, { useState, useEffect } from 'react';
-import Select, { MultiValue } from 'react-select';
-import '../style/Table.css';
+// components/SearchBar.tsx
+import React, { useState } from 'react';
+import { CiSearch } from 'react-icons/ci';
 
 interface SearchBarProps {
+    query: string;
     onSearch: (query: string) => void;
-    onFilterChange: (filters: { atendido?: number; status?: number; plano?: number[] }) => void;
+    placeholder: string;
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ onSearch, onFilterChange }) => {
-    const [searchQuery, setSearchQuery] = useState('');
-    const [status, setStatus] = useState<number | undefined>(undefined);
-    const [plano, setPlano] = useState<number[] | undefined>(undefined);
+const SearchBar: React.FC<SearchBarProps> = ({ query, onSearch, placeholder }) => {
+    const [isSearching, setIsSearching] = useState(false);
 
-    const optionsPlano = [
-        {
-            value: 1, label:
-                <div className="legend-item">
-                    <div className="legend-color-box legend-high"></div>
-                    <span>Alta</span>
-                </div>
-        },
-        {
-            value: 0, label:
-                <div className="legend-item">
-                    <div className="legend-color-box legend-medium"></div>
-                    <span>Média</span>
-                </div>
-        },
-        {
-            value: -1, label:
-                <div className="legend-item">
-                    <div className="legend-color-box legend-low"></div>
-                    <span>Baixa</span>
-                </div>
-        },
-    ];
-
-    // Função para mudança no plano
-    const handlePlanoChange = (selectedOptions: MultiValue<{ value: number; label: JSX.Element }>) => {
-        const values = selectedOptions.map(option => option.value);
-        setPlano(values.length > 0 ? values : undefined); // Atualiza com array de valores
-    };
-
-    // Atualiza os filtros sempre que o estado dos filtros mudar
-    useEffect(() => {
-        onFilterChange({ status, plano });
-    }, [status, plano]);
-
-    // Função para mudança no campo de busca
-    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const query = e.target.value;
-        setSearchQuery(query);
-        onSearch(query);
-    };
-
-    // Função para mudança no status
-    const handleStatusChange = (newStatus: number | undefined) => {
-        setStatus(newStatus);
+    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setIsSearching(true);
+        onSearch(e.target.value);
     };
 
     return (
-        <div className="mb-4 flex flex-col space-y-2">
-            <input
-                type="text"
-                value={searchQuery}
-                onChange={handleSearchChange}
-                placeholder="Pesquisar por produto..."
-                className="px-4 py-2 border border-gray-300 rounded-lg"
-            />
-            <div className="flex flex-wrap space-x-4 mt-2">
-                <label className="flex items-center space-x-2">
-                    <input
-                        type="radio"
-                        name="status"
-                        checked={status === undefined}
-                        onChange={() => handleStatusChange(undefined)}
-                        className="form-radio"
-                    />
-                    <span>Todos</span>
-                </label>
-                <label className="flex items-center space-x-2">
-                    <input
-                        type="radio"
-                        name="status"
-                        checked={status === 1}
-                        onChange={() => handleStatusChange(status === 1 ? undefined : 1)}
-                        className="form-radio"
-                    />
-                    <span>Aberto</span>
-                </label>
-                <label className="flex items-center space-x-2">
-                    <input
-                        type="radio"
-                        name="status"
-                        checked={status === 2}
-                        onChange={() => handleStatusChange(status === 2 ? undefined : 2)}
-                        className="form-radio"
-                    />
-                    <span>Em atendimento</span>
-                </label>
-                <Select
-                    value={optionsPlano.filter(option => plano?.includes(option.value))}
-                    isMulti
-                    name="plano"
-                    options={optionsPlano}
-                    className="plano-multi-select"
-                    classNamePrefix="select"
-                    placeholder="Selecione uma opção"
-                    onChange={handlePlanoChange}
+        <div className="flex justify-end mb-1 w-full"> {/* Alinha à direita */}
+            <div className="flex items-center border border-gray-300 rounded-lg w-full max-w-lg"> {/* Limite máximo de largura */}
+                <CiSearch className="text-gray-500 ml-2 mr-2" />
+                <input
+                    type="text"
+                    value={query}
+                    onChange={handleSearch}
+                    className="p-2 w-full outline-none rounded-lg"
+                    placeholder={placeholder}
                 />
             </div>
         </div>
