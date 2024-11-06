@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { getAllCalls } from '../api/callApi';
 import Layout from '../components/Layout';
 import SearchBar from '../components/SearchBar';
+import React from 'react';
 
 type Call = {
   cha_id: number;
@@ -179,9 +180,9 @@ const CallTable = () => {
                 const attendanceDuration = atendimento > 0 ? termino - atendimento : 0;
 
                 return (
-                  <>
-                    <tr key={call.cha_id} onClick={() => toggleExpandRow(call.cha_id)} className="hover:bg-gray-100 cursor-pointer transition duration-200">
-                      <td className="py-2 px-4 border-b flex justify-center items-center"> {/* Centraliza o conteúdo da célula */}
+                  <React.Fragment key={call.cha_id}> {/* A chave é atribuída ao fragmento de forma global */}
+                    <tr onClick={() => toggleExpandRow(call.cha_id)} className="hover:bg-gray-100 cursor-pointer transition duration-200">
+                      <td className="py-2 px-4 border-b flex justify-center items-center">
                         <div className="relative w-8 h-16 bg-gray-300 rounded">
                           <div
                             className={`absolute bottom-0 w-full ${getPriorityStyle(call.cha_plano).color}`}
@@ -198,10 +199,10 @@ const CallTable = () => {
                       <td className="py-2 px-4 border-b text-center">{call.cha_local}</td>
                       <td className="py-2 px-4 border-b text-center">{call.status}</td>
                       <td className="py-2 px-4 border-b uppercase text-center">{call.support}</td>
-                      <td className="py-2 px-4 border-b text-center">{formatDuration(attendanceDuration)}</td>
+                      <td className={`py-2 px-4 border-b text-center ${getDurationStyle(attendanceDuration)}`}>{formatDuration(attendanceDuration)}</td>
                     </tr>
                     {expandedRow === call.cha_id && (
-                      <tr key={`expanded-${call.cha_id}`}> {/* Alterei a chave aqui para incluir um prefixo único */}
+                      <tr>
                         <td colSpan={9} className="py-2 px-4 border-b bg-gray-50 text-gray-700 uppercase">
                           <div>
                             <strong>Descrição:</strong> {call.cha_descricao}
@@ -212,7 +213,7 @@ const CallTable = () => {
                         </td>
                       </tr>
                     )}
-                  </>
+                  </React.Fragment>
                 );
               })}
             </tbody>
