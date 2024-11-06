@@ -201,7 +201,7 @@ const CallTable = () => {
                       <td className="py-2 px-4 border-b text-center">{formatDuration(attendanceDuration)}</td>
                     </tr>
                     {expandedRow === call.cha_id && (
-                      <tr key={`${call.cha_id}`}>
+                      <tr key={`expanded-${call.cha_id}`}> {/* Alterei a chave aqui para incluir um prefixo único */}
                         <td colSpan={9} className="py-2 px-4 border-b bg-gray-50 text-gray-700 uppercase">
                           <div>
                             <strong>Descrição:</strong> {call.cha_descricao}
@@ -210,7 +210,7 @@ const CallTable = () => {
                             <strong>Operador:</strong> {call.cha_operador}
                           </div>
                         </td>
-                      </tr >
+                      </tr>
                     )}
                   </>
                 );
