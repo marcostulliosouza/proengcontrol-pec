@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { attendCall, transferCall, giveUpCall, closeCall, isLockedCall, getActionTaken } from '../api/callApi';
 import { getUsersList } from '../api/userApi';
+<<<<<<< HEAD
 import { getDetractorList } from '../api/detractorApi'; // Supondo que você tenha uma API para pegar detratores
+=======
+import { getDetractorList } from '../api/dectratorApi';
+>>>>>>> 5fa1a1a085ce8470123a33cbf35d4e9a8c68e6f6
 
 interface CallModalProps {
   call: any;
@@ -18,9 +22,17 @@ const CallModal: React.FC<CallModalProps> = ({ call, onClose, refreshCalls }) =>
   const [loading, setLoading] = useState(false);
   const [isLocked, setIsLocked] = useState(false);
   const [actionTaken, setActionTaken] = useState<any | null>(null);
+<<<<<<< HEAD
   const [detractors, setDetractors] = useState<any[]>([]); // Lista de detratores
   const [selectedDetractor, setSelectedDetractor] = useState<string | null>(null); // Detrator selecionado
   const [solutionDescription, setSolutionDescription] = useState<string>(''); // Descrição da solução
+=======
+  const [detractors, setDetractors] = useState<any[]>([]);
+  const [selectedDetractor, setSelectedDetractor] = useState<string | null>(null);
+  const [solutionDescription, setSolutionDescription] = useState<string>('');
+  const [callTime, setCallTime] = useState<number>(0);
+  const [timer, setTimer] = useState<NodeJS.Timeout | null>(null);
+>>>>>>> 5fa1a1a085ce8470123a33cbf35d4e9a8c68e6f6
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -42,7 +54,11 @@ const CallModal: React.FC<CallModalProps> = ({ call, onClose, refreshCalls }) =>
     const checkLockStatus = async () => {
       try {
         const response = await isLockedCall(call.cha_id);
+<<<<<<< HEAD
         setIsLocked(response);
+=======
+        setIsLocked(response.isLocked);
+>>>>>>> 5fa1a1a085ce8470123a33cbf35d4e9a8c68e6f6
       } catch (error) {
         console.error('Erro ao verificar bloqueio do chamado:', error);
       }
@@ -68,7 +84,10 @@ const CallModal: React.FC<CallModalProps> = ({ call, onClose, refreshCalls }) =>
     setIsAttended(call.cha_status === 2);
   }, [call.cha_status]);
 
+<<<<<<< HEAD
   // Buscar detratores
+=======
+>>>>>>> 5fa1a1a085ce8470123a33cbf35d4e9a8c68e6f6
   useEffect(() => {
     const fetchDetractors = async () => {
       try {
@@ -81,6 +100,23 @@ const CallModal: React.FC<CallModalProps> = ({ call, onClose, refreshCalls }) =>
 
     fetchDetractors();
   }, [call.cha_tipo]);
+<<<<<<< HEAD
+=======
+
+  const startTimer = () => {
+    setTimer(
+      setInterval(() => {
+        setCallTime((prev) => prev + 1);
+      }, 1000)
+    );
+  };
+
+  const stopTimer = () => {
+    if (timer) {
+      clearInterval(timer);
+    }
+  };
+>>>>>>> 5fa1a1a085ce8470123a33cbf35d4e9a8c68e6f6
 
   const handleAttend = async () => {
     if (userId) {
@@ -89,6 +125,10 @@ const CallModal: React.FC<CallModalProps> = ({ call, onClose, refreshCalls }) =>
         await attendCall(call.cha_id, userId);
         await refreshCalls();
         setIsAttended(true);
+<<<<<<< HEAD
+=======
+        startTimer();
+>>>>>>> 5fa1a1a085ce8470123a33cbf35d4e9a8c68e6f6
       } catch (error) {
         console.error('Erro ao atender o chamado:', error);
       } finally {
@@ -126,6 +166,10 @@ const CallModal: React.FC<CallModalProps> = ({ call, onClose, refreshCalls }) =>
         setLoading(true);
         await giveUpCall(call.cha_id, userId);
         setIsAttended(false);
+<<<<<<< HEAD
+=======
+        stopTimer();
+>>>>>>> 5fa1a1a085ce8470123a33cbf35d4e9a8c68e6f6
         await refreshCalls();
       } catch (error) {
         console.error('Erro ao desistir do chamado:', error);
@@ -147,6 +191,10 @@ const CallModal: React.FC<CallModalProps> = ({ call, onClose, refreshCalls }) =>
       setLoading(true);
       await closeCall(call.cha_id, selectedDetractor, solutionDescription);
       await refreshCalls();
+<<<<<<< HEAD
+=======
+      stopTimer();
+>>>>>>> 5fa1a1a085ce8470123a33cbf35d4e9a8c68e6f6
       onClose();
     } catch (error) {
       console.error('Erro ao fechar o chamado:', error);
@@ -166,8 +214,13 @@ const CallModal: React.FC<CallModalProps> = ({ call, onClose, refreshCalls }) =>
         <p>ID: {call.cha_id}</p>
         <p>Cliente: {call.cha_cliente}</p>
         <p>Status: {call.cha_status}</p>
+<<<<<<< HEAD
 
         {/* Exibe ações realizadas */}
+=======
+        <p>Tempo Total: {isAttended ? `${Math.floor(callTime / 60)} min ${callTime % 60} seg` : 'Ainda não atendido'}</p>
+
+>>>>>>> 5fa1a1a085ce8470123a33cbf35d4e9a8c68e6f6
         {actionTaken && (
           <div className="mb-4">
             <h3 className="text-lg font-semibold">Ações Realizadas:</h3>
@@ -203,7 +256,11 @@ const CallModal: React.FC<CallModalProps> = ({ call, onClose, refreshCalls }) =>
               <button
                 className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mr-2"
                 onClick={handleAttend}
+<<<<<<< HEAD
                 disabled={loading}
+=======
+                disabled={loading || isLocked}
+>>>>>>> 5fa1a1a085ce8470123a33cbf35d4e9a8c68e6f6
               >
                 {loading ? 'Atendendo...' : 'Atender'}
               </button>
@@ -223,6 +280,7 @@ const CallModal: React.FC<CallModalProps> = ({ call, onClose, refreshCalls }) =>
                 >
                   Desistir
                 </button>
+<<<<<<< HEAD
 
                 {/* Seção para selecionar detrator e descrição da solução */}
                 <div className="mb-4">
@@ -265,6 +323,51 @@ const CallModal: React.FC<CallModalProps> = ({ call, onClose, refreshCalls }) =>
           className="mt-4 bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
           onClick={onClose}
           disabled={loading}
+=======
+
+                <div className="mb-4">
+                  <h3 className="text-lg font-semibold">Selecione um Detrator:</h3>
+                  <select
+                    className="w-full p-2 border border-gray-300 rounded"
+                    onChange={(e) => setSelectedDetractor(e.target.value)}
+                  >
+                    <option value="">Selecione um detrator</option>
+                    {detractors.map((detractor) => (
+                      <option key={detractor.dtr_id} value={detractor.dtr_id}>
+                        {detractor.dtr_descricao}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="mb-4">
+                  <h3 className="text-lg font-semibold">Descrição da Solução:</h3>
+                  <textarea
+                    className="w-full p-2 border border-gray-300 rounded"
+                    value={solutionDescription}
+                    onChange={(e) => setSolutionDescription(e.target.value)}
+                    placeholder="Descreva a solução..."
+                  />
+                </div>
+
+                {canClose && (
+                  <button
+                    className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+                    onClick={handleClose}
+                    disabled={loading}
+                  >
+                    {loading ? 'Finalizando...' : 'Finalizar Chamado'}
+                  </button>
+                )}
+              </>
+            )}
+          </div>
+        )}
+
+        <button
+          className="mt-4 bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+          onClick={onClose}
+>>>>>>> 5fa1a1a085ce8470123a33cbf35d4e9a8c68e6f6
         >
           Fechar
         </button>

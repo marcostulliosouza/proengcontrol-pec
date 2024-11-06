@@ -1,3 +1,4 @@
+// api/detratorApi.ts
 import { API_URL } from '../config/apiConfig';
 import axios from 'axios';
 
