@@ -8,7 +8,7 @@ interface HeaderProps {
     toggleSidebar: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ toggleSidebar }) => {
+const Header: React.FC<HeaderProps> = ({ }) => {
     const [menuOpen, setMenuOpen] = useState(false);
     const navigate = useNavigate();
 

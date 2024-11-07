@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { getAllCalls } from '../api/callApi';
 import Layout from '../components/Layout';
 import SearchBar from '../components/SearchBar';
+import CallModal from '../components/CallModal';
 import React from 'react';
 
 type Call = {
@@ -39,6 +40,7 @@ const CallTable = () => {
   const [query, setQuery] = useState('');
   const [expandedRow, setExpandedRow] = useState<number | null>(null);
   const [selectedPriorities, setSelectedPriorities] = useState<number[]>([]); // Novo estado para múltiplas prioridades selecionadas
+  const [modalCall, setModalCall] = useState<Call | null>(null); // Chamado para exibir no modal
 
   useEffect(() => {
     const fetchData = async () => {
@@ -59,6 +61,10 @@ const CallTable = () => {
 
     return () => clearInterval(interval);
   }, []);
+
+  const handleDoubleClick = (call: Call) => {
+    setModalCall(call);
+  };
 
   useEffect(() => {
     // Filtra com base na busca e nas prioridades selecionadas
@@ -133,7 +139,8 @@ const CallTable = () => {
                 onChange={() => handlePriorityChange(1)}
                 className="mr-2"
               />
-              Dentro do Plano
+              <div className="relative w-4 h-4 bg-red-500 rounded"></div>
+              <div className='p-1'>Dentro do Plano</div>
             </label>
             <label className="flex items-center">
               <input
@@ -142,7 +149,8 @@ const CallTable = () => {
                 onChange={() => handlePriorityChange(0)}
                 className="mr-2"
               />
-              Fora do Plano
+              <div className="relative w-4 h-4 bg-yellow-500 rounded"></div>
+              <div className='p-1'>Fora do Plano</div>
             </label>
             <label className="flex items-center">
               <input
@@ -151,7 +159,8 @@ const CallTable = () => {
                 onChange={() => handlePriorityChange(-1)}
                 className="mr-2"
               />
-              Engenharia
+              <div className="relative w-4 h-4 bg-blue-500 rounded"></div>
+              <div className='p-1'>Engenharia</div>
             </label>
           </div>
 
@@ -181,7 +190,12 @@ const CallTable = () => {
 
                 return (
                   <React.Fragment key={call.cha_id}> {/* A chave é atribuída ao fragmento de forma global */}
-                    <tr onClick={() => toggleExpandRow(call.cha_id)} className="hover:bg-gray-100 cursor-pointer transition duration-200">
+                    <tr
+                      onClick={() => toggleExpandRow(call.cha_id)}
+                      key={call.cha_id}
+                      onDoubleClick={() => handleDoubleClick(call)} // Define o clique duplo
+                      className="hover:bg-gray-100 cursor-pointer transition duration-200"
+                    >
                       <td className="py-2 px-4 border-b flex justify-center items-center">
                         <div className="relative w-8 h-16 bg-gray-300 rounded">
                           <div
@@ -220,6 +234,8 @@ const CallTable = () => {
           </table>
         </div>
       </div>
+      {/* Renderiza o modal quando `modalCall` estiver definido */}
+      {modalCall && <CallModal call={modalCall} onClose={() => setModalCall(null)} />}
     </Layout>
   );
 };
