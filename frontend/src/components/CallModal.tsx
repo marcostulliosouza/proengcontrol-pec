@@ -1,4 +1,3 @@
-import { duration } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { CiStopwatch } from "react-icons/ci";
 
@@ -79,10 +78,8 @@ const CallModal: React.FC<CallModalProps> = ({ call, onClose }) => {
   };
 
   const abertura = new Date(call.cha_data_hora_abertura).getTime();
-  const atendimento = call.cha_data_hora_atendimento ? new Date(call.cha_data_hora_atendimento).getTime() : 0;
   const termino = call.cha_data_hora_termino ? new Date(call.cha_data_hora_termino).getTime() : Date.now();
   const totalDuration = termino - abertura;
-  const attendanceDuration = atendimento > 0 ? termino - atendimento : 0;
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -99,7 +96,7 @@ const CallModal: React.FC<CallModalProps> = ({ call, onClose }) => {
 
         <div className={`mb-6 text-center ${getPriorityStyle(call.cha_plano).color} text-white py-2 px-4 rounded`}>
           {!isAttending && (
-            <strong>Tempo de Chamada</strong>
+            <strong>Tempo d Chamada</strong>
           )}
           {isAttending && (
             <strong>Tempo de Atendimento</strong>
