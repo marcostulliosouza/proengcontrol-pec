@@ -3,7 +3,11 @@ import { getAllCalls } from '../api/callApi';
 import Layout from '../components/Layout';
 import SearchBar from '../components/SearchBar';
 import CallModal from '../components/CallModal';
+import io from 'socket.io-client';
+import { API_URL } from '../config/apiConfig';
 import React from 'react';
+
+const socket = io(API_URL);
 
 type Call = {
   cha_id: string;
@@ -25,6 +29,7 @@ type Call = {
   cha_data_hora_atendimento: string | null;
   cha_data_hora_termino: string | null;
   cha_local: string;
+  cha_visualizado: number;
 };
 
 const formatDuration = (ms: number) => {
@@ -42,24 +47,37 @@ const CallTable = () => {
   const [selectedPriorities, setSelectedPriorities] = useState<number[]>([]); // Novo estado para múltiplas prioridades selecionadas
   const [modalCall, setModalCall] = useState<Call | null>(null); // Chamado para exibir no modal
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await getAllCalls();
-        setCalls(data);
-        setFilteredCalls(data); // Inicialmente exibe todos os chamados
-      } catch (error) {
-        console.error('Erro ao carregar chamados:', error);
-      }
-    };
+  const fetchData = async () => {
+    try {
+      const data = await getAllCalls();
+      setCalls(data);
+      setFilteredCalls(data); // Inicialmente exibe todos os chamados
+    } catch (error) {
+      console.error('Erro ao carregar chamados:', error);
+    }
+  };
 
+  useEffect(() => {
     fetchData();
 
+    // socket.on('callsUpdated', (data: Call[]) => {
+    //   // Verifique se os dados são diferentes antes de atualizar
+    //   setCalls((prevCalls) => {
+    //     const newCalls = [...data];
+    //     if (JSON.stringify(prevCalls) !== JSON.stringify(newCalls)) {
+    //       setFilteredCalls(newCalls);
+    //     }
+    //     return newCalls;
+    //   });
+    // });
     const interval = setInterval(() => {
       setCalls((prevCalls) => [...prevCalls]);
     }, 60000);
 
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+      // socket.off('callsUpdated'); // Limpa o ouvinte quando o componente for desmontado
+    }
   }, []);
 
   const handleDoubleClick = (call: Call) => {
@@ -78,6 +96,8 @@ const CallTable = () => {
     });
     setFilteredCalls(results);
   }, [query, selectedPriorities, calls]);
+
+  const userId = String(localStorage.getItem('userId'));
 
   const toggleExpandRow = (callId: number) => {
     setExpandedRow(expandedRow === callId ? null : callId);
@@ -184,13 +204,19 @@ const CallTable = () => {
                 const termino = call.cha_data_hora_termino ? new Date(call.cha_data_hora_termino).getTime() : Date.now();
                 const totalDuration = termino - abertura;
                 const attendanceDuration = atendimento > 0 ? termino - atendimento : 0;
+                // Define uma classe diferente se o chamado está sendo visualizado por outro operador
+                const isDisabled = call.cha_visualizado === 1
+                const rowClass = call.cha_visualizado === 1 && Number(call.support_id) !== Number(userId)
+                  ? 'bg-green-200 text-gray-500cursor-not-allowed'
+                  : (call.cha_visualizado === 1 && Number(call.support_id) === Number(userId))
+                    ? 'bg-amber-200 text-gray-500'
+                    : 'hover:bg-gray-100 cursor-pointer transition duration-200';
                 return (
                   <React.Fragment key={call.cha_id}>
                     <tr
-                      onClick={() => toggleExpandRow(parseInt(call.cha_id))}
-                      key={call.cha_id}
+                      onClick={() => !isDisabled && toggleExpandRow(parseInt(call.cha_id))}
                       onDoubleClick={() => handleDoubleClick(call)}
-                      className="hover:bg-gray-100 cursor-pointer transition duration-200"
+                      className={rowClass}
                     >
                       <td className="py-2 px-4 border-b flex justify-center items-center">
                         <div className="relative w-8 h-16 bg-gray-300 rounded">
@@ -230,7 +256,13 @@ const CallTable = () => {
           </table>
         </div>
       </div>
-      {modalCall && <CallModal call={modalCall} onClose={() => setModalCall(null)} />}
+      {modalCall && (
+        <CallModal
+          call={modalCall}
+          onClose={() => setModalCall(null)}
+          onUpdate={fetchData}
+        />
+      )}
     </Layout>
   );
 };

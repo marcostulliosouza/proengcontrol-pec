@@ -1,20 +1,28 @@
 // /services/socketService.js
-/*WebSocket no servidor para que ele possa emitir eventos sempre que algo mudar.*/
-let io = null;
+const socketIO = require('socket.io');
+let io;
 
-const initializeSocket = (server) => {
-    io = require('socket.io')(server, {
+function initializeSocket(server) {
+    io = socketIO(server, {
         cors: {
-            origin: "*",
-            methods: ["GET", "POST"]
+            origin: '*', // Defina a origem permitida para o frontend
+            methods: ['GET', 'POST']
         }
     });
-};
 
-const emitCallUpdate = (call) => {
+    io.on('connection', (socket) => {
+        console.log('Novo cliente conectado:', socket.id);
+
+        socket.on('disconnect', () => {
+            console.log('Cliente desconectado:', socket.id);
+        });
+    });
+}
+
+const emitCallUpdate = (callData) => {
     if (io) {
         // console.log('Emitting call update:', call); // Adicione este log para verificar
-        io.emit('callUpdated', call);
+        io.emit('callsUpdated', callData);
     }
 };
 

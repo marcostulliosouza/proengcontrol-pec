@@ -1,3 +1,4 @@
+// server.js
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -7,6 +8,7 @@ const authRoutes = require('./routes/authRoutes');
 const callRoutes = require('./routes/callRoutes');
 const userRoutes = require('./routes/userRoutes');
 const detractorRoutes = require('./routes/detractorRoutes');
+const { initializeSocket } = require('./services/socketService');
 
 const app = express();
 const server = http.createServer(app); // Cria um servidor HTTP
@@ -23,8 +25,8 @@ app.use('/api', callRoutes); // Rotas de chamados
 app.use('/api', userRoutes); // Rotas de usuários/colaboradores
 app.use('/api', detractorRoutes); // Rotas de detratores
 
-// Inicializa o Socket.io com o servidor HTTP
-socketService.initializeSocket(server);
+// Inicializa o Socket.IO com o servidor HTTP
+initializeSocket(server);
 
 // Inicia o servidor HTTP
 server.listen(PORT, '0.0.0.0', () => {

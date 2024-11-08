@@ -13,6 +13,17 @@ class CallService {
         }
     }
 
+    // Obtém um chamado pelo ID
+    static async getCallById(callID) {
+        try {
+            const call = await CallModel.getCallById(callID);
+            emitCallUpdate(call);
+            return call;
+        } catch (error) {
+            throw new Error('Error fetching call by ID: ' + error.message);
+        }
+    }
+
     static async changeCallDateTimes(callID, beginningDate, endDate) {
         try {
             const result = await CallModel.changeCallDateTimes(callID, beginningDate, endDate);

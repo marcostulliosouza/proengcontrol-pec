@@ -23,7 +23,8 @@ class CallModel {
 				"MAX(chamados.cha_data_hora_abertura) AS cha_data_hora_abertura",
 				"MAX(chamados.cha_data_hora_atendimento) AS cha_data_hora_atendimento",
 				"MAX(chamados.cha_data_hora_termino) AS cha_data_hora_termino",
-				"MAX(local_chamado.loc_nome) AS cha_local"
+				"MAX(local_chamado.loc_nome) AS cha_local",
+				"chamados.cha_visualizado"
 			];
 
 			const table = "chamados";
@@ -60,6 +61,54 @@ class CallModel {
 			console.error(`Error ao carregar os chamados: ${error.message}`);
 		}
 
+	}
+	static async getCallById(callID) {
+		try {
+			const fields = [
+				"chamados.cha_id",
+				"chamados.cha_operador",
+				"TIMESTAMPDIFF(MINUTE, chamados.cha_data_hora_abertura, NOW()) AS duracao_total",
+				"IF(chamados.cha_status > 1, TIMESTAMPDIFF(MINUTE, chamados.cha_data_hora_atendimento, NOW()), 0) AS duracao_atendimento",
+				"chamados.cha_tipo",
+				"MAX(tipos_chamado.tch_descricao) AS call_type",
+				"MAX(clientes.cli_nome) AS cha_cliente",
+				"MAX(produtos.pro_nome) AS cha_produto",
+				"chamados.cha_DT",
+				"chamados.cha_status",
+				"MAX(status_chamado.stc_descricao) AS status",
+				"MAX(atendimentos_chamados.atc_colaborador) AS support_id",
+				"MAX(colaboradores.col_login) AS support",
+				"MAX(chamados.cha_descricao) AS cha_descricao",
+				"MAX(chamados.cha_plano) AS cha_plano",
+				"MAX(chamados.cha_data_hora_abertura) AS cha_data_hora_abertura",
+				"MAX(chamados.cha_data_hora_atendimento) AS cha_data_hora_atendimento",
+				"MAX(chamados.cha_data_hora_termino) AS cha_data_hora_termino",
+				"MAX(local_chamado.loc_nome) AS cha_local",
+				"chamados.cha_visualizado"
+			];
+
+			const table = "chamados";
+
+			const joins = [
+				{ table: "atendimentos_chamados", on: "chamados.cha_id = atendimentos_chamados.atc_chamado", type: " LEFT" },
+				{ table: "clientes", on: "chamados.cha_cliente = clientes.cli_id", type: " LEFT" },
+				{ table: "produtos", on: "chamados.cha_produto = produtos.pro_id", type: " LEFT" },
+				{ table: "colaboradores", on: "atendimentos_chamados.atc_colaborador = colaboradores.col_id", type: " LEFT" },
+				{ table: "tipos_chamado", on: "chamados.cha_tipo = tipos_chamado.tch_id", type: " LEFT" },
+				{ table: "status_chamado", on: "chamados.cha_status = status_chamado.stc_id", type: " LEFT" },
+				{ table: "local_chamado", on: "chamados.cha_local = local_chamado.loc_nome", type: " LEFT" }
+			];
+
+			const where = [`chamados.cha_id = ${callID}`];
+
+			// Executa a consulta para obter o chamado específico
+			const call = await dbService.select(fields, table, where, joins);
+
+			return call.length > 0 ? call[0] : null;
+
+		} catch (error) {
+			console.error(`Erro ao obter o chamado com ID ${callID}: ${error.message}`);
+		}
 	}
 
 	// Responsável por atualiza a tabela "chamados" com as novas datas de início e término
@@ -105,7 +154,7 @@ class CallModel {
 			// Insere a ação tomada na tabela "acoes_chamados"
 			const table2 = "acoes_chamados";
 			const fields2 = [
-				["ach_descricao", "UPPER(?)"]
+				["ach_descricao", "UPPER(?)"],
 				["ach_detrator", detractorID]
 			];
 
@@ -206,27 +255,9 @@ class CallModel {
 			console.error(`Erro ao atualizar os dados da chamada ${callID}: ${error.message}`);
 		}
 	}
-
-	// Essa função atualiza as 
-	// datas de início e término do chamado no banco de dados.
-	static async changeCallDateTimes(callID, beginningDate, endDate) {
-		try {
-			const table = "chamados";
-			const fieldsAndValues = [
-				["cha_data_hora_abertura", `"${beginningDate}"`],
-				["cha_data_hora_termino", `"${endDate}"`]
-			];
-			const conditions = [`cha_id = "${callID}"`];
-
-			await dbService.update(table, fieldsAndValues, conditions);
-		} catch (error) {
-			console.error(`Error changing call dates for call ${callID}: ${error.message}`);
-		}
-	}
-
 	// Essa função trava ou destrava um chamado, 
 	// indicando se o chamado está sendo visualizado por outro usuário.
-	static async lockCall(callID, lock = true) {
+	static async lockCall(callID, lock) {
 		try {
 			const table = "chamados";
 			const fieldsAndValues = [["cha_visualizado", lock ? "1" : "0"]];
@@ -261,26 +292,27 @@ class CallModel {
 			if (isLocked) {
 				throw new Error('Chamado já está sendo atendido por outro usuário.')
 			}
+			else {
+				// Bloquear o chamado para o usuário atual
+				await this.lockCall(callID, true);
 
-			// Bloquear o chamado para o usuário atual
-			await this.lockCall(callID, true);
+				// Registrar o atendimento do responsável
+				const table = "atendimentos_chamados";
+				const fields = [
+					["atc_chamado", `${callID}`],
+					["atc_colaborador", `${idResponsible}`],
+					["atc_data_hora_inicio", 'NOW()'] // 'NOW()' será tratado corretamente pelo dbService
+				];
 
-			// Registrar o atendimento do responsável
-			const table = "atendimentos_chamados";
-			const fields = [
-				["atc_chamado", `${callID}`],
-				["atc_colaborador", `${idResponsible}`],
-				["atc_data_hora_inicio", 'NOW()'] // 'NOW()' será tratado corretamente pelo dbService
-			];
+				await dbService.insert(table, fields);
 
-			await dbService.insert(table, fields);
+				// Atualizar o status e o responsável pelo chamado
+				await CallModel.updateCallData(callID, {
+					cha_status: 2,  // Em atendimento
+					cha_data_hora_atendimento: "NOW()",
+				});
 
-			// Atualizar o status e o responsável pelo chamado
-			await CallModel.updateCallData(callID, {
-				cha_status: 2,  // Em atendimento
-				cha_data_hora_atendimento: "NOW()"
-			});
-
+			}
 		} catch (error) {
 			console.error(`Erro ao definir a chamada ${callID} como sendo atendida por ${idResponsible}: ${error.message}`);
 		}
@@ -297,8 +329,6 @@ class CallModel {
 		try {
 			// Desbloquear o chamado
 			await this.lockCall(callID, false);
-
-
 			const table = "atendimentos_chamados";
 			const conditions = [
 				["atc_chamado", `${callID}`]

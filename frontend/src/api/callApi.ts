@@ -7,8 +7,12 @@ export const getAllCalls = async () => {
   return response.data;
 };
 
+export const getCallById = async (callID: string) => {
+  const response = await axios.get(`${API_URL}/api/chamados/${callID}`);
+  return response.data;
+};
+
 export const attendCall = async (callID: string, idResponsible: string) => {
-  console.log(idResponsible)
   await axios.post(`${API_URL}/api/chamados/${callID}/atender`, { idResponsible });
 };
 

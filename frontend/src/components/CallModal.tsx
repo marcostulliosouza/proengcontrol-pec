@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { CiStopwatch } from "react-icons/ci";
-import { attendCall, giveUpCall, isLockedCall, transferCall } from '../api/callApi';
+import { attendCall, giveUpCall, isLockedCall, transferCall, getCallById } from '../api/callApi';
 
 type Call = {
   cha_id: string;
@@ -22,58 +22,86 @@ type Call = {
   cha_data_hora_atendimento: string | null;
   cha_data_hora_termino: string | null;
   cha_local: string;
+  cha_visualizado: number;
 };
 
 type CallModalProps = {
   call: Call;
   onClose: () => void;
+  onUpdate: () => void;
 };
 
-const CallModal: React.FC<CallModalProps> = ({ call, onClose }) => {
+const CallModal: React.FC<CallModalProps> = ({ call: initialCall, onClose, onUpdate }) => {
+  const [call, setCall] = useState<Call>(initialCall); // Cria o estado para call
   const [isAttending, setIsAttending] = useState(false);
   const [time, setTime] = useState(0); // Tempo de atendimento em segundos
 
   useEffect(() => {
+    // Recuperar o estado do atendimento armazenado
+    const storedCallId = localStorage.getItem('currentCallId');
+    const storedIsAttending = JSON.parse(localStorage.getItem('isAttending') || 'null');
+
+    if (storedCallId && storedCallId === call.cha_id && storedIsAttending) {
+      setIsAttending(true);
+      setTime(parseInt(localStorage.getItem('currentCallTime') || '0')); // Recupera o tempo de atendimento
+    }
+
     let interval: NodeJS.Timeout;
     if (isAttending) {
       interval = setInterval(() => setTime((prevTime) => prevTime + 1), 1000);
     }
     return () => clearInterval(interval);
-  }, [isAttending]);
+  }, [call.cha_id, isAttending]);
 
   const userId = String(localStorage.getItem('userId'));
+
+  // Função para atualizar o estado de `call` com os dados mais recentes do banco
+  const updateCallState = async () => {
+    const updatedCall = await getCallById(call.cha_id); // Obter dados do banco
+    setCall(updatedCall); // Atualizar o estado de `call` com o objeto atualizado
+  };
 
   const startAttendance = async () => {
     const response = await isLockedCall(call.cha_id);
     const isLocked = response?.isLocked;
 
-    if (isLocked) {
+    if (isLocked && (Number(call.support_id) !== Number(userId))) {
       alert('Chamado já está sendo atendido por outro usuário.');
       return;
     }
-
-    setIsAttending(true);
-    await attendCall(call.cha_id.toString(), userId);
-    // Atualizar o `support_id` para refletir o usuário logado
-    call.support_id = userId;
+    else {
+      setIsAttending(true);
+      await attendCall(call.cha_id.toString(), userId);
+      await updateCallState(); // Atualiza o estado de call após atender
+      onUpdate();
+      localStorage.setItem('currentCallId', call.cha_id); // Salva o ID do chamado
+      localStorage.setItem('isAttending', 'true'); // Marca como atendendo
+      localStorage.setItem('currentCallTime', String(time)); // Salva o tempo atual
+    }
   };
 
   const resetAttendance = async () => {
     if (Number(call.support_id) !== Number(userId)) {
-      alert('Você não pode cancelar um chamado que não é seu.');
+      alert("Você não pode cancelar um chamado que não é seu.");
       return;
     }
-
-    setIsAttending(false);
-    setTime(0);
-    await giveUpCall(call.cha_id.toString(), userId);
-
+    else {
+      setIsAttending(false);
+      setTime(0);
+      await giveUpCall(call.cha_id.toString(), userId);
+      await updateCallState();
+      onUpdate();
+      localStorage.removeItem('currentCallId');
+      localStorage.removeItem('isAttending');
+      localStorage.removeItem('currentCallTime');
+    }
     // Atualize o estado local do chamado, se necessário
   };
 
   const transferCallHandler = (newUser: string) => {
     // Chamar a função da API para transferir o chamado
     transferCall(call.cha_id.toString(), userId, newUser);
+    updateCallState();
     // Adicionar a lógica para lidar com a transferência (ex.: mostrar um campo de input para selecionar o novo usuário)
   };
 
@@ -141,6 +169,9 @@ const CallModal: React.FC<CallModalProps> = ({ call, onClose }) => {
         </div>
 
         <div className="space-y-3 text-gray-700">
+          {isAttending && (
+            <div><strong>Suporte:</strong> {call.support}</div>
+          )}
           <div><strong>Criado por:</strong> {call.cha_operador.toUpperCase()}</div>
           <div><strong>Tipo de Chamado:</strong> {call.call_type}</div>
           <div><strong>Cliente:</strong> {call.cha_cliente}</div>
