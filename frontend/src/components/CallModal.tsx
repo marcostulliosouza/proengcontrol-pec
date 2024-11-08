@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { CiStopwatch } from "react-icons/ci";
-import { attendCall, giveUpCall, transferCall } from '../api/callApi';
+import { attendCall, giveUpCall, isLockedCall, transferCall } from '../api/callApi';
 
 type Call = {
-  cha_id: number;
+  cha_id: string;
   cha_operador: string;
   duracao_total: number;
   duracao_atendimento: number;
@@ -43,17 +43,32 @@ const CallModal: React.FC<CallModalProps> = ({ call, onClose }) => {
 
   const userId = String(localStorage.getItem('userId'));
 
-  const startAttendance = () => {
+  const startAttendance = async () => {
+    const response = await isLockedCall(call.cha_id);
+    const isLocked = response?.isLocked;
+
+    if (isLocked) {
+      alert('Chamado já está sendo atendido por outro usuário.');
+      return;
+    }
+
     setIsAttending(true);
-    // Chamar a função da API para iniciar o atendimento
-    attendCall(call.cha_id.toString(), userId);
+    await attendCall(call.cha_id.toString(), userId);
+    // Atualizar o `support_id` para refletir o usuário logado
+    call.support_id = userId;
   };
 
-  const resetAttendance = () => {
+  const resetAttendance = async () => {
+    if (Number(call.support_id) !== Number(userId)) {
+      alert('Você não pode cancelar um chamado que não é seu.');
+      return;
+    }
+
     setIsAttending(false);
     setTime(0);
-    // Chamar a função da API para desistir do atendimento
-    giveUpCall(call.cha_id.toString(), userId);
+    await giveUpCall(call.cha_id.toString(), userId);
+
+    // Atualize o estado local do chamado, se necessário
   };
 
   const transferCallHandler = (newUser: string) => {

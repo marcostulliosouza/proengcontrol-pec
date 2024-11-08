@@ -256,6 +256,15 @@ class CallModel {
 	// chamado e atualiza o status e a hora de início do atendimento.
 	static async setCallAsBeingAnswered(callID, idResponsible) {
 		try {
+			// Verificar se o chamado está bloqueado
+			const isLocked = await this.isLockedCall(callID);
+			if (isLocked) {
+				throw new Error('Chamado já está sendo atendido por outro usuário.')
+			}
+
+			// Bloquear o chamado para o usuário atual
+			await this.lockCall(callID, true);
+
 			// Registrar o atendimento do responsável
 			const table = "atendimentos_chamados";
 			const fields = [
@@ -286,6 +295,10 @@ class CallModel {
 		}
 
 		try {
+			// Desbloquear o chamado
+			await this.lockCall(callID, false);
+
+
 			const table = "atendimentos_chamados";
 			const conditions = [
 				["atc_chamado", `${callID}`]

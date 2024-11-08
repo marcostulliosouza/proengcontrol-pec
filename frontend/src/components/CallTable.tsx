@@ -6,7 +6,7 @@ import CallModal from '../components/CallModal';
 import React from 'react';
 
 type Call = {
-  cha_id: number;
+  cha_id: string;
   cha_operador: string;
   duracao_total: number;
   duracao_atendimento: number;
@@ -187,7 +187,7 @@ const CallTable = () => {
                 return (
                   <React.Fragment key={call.cha_id}>
                     <tr
-                      onClick={() => toggleExpandRow(call.cha_id)}
+                      onClick={() => toggleExpandRow(parseInt(call.cha_id))}
                       key={call.cha_id}
                       onDoubleClick={() => handleDoubleClick(call)}
                       className="hover:bg-gray-100 cursor-pointer transition duration-200"
@@ -211,7 +211,7 @@ const CallTable = () => {
                       <td className="py-2 px-4 border-b uppercase text-center">{call.support}</td>
                       <td className={`py-2 px-4 border-b text-center ${getDurationStyle(attendanceDuration)}`}>{formatDuration(attendanceDuration)}</td>
                     </tr>
-                    {expandedRow === call.cha_id && (
+                    {expandedRow === parseInt(call.cha_id) && (
                       <tr>
                         <td colSpan={9} className="py-2 px-4 border-b bg-gray-50 text-gray-700 uppercase">
                           <div>
