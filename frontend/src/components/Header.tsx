@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import logo from '../assets/icon_pec_cinza.svg';
 import { AiOutlineUser } from 'react-icons/ai';
-
+const user = String(localStorage.getItem('user'));
 interface HeaderProps {
     toggleSidebar: () => void;
 }
@@ -58,6 +58,14 @@ const Header: React.FC<HeaderProps> = ({ }) => {
                     {menuOpen && (
                         <div className="absolute right-0 mt-2 w-48 bg-white text-gray-700 shadow-lg rounded-lg">
                             <ul className="list-none p-0 m-0">
+                                <li>
+                                    <button
+                                        onClick={() => navigate('/change-password')}
+                                        className="block w-full text-left px-4 py-2 hover:bg-gray-200 rounded-t-lg"
+                                    >
+                                        <p>Olá, {user}</p>
+                                    </button>
+                                </li>
                                 <li>
                                     <button
                                         onClick={() => navigate('/change-password')}
