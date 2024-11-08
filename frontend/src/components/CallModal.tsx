@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { CiStopwatch } from "react-icons/ci";
+import { attendCall, giveUpCall, transferCall } from '../api/callApi';
 
 type Call = {
   cha_id: number;
@@ -13,7 +14,7 @@ type Call = {
   cha_DT: string;
   cha_status: number;
   status: string;
-  support_id: number;
+  support_id: string;
   support: string;
   cha_descricao: string;
   cha_plano: number;
@@ -40,11 +41,25 @@ const CallModal: React.FC<CallModalProps> = ({ call, onClose }) => {
     return () => clearInterval(interval);
   }, [isAttending]);
 
-  const startAttendance = () => setIsAttending(true);
+  const userId = String(localStorage.getItem('userId'));
+
+  const startAttendance = () => {
+    setIsAttending(true);
+    // Chamar a função da API para iniciar o atendimento
+    attendCall(call.cha_id.toString(), userId);
+  };
 
   const resetAttendance = () => {
     setIsAttending(false);
     setTime(0);
+    // Chamar a função da API para desistir do atendimento
+    giveUpCall(call.cha_id.toString(), userId);
+  };
+
+  const transferCallHandler = (newUser: string) => {
+    // Chamar a função da API para transferir o chamado
+    transferCall(call.cha_id.toString(), userId, newUser);
+    // Adicionar a lógica para lidar com a transferência (ex.: mostrar um campo de input para selecionar o novo usuário)
   };
 
   const formatTime = (seconds: number) => {
@@ -58,11 +73,9 @@ const CallModal: React.FC<CallModalProps> = ({ call, onClose }) => {
     const totalSeconds = Math.floor(ms / 1000);
     const hours = Math.floor(totalSeconds / 3600);
     const minutes = Math.floor((totalSeconds % 3600) / 60);
-    const segundos = totalSeconds % 60;;
+    const segundos = totalSeconds % 60;
     return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(segundos).padStart(2, '0')}`;
   };
-
-
 
   const getPriorityStyle = (cha_plano: number) => {
     switch (cha_plano) {
@@ -96,7 +109,7 @@ const CallModal: React.FC<CallModalProps> = ({ call, onClose }) => {
 
         <div className={`mb-6 text-center ${getPriorityStyle(call.cha_plano).color} text-white py-2 px-4 rounded`}>
           {!isAttending && (
-            <strong>Tempo d Chamada</strong>
+            <strong>Tempo de Chamada</strong>
           )}
           {isAttending && (
             <strong>Tempo de Atendimento</strong>
@@ -145,7 +158,10 @@ const CallModal: React.FC<CallModalProps> = ({ call, onClose }) => {
               >
                 Desistir
               </button>
-              <button className="bg-blue-600 text-white px-6 py-3 rounded-lg text-lg hover:bg-blue-700 transition duration-200">
+              <button
+                onClick={() => transferCallHandler("NovoUsuario")} // Exemplo de transferência
+                className="bg-blue-600 text-white px-6 py-3 rounded-lg text-lg hover:bg-blue-700 transition duration-200"
+              >
                 Transferir
               </button>
             </>

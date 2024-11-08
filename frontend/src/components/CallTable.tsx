@@ -17,7 +17,7 @@ type Call = {
   cha_DT: string;
   cha_status: number;
   status: string;
-  support_id: number;
+  support_id: string;
   support: string;
   cha_descricao: string;
   cha_plano: number;
@@ -121,14 +121,12 @@ const CallTable = () => {
       }
     });
   };
-
   return (
     <Layout>
-      <div className="flex justify-end mb-1"> {/* Alinha a barra de pesquisa à direita */}
+      <div className="flex justify-end mb-1">
         <SearchBar query={query} onSearch={setQuery} placeholder={'Pesquise por chamados...'} />
       </div>
       <div className="container mx-auto p-2">
-        {/* Filtro de Prioridades */}
         <div className="mb-1">
           <h3 className="text-lg font-semibold mb-1">Filtrar por Prioridade:</h3>
           <div className="flex gap-4">
@@ -163,7 +161,6 @@ const CallTable = () => {
               <div className='p-1'>Engenharia</div>
             </label>
           </div>
-
         </div>
         <div className="overflow-x-auto">
           <table className="min-w-full bg-white border border-gray-200 rounded-lg">
@@ -187,13 +184,12 @@ const CallTable = () => {
                 const termino = call.cha_data_hora_termino ? new Date(call.cha_data_hora_termino).getTime() : Date.now();
                 const totalDuration = termino - abertura;
                 const attendanceDuration = atendimento > 0 ? termino - atendimento : 0;
-
                 return (
-                  <React.Fragment key={call.cha_id}> {/* A chave é atribuída ao fragmento de forma global */}
+                  <React.Fragment key={call.cha_id}>
                     <tr
                       onClick={() => toggleExpandRow(call.cha_id)}
                       key={call.cha_id}
-                      onDoubleClick={() => handleDoubleClick(call)} // Define o clique duplo
+                      onDoubleClick={() => handleDoubleClick(call)}
                       className="hover:bg-gray-100 cursor-pointer transition duration-200"
                     >
                       <td className="py-2 px-4 border-b flex justify-center items-center">
@@ -234,7 +230,6 @@ const CallTable = () => {
           </table>
         </div>
       </div>
-      {/* Renderiza o modal quando `modalCall` estiver definido */}
       {modalCall && <CallModal call={modalCall} onClose={() => setModalCall(null)} />}
     </Layout>
   );

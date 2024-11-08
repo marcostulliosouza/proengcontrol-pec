@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
-import { getAllUsers } from '../api/userApi';
+import { getUsersList } from '../api/userApi';
 
 export const useUsers = () => {
   const [user, setUsers] = useState<any[]>([]);
 
   useEffect(() => {
     const fetchUsers = async () => {
-      const data = await getAllUsers();
+      const data = await getUsersList();
       setUsers(data);
     };
     fetchUsers();

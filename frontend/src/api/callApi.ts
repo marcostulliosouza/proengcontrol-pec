@@ -8,6 +8,7 @@ export const getAllCalls = async () => {
 };
 
 export const attendCall = async (callID: string, idResponsible: string) => {
+  console.log(idResponsible)
   await axios.post(`${API_URL}/api/chamados/${callID}/atender`, { idResponsible });
 };
 

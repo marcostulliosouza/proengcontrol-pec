@@ -83,6 +83,7 @@ class CallController {
     static async setCallAsBeingAnswered(req, res) {
         const { callID } = req.params;
         const { idResponsible } = req.body; // Verifique se está vindo do corpo da requisição
+        console.log(req)
 
         try {
             // Verifique se callID e idResponsible estão definidos
