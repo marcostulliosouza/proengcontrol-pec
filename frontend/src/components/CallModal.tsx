@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { CiStopwatch } from "react-icons/ci";
 import { attendCall, giveUpCall, isLockedCall, transferCall, getCallById } from '../api/callApi';
+import EndCallModal from './EndCallModal';
 
 type Call = {
   cha_id: string;
@@ -35,6 +36,7 @@ const CallModal: React.FC<CallModalProps> = ({ call: initialCall, onClose, onUpd
   const [call, setCall] = useState<Call>(initialCall); // Cria o estado para call
   const [isAttending, setIsAttending] = useState(false);
   const [time, setTime] = useState(0); // Tempo de atendimento em segundos
+  const [showEndCallModal, setShowEndCallModal] = useState(false);
 
   useEffect(() => {
     // Recuperar o estado do atendimento armazenado
@@ -108,6 +110,19 @@ const CallModal: React.FC<CallModalProps> = ({ call: initialCall, onClose, onUpd
     }
   };
 
+  const handleEndCall = (detractor: string, description: string) => {
+    // Finaliza o atendimento com os dados recebidos
+    console.log(`Finalizado com detrator: ${detractor}, descrição: ${description}`);
+    setShowEndCallModal(false);
+    setIsAttending(false);
+    setTime(0);
+    updateCallState();
+    onUpdate();
+    localStorage.removeItem('currentCallId');
+    localStorage.removeItem('isAttending');
+    localStorage.removeItem('currentCallTime');
+  };
+
   const transferCallHandler = (newUser: string) => {
     // Chamar a função da API para transferir o chamado
     transferCall(call.cha_id.toString(), userId, newUser);
@@ -149,7 +164,7 @@ const CallModal: React.FC<CallModalProps> = ({ call: initialCall, onClose, onUpd
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg shadow-lg p-6 w-4/5 md:w-3/5 lg:w-2/5 xl:w-1/3 relative">
+      <div className="bg-white rounded-lg shadow-lg p-6  w-4/5 md:w-3/5 lg:w-2/5 xl:w-1/3 relative">
         <button
           onClick={handleModalClose}
           className="absolute top-2 right-2 text-2xl text-gray-600 hover:text-gray-800 transition duration-200"
@@ -209,7 +224,7 @@ const CallModal: React.FC<CallModalProps> = ({ call: initialCall, onClose, onUpd
           {isAttending && (
             <>
               <button
-                onClick={resetAttendance}
+                onClick={() => setShowEndCallModal(true)}
                 className="bg-green-600 text-white px-6 py-3 rounded-lg text-lg hover:bg-green-700 transition duration-200"
               >
                 Finalizar
@@ -230,6 +245,12 @@ const CallModal: React.FC<CallModalProps> = ({ call: initialCall, onClose, onUpd
           )}
         </div>
       </div>
+      {showEndCallModal && (
+        <EndCallModal
+          onClose={() => setShowEndCallModal(false)}
+          onConfirm={handleEndCall}
+        />
+      )}
     </div>
   );
 };
