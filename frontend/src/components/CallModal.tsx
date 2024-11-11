@@ -98,11 +98,21 @@ const CallModal: React.FC<CallModalProps> = ({ call: initialCall, onClose, onUpd
     // Atualize o estado local do chamado, se necessário
   };
 
+  const handleModalClose = () => {
+    if (isAttending) {
+      if (window.confirm("Você está em atendimento. Será necessário finalizar o chamado ou desistir.")) {
+        return;
+      }
+    } else {
+      onClose();
+    }
+  };
+
   const transferCallHandler = (newUser: string) => {
     // Chamar a função da API para transferir o chamado
     transferCall(call.cha_id.toString(), userId, newUser);
     updateCallState();
-    // Adicionar a lógica para lidar com a transferência (ex.: mostrar um campo de input para selecionar o novo usuário)
+
   };
 
   const formatTime = (seconds: number) => {
@@ -141,7 +151,7 @@ const CallModal: React.FC<CallModalProps> = ({ call: initialCall, onClose, onUpd
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg shadow-lg p-6 w-4/5 md:w-3/5 lg:w-2/5 xl:w-1/3 relative">
         <button
-          onClick={onClose}
+          onClick={handleModalClose}
           className="absolute top-2 right-2 text-2xl text-gray-600 hover:text-gray-800 transition duration-200"
         >
           &times;
@@ -190,7 +200,7 @@ const CallModal: React.FC<CallModalProps> = ({ call: initialCall, onClose, onUpd
           {!isAttending && (
             <button
               onClick={startAttendance}
-              className="bg-green-600 text-white px-6 py-3 rounded-lg text-lg hover:bg-green-700 transition duration-200"
+              className="bg-blue-600 text-white px-6 py-3 rounded-lg text-lg hover:bg-blue-700 transition duration-200"
             >
               Iniciar Atendimento
             </button>
@@ -200,15 +210,21 @@ const CallModal: React.FC<CallModalProps> = ({ call: initialCall, onClose, onUpd
             <>
               <button
                 onClick={resetAttendance}
-                className="bg-red-600 text-white px-6 py-3 rounded-lg text-lg hover:bg-red-700 transition duration-200"
+                className="bg-green-600 text-white px-6 py-3 rounded-lg text-lg hover:bg-green-700 transition duration-200"
               >
-                Desistir
+                Finalizar
               </button>
               <button
                 onClick={() => transferCallHandler("NovoUsuario")} // Exemplo de transferência
                 className="bg-blue-600 text-white px-6 py-3 rounded-lg text-lg hover:bg-blue-700 transition duration-200"
               >
                 Transferir
+              </button>
+              <button
+                onClick={resetAttendance}
+                className="bg-red-600 text-white px-6 py-3 rounded-lg text-lg hover:bg-red-700 transition duration-200"
+              >
+                Desistir
               </button>
             </>
           )}
