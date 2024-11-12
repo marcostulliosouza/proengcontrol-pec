@@ -20,6 +20,7 @@ const EndCallModal: React.FC<EndCallModalProps> = ({ onClose, onConfirm }) => {
   const [detractors, setDetractors] = useState<Detractor[]>([]);
   const [selectedDetractor, setSelectedDetractor] = useState<Detractor | null>(null);
   const [description, setDescription] = useState<string>('');
+  const [suggestions, setSuggestions] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchDetractors = async () => {
@@ -35,6 +36,27 @@ const EndCallModal: React.FC<EndCallModalProps> = ({ onClose, onConfirm }) => {
       return;
     }
     onConfirm(selectedDetractor.dtr_id, description);
+  };
+
+  // Função para verificar o texto usando a API do LanguageTool
+  const checkGrammar = async (text: string) => {
+    const response = await fetch(
+      `https://api.languagetool.org/v2/check?language=pt-BR&text=${encodeURIComponent(text)}`
+    );
+    const data = await response.json();
+    const newSuggestions = data.matches.map((match: any) => match.replacements[0]?.value || '');
+    setSuggestions(newSuggestions);
+  };
+
+  const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const newDescription = e.target.value;
+    setDescription(newDescription);
+
+    // Realizar verificação após o usuário parar de digitar (debounce)
+    clearTimeout((window as any).checkGrammarTimeout);
+    (window as any).checkGrammarTimeout = setTimeout(() => {
+      checkGrammar(newDescription);
+    }, 500);
   };
 
   // Mapear os detratores para o formato esperado pelo react-select
@@ -75,13 +97,23 @@ const EndCallModal: React.FC<EndCallModalProps> = ({ onClose, onConfirm }) => {
           <label className="block text-gray-700 font-bold mb-2">Descrição:</label>
           <textarea
             value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            onChange={handleDescriptionChange}
             maxLength={250}
             placeholder="Descreva o que foi feito..."
-            className="w-full border border-gray-300 rounded px-3 py-2 resize-none"
+            className="w-full border border-gray-300 rounded px-3 py-2 resize-none uppercase"
             rows={4}
           />
           <p className="text-gray-500 text-xs mt-1">{description.length} / 250 caracteres</p>
+          {suggestions.length > 0 && (
+            <div className="text-red-500 text-xs mt-1">
+              <strong>Sugestões de correção:</strong>
+              <ul>
+                {suggestions.map((suggestion, index) => (
+                  <li key={index}>• {suggestion}</li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
         <div className="flex gap-4 mt-4 justify-end">
           <button
